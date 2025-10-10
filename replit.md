@@ -98,10 +98,10 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - ✅ Supabase database for storing calls with view/click tracking
 - ✅ Dark modern UI with purple gradient accents
 - ✅ Call creation form with link generation
-- ✅ **Replaced GMGN iframe with DexScreener API** - Now using free DexScreener API for price data
-- ✅ **Real-time price data** - Shows current price, 24h change, liquidity, volume, market cap
+- ✅ **DexScreener API Integration** - Real-time price data (price, 24h change, liquidity, volume, market cap)
+- ✅ **Embedded Live Charts** - Interactive DexScreener charts display by default on desktop & mobile
+- ✅ **Responsive 3-Column Layout** - Token info, price data, and live chart (stacks on mobile)
 - ✅ **Auto-refresh** - Price data updates every 30 seconds
-- ✅ Referral tracking with hardcoded GMGN code
+- ✅ Referral tracking with hardcoded GMGN code (7rpqjHdf)
 - ✅ Fixed click tracking race condition with optimistic updates
 - ✅ Fixed page loading issue by making view tracking non-blocking
-- ✅ Added "View Full Chart on DexScreener" link for detailed charts

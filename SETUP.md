@@ -46,7 +46,7 @@ That's it! Your database is now set up.
 - **Clicks**: Counted when someone clicks "Buy via GMGN"
 - **Referral Code**: `7rpqjHdf` is automatically included in all buy links
 - **Price Data**: Real-time data from DexScreener API (updates every 30 seconds)
-- **Charts**: Link to view full interactive charts on DexScreener
+- **Live Charts**: Interactive DexScreener charts embedded and displayed by default on desktop & mobile
 
 ## 🎨 Customize
 

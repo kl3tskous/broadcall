@@ -47,11 +47,11 @@ The app will be available at http://localhost:5000
 ### Sharing Calls
 
 Each call gets a unique URL like `/call/[id]` that you can share with your audience. The page includes:
-- Token information and thesis
-- Real-time price data from DexScreener (price, 24h change, liquidity, volume, market cap)
-- Link to view full chart on DexScreener
-- Buy button with your referral code (opens GMGN Telegram bot)
-- Automatic tracking of views and clicks
+- **Token information and thesis** - Your analysis and token details
+- **Real-time price data** - Live updates every 30 seconds (price, 24h change, liquidity, volume, market cap)
+- **Embedded interactive chart** - DexScreener chart displays by default on desktop & mobile
+- **Buy button** - Opens GMGN Telegram bot with your referral code
+- **Automatic tracking** - Views and clicks tracked in real-time
 
 ## Tech Stack
 

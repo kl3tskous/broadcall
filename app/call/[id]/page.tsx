@@ -142,10 +142,10 @@ export default function CallPage() {
   }
 
   return (
-    <main className="min-h-screen py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+    <main className="min-h-screen py-6 md:py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
             Token Call
           </h1>
           <div className="text-sm text-gray-500">
@@ -153,7 +153,10 @@ export default function CallPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* Mobile-First Responsive Layout */}
+        <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-6">
+          
+          {/* Token Information - Full width on mobile, 1 col on desktop */}
           <div className="card">
             <h2 className="text-xl font-bold mb-4">Token Information</h2>
             
@@ -196,6 +199,7 @@ export default function CallPage() {
             </div>
           </div>
 
+          {/* Price Data - Full width on mobile, 1 col on desktop */}
           <div className="card">
             <h2 className="text-xl font-bold mb-4">Price Data</h2>
             
@@ -205,7 +209,7 @@ export default function CallPage() {
               <div className="space-y-4">
                 <div className="bg-dark-bg p-4 rounded-lg">
                   <div className="text-sm text-gray-400 mb-1">Current Price</div>
-                  <div className="text-3xl font-bold text-white">
+                  <div className="text-2xl md:text-3xl font-bold text-white">
                     ${parseFloat(priceData.priceUsd).toFixed(6)}
                   </div>
                   <div className={`text-sm mt-1 ${priceData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -216,34 +220,64 @@ export default function CallPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-dark-bg p-3 rounded-lg">
                     <div className="text-xs text-gray-400 mb-1">Liquidity</div>
-                    <div className="font-semibold">{formatNumber(priceData.liquidity)}</div>
+                    <div className="font-semibold text-sm">{formatNumber(priceData.liquidity)}</div>
                   </div>
                   <div className="bg-dark-bg p-3 rounded-lg">
                     <div className="text-xs text-gray-400 mb-1">Volume 24h</div>
-                    <div className="font-semibold">{formatNumber(priceData.volume24h)}</div>
+                    <div className="font-semibold text-sm">{formatNumber(priceData.volume24h)}</div>
                   </div>
                   <div className="bg-dark-bg p-3 rounded-lg">
                     <div className="text-xs text-gray-400 mb-1">Market Cap</div>
-                    <div className="font-semibold">{formatNumber(priceData.marketCap)}</div>
+                    <div className="font-semibold text-sm">{formatNumber(priceData.marketCap)}</div>
                   </div>
                   <div className="bg-dark-bg p-3 rounded-lg">
                     <div className="text-xs text-gray-400 mb-1">DEX</div>
-                    <div className="font-semibold capitalize">{priceData.dexId}</div>
+                    <div className="font-semibold text-sm capitalize">{priceData.dexId}</div>
                   </div>
                 </div>
-
-                <a
-                  href={`https://dexscreener.com/solana/${call.token_address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 border border-purple-500/50 text-white py-3 px-4 rounded-lg transition-all text-center font-medium"
-                >
-                  View Full Chart on DexScreener →
-                </a>
               </div>
             ) : (
               <div className="text-center py-8 text-gray-400">
                 Price data not available for this token
+              </div>
+            )}
+          </div>
+
+          {/* Interactive Chart - Full width on mobile, 1 col on desktop */}
+          <div className="card">
+            <h2 className="text-xl font-bold mb-4">Live Chart</h2>
+            
+            {priceLoading ? (
+              <div className="relative w-full bg-dark-bg rounded-lg flex items-center justify-center" style={{ paddingBottom: '100%' }}>
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                  Loading chart...
+                </div>
+              </div>
+            ) : priceData?.pairAddress ? (
+              <>
+                <div className="relative w-full bg-dark-bg rounded-lg overflow-hidden" style={{ paddingBottom: '100%' }}>
+                  <iframe
+                    src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                    className="absolute inset-0 w-full h-full border-0"
+                    title="DexScreener Chart"
+                    loading="lazy"
+                  />
+                </div>
+
+                <a
+                  href={`https://dexscreener.com/solana/${priceData.pairAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 border border-purple-500/50 text-white py-2.5 px-4 rounded-lg transition-all text-center font-medium mt-4 text-sm"
+                >
+                  Open Full Chart →
+                </a>
+              </>
+            ) : (
+              <div className="relative w-full bg-dark-bg rounded-lg flex items-center justify-center" style={{ paddingBottom: '100%' }}>
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                  Chart not available for this token
+                </div>
               </div>
             )}
           </div>
