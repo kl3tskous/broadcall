@@ -1,0 +1,117 @@
+Exactly 💯 — giving Replit AI the Supabase schema right away makes the code generation much cleaner.
+
+Here’s the final version of your Replit AI prompt, ready to paste ⬇️
+
+⸻
+
+🧠 Prompt for Replit AI – Build MVP for Coin Call Referral Platform
+
+Build a Next.js + Tailwind CSS web app with a dark modern UI for a simple influencer coin-call referral platform (Solana-focused).
+
+Features to include in this first version:
+
+1. Project Setup
+	•	Use Next.js and Tailwind CSS (dark theme).
+	•	Create a clean folder structure:
+
+/pages
+  index.jsx
+  call/[id].jsx
+/components
+  WalletConnectButton.jsx
+  CallForm.jsx
+/utils
+  supabaseClient.js
+
+
+	•	Include Solana Wallet Adapter to support Phantom wallet login on the homepage.
+	•	Use Supabase as the database (frontend client).
+
+⸻
+
+2. Supabase Setup
+
+Use this database schema for a calls table:
+
+create table calls (
+  id uuid primary key default gen_random_uuid(),
+  creator_wallet text not null,
+  token_address text not null,
+  platform text not null,
+  thesis text,
+  views int default 0,
+  clicks int default 0,
+  created_at timestamp with time zone default now()
+);
+
+
+⸻
+
+3. Homepage (/)
+	•	Show a “Connect Wallet” button (Phantom via Solana Wallet Adapter).
+	•	Once connected, display the user’s wallet address.
+	•	Show a simple form:
+	•	Input: Token Address (text)
+	•	Input: Thesis (optional textarea)
+	•	Hidden field or default value: platform = "GMGN"
+	•	Generate Link button
+	•	On submit:
+	•	Insert a new record in the calls table using Supabase.
+	•	Use a placeholder referral code: 7rpqjHdf.
+	•	After saving, show a generated link:
+
+https://your-app.com/call/[id]
+
+(where [id] is the Supabase record ID).
+
+⸻
+
+4. Call Page (/call/[id])
+	•	Fetch the call data by ID from Supabase.
+	•	Display:
+	•	Token address
+	•	Thesis (if available)
+	•	Embedded GMGN chart iframe (dark mode):
+
+https://www.gmgn.cc/kline/sol/[TOKEN_ADDRESS]?theme=dark
+
+
+	•	“Buy via GMGN” button linking to:
+
+https://t.me/gmgnaibot?start=i_7rpqjHdf_sol_[TOKEN_ADDRESS]
+
+
+	•	Increment the views counter when the page loads.
+	•	Increment the clicks counter when the buy button is clicked.
+
+⸻
+
+5. UI / Design
+	•	Use Tailwind CSS for a sleek dark theme:
+	•	Background: dark gray / black
+	•	Text: light gray / white
+	•	Accent: bright color (blue, green, or purple)
+	•	Mobile-friendly layout.
+	•	Clean, modern, minimalist design.
+
+⸻
+
+✅ Requirements Recap
+	•	Next.js + Tailwind project scaffold
+	•	Phantom wallet connect via Solana Wallet Adapter
+	•	Supabase client integration
+	•	Call creation form + link generation
+	•	Call page with token info, chart, and referral button
+	•	View and click tracking in Supabase
+	•	Simple, dark, modern UI
+
+Start by coding the base project structure, Supabase client setup, wallet connect component, and homepage with form.
+
+⸻
+
+👉 This gives Replit AI everything it needs to:
+	•	set up the codebase properly,
+	•	configure Supabase usage,
+	•	and build your MVP cleanly from the start.
+
+Would you like me to also prepare a follow-up prompt for after the first build (e.g. “make the design look more premium / animated”)? That often helps polish the UI after the base version is working. 🚀
