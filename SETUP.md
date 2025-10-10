@@ -45,7 +45,8 @@ That's it! Your database is now set up.
 - **Views**: Auto-tracked when someone visits your call page
 - **Clicks**: Counted when someone clicks "Buy via GMGN"
 - **Referral Code**: `7rpqjHdf` is automatically included in all buy links
-- **Charts**: Live GMGN price charts embedded on each call page
+- **Price Data**: Real-time data from DexScreener API (updates every 30 seconds)
+- **Charts**: Link to view full interactive charts on DexScreener
 
 ## 🎨 Customize
 

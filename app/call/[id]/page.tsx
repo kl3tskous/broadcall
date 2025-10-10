@@ -6,11 +6,23 @@ import { supabase, Call } from '@/utils/supabaseClient'
 
 const REFERRAL_CODE = '7rpqjHdf'
 
+interface TokenPrice {
+  priceUsd: string
+  priceChange24h: number
+  liquidity: number
+  volume24h: number
+  marketCap: number
+  pairAddress: string
+  dexId: string
+}
+
 export default function CallPage() {
   const params = useParams()
   const id = params.id as string
   const [call, setCall] = useState<Call | null>(null)
   const [loading, setLoading] = useState(true)
+  const [priceData, setPriceData] = useState<TokenPrice | null>(null)
+  const [priceLoading, setPriceLoading] = useState(true)
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -24,20 +36,22 @@ export default function CallPage() {
         if (error) throw error
 
         setCall(data)
+        setLoading(false)
 
         const updatedViews = (data.views || 0) + 1
 
-        const { error: updateError } = await supabase
+        void supabase
           .from('calls')
           .update({ views: updatedViews })
           .eq('id', id)
-
-        if (!updateError) {
-          setCall({ ...data, views: updatedViews })
-        }
+          .then(({ error: updateError }) => {
+            if (!updateError) {
+              setCall({ ...data, views: updatedViews })
+            }
+          })
+          .catch(console.error)
       } catch (error) {
         console.error('Error fetching call:', error)
-      } finally {
         setLoading(false)
       }
     }
@@ -46,6 +60,40 @@ export default function CallPage() {
       fetchCall()
     }
   }, [id])
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      if (!call?.token_address) return
+
+      try {
+        const response = await fetch(
+          `https://api.dexscreener.com/latest/dex/tokens/${call.token_address}`
+        )
+        const data = await response.json()
+
+        if (data.pairs && data.pairs.length > 0) {
+          const mainPair = data.pairs[0]
+          setPriceData({
+            priceUsd: mainPair.priceUsd || '0',
+            priceChange24h: mainPair.priceChange?.h24 || 0,
+            liquidity: mainPair.liquidity?.usd || 0,
+            volume24h: mainPair.volume?.h24 || 0,
+            marketCap: mainPair.fdv || 0,
+            pairAddress: mainPair.pairAddress,
+            dexId: mainPair.dexId
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching price:', error)
+      } finally {
+        setPriceLoading(false)
+      }
+    }
+
+    fetchPrice()
+    const interval = setInterval(fetchPrice, 30000)
+    return () => clearInterval(interval)
+  }, [call?.token_address])
 
   const handleBuyClick = async () => {
     if (call) {
@@ -66,6 +114,12 @@ export default function CallPage() {
       const buyUrl = `https://t.me/gmgnaibot?start=i_${REFERRAL_CODE}_sol_${call.token_address}`
       window.open(buyUrl, '_blank')
     }
+  }
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) return `$${(num / 1000000).toFixed(2)}M`
+    if (num >= 1000) return `$${(num / 1000).toFixed(2)}K`
+    return `$${num.toFixed(2)}`
   }
 
   if (loading) {
@@ -143,14 +197,55 @@ export default function CallPage() {
           </div>
 
           <div className="card">
-            <h2 className="text-xl font-bold mb-4">Price Chart</h2>
-            <div className="relative w-full" style={{ paddingBottom: '75%' }}>
-              <iframe
-                src={`https://www.gmgn.cc/kline/sol/${call.token_address}?theme=dark`}
-                className="absolute inset-0 w-full h-full rounded-lg"
-                title="GMGN Chart"
-              />
-            </div>
+            <h2 className="text-xl font-bold mb-4">Price Data</h2>
+            
+            {priceLoading ? (
+              <div className="text-center py-8 text-gray-400">Loading price data...</div>
+            ) : priceData ? (
+              <div className="space-y-4">
+                <div className="bg-dark-bg p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-1">Current Price</div>
+                  <div className="text-3xl font-bold text-white">
+                    ${parseFloat(priceData.priceUsd).toFixed(6)}
+                  </div>
+                  <div className={`text-sm mt-1 ${priceData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {priceData.priceChange24h >= 0 ? '↑' : '↓'} {Math.abs(priceData.priceChange24h).toFixed(2)}% (24h)
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <div className="text-xs text-gray-400 mb-1">Liquidity</div>
+                    <div className="font-semibold">{formatNumber(priceData.liquidity)}</div>
+                  </div>
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <div className="text-xs text-gray-400 mb-1">Volume 24h</div>
+                    <div className="font-semibold">{formatNumber(priceData.volume24h)}</div>
+                  </div>
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <div className="text-xs text-gray-400 mb-1">Market Cap</div>
+                    <div className="font-semibold">{formatNumber(priceData.marketCap)}</div>
+                  </div>
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <div className="text-xs text-gray-400 mb-1">DEX</div>
+                    <div className="font-semibold capitalize">{priceData.dexId}</div>
+                  </div>
+                </div>
+
+                <a
+                  href={`https://dexscreener.com/solana/${call.token_address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 border border-purple-500/50 text-white py-3 px-4 rounded-lg transition-all text-center font-medium"
+                >
+                  View Full Chart on DexScreener →
+                </a>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-400">
+                Price data not available for this token
+              </div>
+            )}
           </div>
         </div>
       </div>

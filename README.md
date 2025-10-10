@@ -5,11 +5,12 @@ A Next.js-based Solana influencer coin-call referral platform with Phantom walle
 ## Features
 
 ✨ **Phantom Wallet Integration** - Connect your Solana wallet to create and track calls  
-📊 **GMGN Chart Embeds** - Live price charts for each token call  
+📊 **DexScreener Price Data** - Real-time token prices with 24h change, liquidity, volume, and market cap  
 🔗 **Shareable Links** - Auto-generated unique links for each call  
 📈 **Analytics Tracking** - Automatic view and click tracking  
 💰 **Referral System** - Built-in GMGN referral code integration  
-🎨 **Modern Dark UI** - Sleek design with purple gradient accents
+🎨 **Modern Dark UI** - Sleek design with purple gradient accents  
+🔄 **Auto-Refresh** - Price data updates every 30 seconds
 
 ## Quick Start
 
@@ -47,8 +48,9 @@ The app will be available at http://localhost:5000
 
 Each call gets a unique URL like `/call/[id]` that you can share with your audience. The page includes:
 - Token information and thesis
-- Live GMGN price chart
-- Buy button with your referral code
+- Real-time price data from DexScreener (price, 24h change, liquidity, volume, market cap)
+- Link to view full chart on DexScreener
+- Buy button with your referral code (opens GMGN Telegram bot)
 - Automatic tracking of views and clicks
 
 ## Tech Stack
