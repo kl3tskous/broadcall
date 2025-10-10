@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/utils/supabaseClient'
+import { platforms } from './PlatformLogos'
 
 interface CallFormProps {
   walletAddress: string
@@ -12,6 +13,13 @@ export function CallForm({ walletAddress }: CallFormProps) {
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [generatedLink, setGeneratedLink] = useState('')
+  
+  // Referral codes for each platform
+  const [gmgnRef, setGmgnRef] = useState('')
+  const [axiomRef, setAxiomRef] = useState('')
+  const [photonRef, setPhotonRef] = useState('')
+  const [bullxRef, setBullxRef] = useState('')
+  const [trojanRef, setTrojanRef] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,6 +35,11 @@ export function CallForm({ walletAddress }: CallFormProps) {
             token_address: tokenAddress,
             platform: 'GMGN',
             thesis: thesis || null,
+            gmgn_ref: gmgnRef || null,
+            axiom_ref: axiomRef || null,
+            photon_ref: photonRef || null,
+            bullx_ref: bullxRef || null,
+            trojan_ref: trojanRef || null,
           },
         ])
         .select()
@@ -38,6 +51,11 @@ export function CallForm({ walletAddress }: CallFormProps) {
       setGeneratedLink(link)
       setTokenAddress('')
       setThesis('')
+      setGmgnRef('')
+      setAxiomRef('')
+      setPhotonRef('')
+      setBullxRef('')
+      setTrojanRef('')
     } catch (error: any) {
       console.error('Error creating call:', error)
       const errorMessage = error?.message || error?.error_description || JSON.stringify(error)
@@ -56,7 +74,7 @@ export function CallForm({ walletAddress }: CallFormProps) {
     <div className="card">
       <h2 className="text-2xl font-bold mb-6">Create New Call</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="tokenAddress" className="block text-sm font-medium text-gray-300 mb-2">
             Token Address *
@@ -84,6 +102,98 @@ export function CallForm({ walletAddress }: CallFormProps) {
             className="input-field min-h-[100px]"
             rows={4}
           />
+        </div>
+
+        {/* Referral Codes Section */}
+        <div className="border border-gray-700 rounded-lg p-4 bg-dark-bg/50">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+              Your Referral Codes
+            </span>
+            <span className="text-xs text-gray-500 font-normal">(Optional)</span>
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* GMGN */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                {platforms.find(p => p.id === 'gmgn')?.Logo && 
+                  React.createElement(platforms.find(p => p.id === 'gmgn')!.Logo, { className: 'w-4 h-4' })}
+                GMGN
+              </label>
+              <input
+                type="text"
+                value={gmgnRef}
+                onChange={(e) => setGmgnRef(e.target.value)}
+                placeholder="Your GMGN ref code"
+                className="input-field text-sm"
+              />
+            </div>
+
+            {/* Axiom */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                {platforms.find(p => p.id === 'axiom')?.Logo && 
+                  React.createElement(platforms.find(p => p.id === 'axiom')!.Logo, { className: 'w-4 h-4' })}
+                Axiom
+              </label>
+              <input
+                type="text"
+                value={axiomRef}
+                onChange={(e) => setAxiomRef(e.target.value)}
+                placeholder="Your Axiom ref code"
+                className="input-field text-sm"
+              />
+            </div>
+
+            {/* Photon */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                {platforms.find(p => p.id === 'photon')?.Logo && 
+                  React.createElement(platforms.find(p => p.id === 'photon')!.Logo, { className: 'w-4 h-4' })}
+                Photon
+              </label>
+              <input
+                type="text"
+                value={photonRef}
+                onChange={(e) => setPhotonRef(e.target.value)}
+                placeholder="Your Photon ref code"
+                className="input-field text-sm"
+              />
+            </div>
+
+            {/* BullX */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                {platforms.find(p => p.id === 'bullx')?.Logo && 
+                  React.createElement(platforms.find(p => p.id === 'bullx')!.Logo, { className: 'w-4 h-4' })}
+                BullX
+              </label>
+              <input
+                type="text"
+                value={bullxRef}
+                onChange={(e) => setBullxRef(e.target.value)}
+                placeholder="Your BullX ref code"
+                className="input-field text-sm"
+              />
+            </div>
+
+            {/* Trojan */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                {platforms.find(p => p.id === 'trojan')?.Logo && 
+                  React.createElement(platforms.find(p => p.id === 'trojan')!.Logo, { className: 'w-4 h-4' })}
+                Trojan
+              </label>
+              <input
+                type="text"
+                value={trojanRef}
+                onChange={(e) => setTrojanRef(e.target.value)}
+                placeholder="Your Trojan ref code"
+                className="input-field text-sm"
+              />
+            </div>
+          </div>
         </div>
 
         <button
