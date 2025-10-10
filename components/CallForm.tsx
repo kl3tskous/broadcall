@@ -1,25 +1,37 @@
 'use client'
 
-import React, { useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
+import React, { useState, useEffect } from 'react'
+import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from './PlatformLogos'
 
 interface CallFormProps {
   walletAddress: string
+  userSettings: UserSettings | null
 }
 
-export function CallForm({ walletAddress }: CallFormProps) {
+export function CallForm({ walletAddress, userSettings }: CallFormProps) {
   const [tokenAddress, setTokenAddress] = useState('')
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [generatedLink, setGeneratedLink] = useState('')
   
-  // Referral codes for each platform
-  const [gmgnRef, setGmgnRef] = useState('')
-  const [axiomRef, setAxiomRef] = useState('')
-  const [photonRef, setPhotonRef] = useState('')
-  const [bullxRef, setBullxRef] = useState('')
-  const [trojanRef, setTrojanRef] = useState('')
+  // Referral codes for each platform - auto-populate from user settings
+  const [gmgnRef, setGmgnRef] = useState(userSettings?.gmgn_ref || '')
+  const [axiomRef, setAxiomRef] = useState(userSettings?.axiom_ref || '')
+  const [photonRef, setPhotonRef] = useState(userSettings?.photon_ref || '')
+  const [bullxRef, setBullxRef] = useState(userSettings?.bullx_ref || '')
+  const [trojanRef, setTrojanRef] = useState(userSettings?.trojan_ref || '')
+
+  // Update referral codes when userSettings changes
+  useEffect(() => {
+    if (userSettings) {
+      setGmgnRef(userSettings.gmgn_ref || '')
+      setAxiomRef(userSettings.axiom_ref || '')
+      setPhotonRef(userSettings.photon_ref || '')
+      setBullxRef(userSettings.bullx_ref || '')
+      setTrojanRef(userSettings.trojan_ref || '')
+    }
+  }, [userSettings])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
