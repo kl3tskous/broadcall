@@ -26,3 +26,16 @@ export interface Platform {
   name: string
   color: string
 }
+
+export interface UserSettings {
+  id: string
+  wallet_address: string
+  gmgn_ref: string | null
+  axiom_ref: string | null
+  photon_ref: string | null
+  bullx_ref: string | null
+  trojan_ref: string | null
+  onboarded: boolean
+  created_at: string
+  updated_at: string
+}
