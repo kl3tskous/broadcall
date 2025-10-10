@@ -25,10 +25,16 @@ export default function CallPage() {
 
         setCall(data)
 
-        await supabase
+        const updatedViews = (data.views || 0) + 1
+
+        const { error: updateError } = await supabase
           .from('calls')
-          .update({ views: (data.views || 0) + 1 })
+          .update({ views: updatedViews })
           .eq('id', id)
+
+        if (!updateError) {
+          setCall({ ...data, views: updatedViews })
+        }
       } catch (error) {
         console.error('Error fetching call:', error)
       } finally {
@@ -43,10 +49,19 @@ export default function CallPage() {
 
   const handleBuyClick = async () => {
     if (call) {
-      await supabase
+      const updatedClicks = (call.clicks || 0) + 1
+
+      setCall({ ...call, clicks: updatedClicks })
+
+      const { error: updateError } = await supabase
         .from('calls')
-        .update({ clicks: (call.clicks || 0) + 1 })
+        .update({ clicks: updatedClicks })
         .eq('id', id)
+
+      if (updateError) {
+        console.error('Error updating clicks:', updateError)
+        setCall({ ...call, clicks: call.clicks })
+      }
 
       const buyUrl = `https://t.me/gmgnaibot?start=i_${REFERRAL_CODE}_sol_${call.token_address}`
       window.open(buyUrl, '_blank')
