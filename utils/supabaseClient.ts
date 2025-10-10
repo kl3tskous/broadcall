@@ -13,5 +13,16 @@ export interface Call {
   thesis: string | null
   views: number
   clicks: number
+  gmgn_ref: string | null
+  axiom_ref: string | null
+  photon_ref: string | null
+  bullx_ref: string | null
+  trojan_ref: string | null
   created_at: string
+}
+
+export interface Platform {
+  id: string
+  name: string
+  color: string
 }

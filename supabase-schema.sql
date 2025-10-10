@@ -9,6 +9,12 @@ create table calls (
   thesis text,
   views int default 0,
   clicks int default 0,
+  -- Referral codes for different platforms
+  gmgn_ref text,
+  axiom_ref text,
+  photon_ref text,
+  bullx_ref text,
+  trojan_ref text,
   created_at timestamp with time zone default now()
 );
 
