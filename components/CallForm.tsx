@@ -38,9 +38,10 @@ export function CallForm({ walletAddress }: CallFormProps) {
       setGeneratedLink(link)
       setTokenAddress('')
       setThesis('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating call:', error)
-      alert('Failed to create call. Please check your Supabase configuration.')
+      const errorMessage = error?.message || error?.error_description || JSON.stringify(error)
+      alert(`Failed to create call: ${errorMessage}`)
     } finally {
       setLoading(false)
     }
