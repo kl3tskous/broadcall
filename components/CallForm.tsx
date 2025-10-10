@@ -63,11 +63,12 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
       setGeneratedLink(link)
       setTokenAddress('')
       setThesis('')
-      setGmgnRef('')
-      setAxiomRef('')
-      setPhotonRef('')
-      setBullxRef('')
-      setTrojanRef('')
+      // Keep referral codes populated from user settings
+      setGmgnRef(userSettings?.gmgn_ref || '')
+      setAxiomRef(userSettings?.axiom_ref || '')
+      setPhotonRef(userSettings?.photon_ref || '')
+      setBullxRef(userSettings?.bullx_ref || '')
+      setTrojanRef(userSettings?.trojan_ref || '')
     } catch (error: any) {
       console.error('Error creating call:', error)
       const errorMessage = error?.message || error?.error_description || JSON.stringify(error)

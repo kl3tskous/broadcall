@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { supabase, Call } from '@/utils/supabaseClient'
+import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
@@ -21,6 +21,7 @@ export default function CallPage() {
   const params = useParams()
   const id = params.id as string
   const [call, setCall] = useState<Call | null>(null)
+  const [creatorSettings, setCreatorSettings] = useState<UserSettings | null>(null)
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
   const [priceLoading, setPriceLoading] = useState(true)
@@ -37,6 +38,17 @@ export default function CallPage() {
         if (error) throw error
 
         setCall(data)
+
+        const { data: settingsData } = await supabase
+          .from('user_settings')
+          .select('*')
+          .eq('wallet_address', data.creator_wallet)
+          .single()
+
+        if (settingsData) {
+          setCreatorSettings(settingsData)
+        }
+
         setLoading(false)
 
         const updatedViews = (data.views || 0) + 1
@@ -103,29 +115,29 @@ export default function CallPage() {
     
     switch (platformId) {
       case 'gmgn':
-        const gmgnRef = call.gmgn_ref || DEFAULT_GMGN_REF
+        const gmgnRef = call.gmgn_ref || creatorSettings?.gmgn_ref || DEFAULT_GMGN_REF
         return `https://t.me/gmgnaibot?start=i_${gmgnRef}_sol_${tokenAddress}`
       
       case 'axiom':
-        const axiomRef = call.axiom_ref || ''
+        const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || ''
         return axiomRef 
           ? `https://axiom.trade/solana/${tokenAddress}?ref=${axiomRef}`
           : `https://axiom.trade/solana/${tokenAddress}`
       
       case 'photon':
-        const photonRef = call.photon_ref || ''
+        const photonRef = call.photon_ref || creatorSettings?.photon_ref || ''
         return photonRef
           ? `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}?ref=${photonRef}`
           : `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}`
       
       case 'bullx':
-        const bullxRef = call.bullx_ref || ''
+        const bullxRef = call.bullx_ref || creatorSettings?.bullx_ref || ''
         return bullxRef
           ? `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}&r=${bullxRef}`
           : `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}`
       
       case 'trojan':
-        const trojanRef = call.trojan_ref || ''
+        const trojanRef = call.trojan_ref || creatorSettings?.trojan_ref || ''
         return trojanRef
           ? `https://t.me/solana_trojanbot?start=${trojanRef}-${tokenAddress}`
           : `https://t.me/solana_trojanbot?start=${tokenAddress}`
