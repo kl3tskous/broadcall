@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { supabase, Call } from '@/utils/supabaseClient'
+import { platforms } from '@/components/PlatformLogos'
 
-const REFERRAL_CODE = '7rpqjHdf'
+const DEFAULT_GMGN_REF = '7rpqjHdf'
 
 interface TokenPrice {
   priceUsd: string
@@ -95,24 +96,63 @@ export default function CallPage() {
     return () => clearInterval(interval)
   }, [call?.token_address])
 
-  const handleBuyClick = async () => {
+  const getPlatformUrl = (platformId: string) => {
+    if (!call) return ''
+    
+    const tokenAddress = call.token_address
+    
+    switch (platformId) {
+      case 'gmgn':
+        const gmgnRef = call.gmgn_ref || DEFAULT_GMGN_REF
+        return `https://t.me/gmgnaibot?start=i_${gmgnRef}_sol_${tokenAddress}`
+      
+      case 'axiom':
+        const axiomRef = call.axiom_ref || ''
+        return axiomRef 
+          ? `https://axiom.trade/solana/${tokenAddress}?ref=${axiomRef}`
+          : `https://axiom.trade/solana/${tokenAddress}`
+      
+      case 'photon':
+        const photonRef = call.photon_ref || ''
+        return photonRef
+          ? `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}?ref=${photonRef}`
+          : `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}`
+      
+      case 'bullx':
+        const bullxRef = call.bullx_ref || ''
+        return bullxRef
+          ? `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}&r=${bullxRef}`
+          : `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}`
+      
+      case 'trojan':
+        const trojanRef = call.trojan_ref || ''
+        return trojanRef
+          ? `https://t.me/solana_trojanbot?start=${trojanRef}-${tokenAddress}`
+          : `https://t.me/solana_trojanbot?start=${tokenAddress}`
+      
+      default:
+        return ''
+    }
+  }
+
+  const handlePlatformClick = async (platformId: string) => {
     if (call) {
       const updatedClicks = (call.clicks || 0) + 1
-
       setCall({ ...call, clicks: updatedClicks })
 
-      const { error: updateError } = await supabase
+      void supabase
         .from('calls')
         .update({ clicks: updatedClicks })
         .eq('id', id)
+        .catch((error) => {
+          console.error('Error updating clicks:', error)
+          setCall({ ...call, clicks: call.clicks })
+        })
 
-      if (updateError) {
-        console.error('Error updating clicks:', updateError)
-        setCall({ ...call, clicks: call.clicks })
+      const url = getPlatformUrl(platformId)
+      if (url) {
+        window.open(url, '_blank')
       }
-
-      const buyUrl = `https://t.me/gmgnaibot?start=i_${REFERRAL_CODE}_sol_${call.token_address}`
-      window.open(buyUrl, '_blank')
     }
   }
 
@@ -181,21 +221,27 @@ export default function CallPage() {
                 </div>
               )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">
-                  Platform
+              {/* Buy on Platforms */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-400 mb-3">
+                  Buy on Your Favorite Platform
                 </label>
-                <div className="bg-dark-bg p-3 rounded-lg text-sm">
-                  {call.platform}
+                <div className="grid grid-cols-2 gap-2">
+                  {platforms.map((platform) => {
+                    const Logo = platform.Logo
+                    return (
+                      <button
+                        key={platform.id}
+                        onClick={() => handlePlatformClick(platform.id)}
+                        className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 border border-purple-500/50 rounded-lg transition-all text-sm font-medium"
+                      >
+                        <Logo className="w-4 h-4" />
+                        {platform.name}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
-
-              <button
-                onClick={handleBuyClick}
-                className="btn-primary w-full mt-6"
-              >
-                Buy via GMGN
-              </button>
             </div>
           </div>
 

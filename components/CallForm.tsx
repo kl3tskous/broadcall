@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { supabase } from '@/utils/supabaseClient'
 import { platforms } from './PlatformLogos'
 
