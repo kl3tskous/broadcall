@@ -78,6 +78,20 @@ Server runs on http://localhost:5000
 4. **Track Engagement**: View count increments on page load, click count on buy button
 5. **Buy Button**: Opens GMGN Telegram bot with referral code `7rpqjHdf`
 
+## Implementation Notes
+
+### Tracking System
+- **View Tracking**: Increments on page load with optimistic UI updates
+- **Click Tracking**: Increments on buy button click with error rollback
+- **Error Handling**: Graceful degradation if Supabase updates fail
+- **State Management**: Local state synced with database for instant UI feedback
+
+### Dependencies Installation
+The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
+- Skip native compilation (not needed for web apps)
+- Handle peer dependency conflicts from Solana wallet adapters
+- Ensure reliable installation in Replit environment
+
 ## Recent Changes
 - ✅ MVP complete with Next.js 14, TypeScript, and Tailwind CSS
 - ✅ Phantom wallet connection integrated via Solana Wallet Adapter  
@@ -86,3 +100,5 @@ Server runs on http://localhost:5000
 - ✅ Call creation form with link generation
 - ✅ Dynamic call pages with GMGN chart embeds
 - ✅ Referral tracking with hardcoded GMGN code
+- ✅ Fixed click tracking race condition with optimistic updates
+- ✅ Added error handling and rollback for failed database updates
