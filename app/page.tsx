@@ -77,7 +77,7 @@ export default function Home() {
     <main className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
             Coin Call Platform
           </h1>
           <p className="text-gray-400 text-lg">
@@ -95,7 +95,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/settings"
-                  className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                  className="text-sm text-orange-400 hover:text-orange-300 transition-colors"
                 >
                   ⚙️ Settings
                 </Link>

@@ -14,8 +14,8 @@ module.exports = {
           border: '#262626',
         },
         accent: {
-          primary: '#8b5cf6',
-          hover: '#7c3aed',
+          primary: '#f97316',
+          hover: '#ea580c',
         }
       },
     },

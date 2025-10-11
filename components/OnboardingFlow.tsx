@@ -73,7 +73,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
       <div className="card max-w-2xl w-full">
         {step === 1 && (
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
               Welcome to Coin Call Platform! 🚀
             </h1>
             <p className="text-gray-300 mb-6 text-lg">
@@ -84,7 +84,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
               <h2 className="text-xl font-bold mb-4">How It Works:</h2>
               
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center font-bold">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center font-bold">
                   1
                 </div>
                 <div>
@@ -96,7 +96,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center font-bold">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center font-bold">
                   2
                 </div>
                 <div>
@@ -108,7 +108,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center font-bold">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center font-bold">
                   3
                 </div>
                 <div>
@@ -120,7 +120,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center font-bold">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center font-bold">
                   4
                 </div>
                 <div>
@@ -152,7 +152,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  <span className="text-purple-400">●</span> GMGN Referral Code
+                  <span className="text-orange-400">●</span> GMGN Referral Code
                 </label>
                 <input
                   type="text"
@@ -165,7 +165,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  <span className="text-pink-400">●</span> Axiom Referral Code
+                  <span className="text-orange-400">●</span> Axiom Referral Code
                 </label>
                 <input
                   type="text"
@@ -178,7 +178,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  <span className="text-purple-400">●</span> Photon Referral Code
+                  <span className="text-orange-400">●</span> Photon Referral Code
                 </label>
                 <input
                   type="text"
@@ -191,7 +191,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  <span className="text-pink-400">●</span> BullX Referral Code
+                  <span className="text-orange-400">●</span> BullX Referral Code
                 </label>
                 <input
                   type="text"
@@ -204,7 +204,7 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  <span className="text-purple-400">●</span> Trojan Referral Code
+                  <span className="text-orange-400">●</span> Trojan Referral Code
                 </label>
                 <input
                   type="text"

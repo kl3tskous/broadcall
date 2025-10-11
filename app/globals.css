@@ -12,11 +12,11 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply bg-accent-primary hover:bg-accent-hover text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
+    @apply bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200;
   }
   
   .input-field {
-    @apply w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-accent-primary transition-colors;
+    @apply w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors;
   }
   
   .card {
@@ -25,10 +25,10 @@ body {
 }
 
 .wallet-adapter-button {
-  background-color: #8b5cf6 !important;
+  background: linear-gradient(to right, #f97316, #dc2626) !important;
   border-radius: 0.5rem !important;
 }
 
 .wallet-adapter-button:hover {
-  background-color: #7c3aed !important;
+  background: linear-gradient(to right, #ea580c, #b91c1c) !important;
 }

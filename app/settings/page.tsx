@@ -118,7 +118,7 @@ export default function SettingsPage() {
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
               Settings
             </h1>
             <p className="text-gray-400">Manage your referral codes and preferences</p>
@@ -142,7 +142,7 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
-                <span className="text-purple-400">●</span> GMGN Referral Code
+                <span className="text-orange-400">●</span> GMGN Referral Code
               </label>
               <input
                 type="text"
@@ -158,7 +158,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                <span className="text-pink-400">●</span> Axiom Referral Code
+                <span className="text-orange-400">●</span> Axiom Referral Code
               </label>
               <input
                 type="text"
@@ -174,7 +174,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                <span className="text-purple-400">●</span> Photon Referral Code
+                <span className="text-orange-400">●</span> Photon Referral Code
               </label>
               <input
                 type="text"
@@ -190,7 +190,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                <span className="text-pink-400">●</span> BullX Referral Code
+                <span className="text-orange-400">●</span> BullX Referral Code
               </label>
               <input
                 type="text"
@@ -206,7 +206,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                <span className="text-purple-400">●</span> Trojan Referral Code
+                <span className="text-orange-400">●</span> Trojan Referral Code
               </label>
               <input
                 type="text"

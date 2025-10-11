@@ -126,7 +126,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               <img 
                 src={avatarUrl} 
                 alt="Avatar preview" 
-                className="w-16 h-16 rounded-full border-2 border-purple-500/50"
+                className="w-16 h-16 rounded-full border-2 border-orange-500/50"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none'
                 }}
