@@ -1,0 +1,153 @@
+🧠 Prompt for Replit AI — “Token Call Page Upgrade”
+
+I already have a working Next.js + Tailwind web app with Supabase that lets users:
+
+connect their Phantom wallet
+
+input a contract address (CA)
+
+generate a token call page with referral buttons.
+
+Now upgrade this project to make the token call share page much more visually appealing and flex-worthy, similar to bots like RickBot or PhanesBot.
+
+🗄️ 1. Supabase Database Upgrades
+
+Modify the existing calls table to add:
+
+alter table calls
+add column token_name text,
+add column token_symbol text,
+add column token_logo text,
+add column initial_price numeric,
+add column initial_mcap numeric,
+add column current_price numeric,
+add column current_mcap numeric,
+add column ath_price numeric,
+add column ath_mcap numeric,
+add column first_shared_at timestamp with time zone default now(),
+add column user_alias text;
+
+
+Create a new table profiles for KOL identity:
+
+create table if not exists profiles (
+  id uuid primary key default gen_random_uuid(),
+  wallet text unique,
+  alias text,
+  avatar_url text,
+  twitter_handle text,
+  created_at timestamp with time zone default now()
+);
+
+
+Link calls.creator_wallet to profiles.wallet when displaying token pages.
+
+🪙 2. Token Metadata & Price Fetching
+
+When a user submits a new CA:
+
+Call the DexScreener API:
+https://api.dexscreener.io/latest/dex/tokens/${tokenAddress}
+
+Extract:
+
+token.name, token.symbol, pair.priceUsd, fdv, liquidity.usd, baseToken.logoURI
+
+Save these in calls as token_name, token_symbol, token_logo, initial_price, initial_mcap.
+
+Also save the first_shared_at timestamp.
+
+On /call/[id] page:
+
+Fetch live DexScreener data again for current_price, current_mcap, and optionally ath.
+
+Calculate ROI % and multiple (current vs initial).
+
+Display token logo, ticker, name at the top of the page.
+
+🎨 3. Frontend Layout Upgrade
+
+Update /call/[id].jsx:
+
+Add a top header with:
+
+Token logo
+
+Token name & ticker
+
+“First shared by @alias at $X MCap • [time ago]”
+
+Add a Performance / Flex Card:
+
+ROI % since call in bold, big font
+
+ATH price/mcap and multiplier
+
+“First shared at $[initial price], now $[current price]”
+
+Keep the Dex chart embed but align it nicely next to performance.
+
+Use Tailwind dark theme styling with clean borders and spacing.
+
+Example:
+
+<div className="flex items-center gap-3 mb-4">
+  <img src={token_logo} className="w-10 h-10 rounded-full" />
+  <div>
+    <h1 className="text-xl font-bold">{token_name} (${token_symbol})</h1>
+    <p className="text-gray-400 text-sm">
+      First shared by @{user_alias} at ${initial_mcap.toLocaleString()} MCap ({formatTimeAgo(first_shared_at)})
+    </p>
+  </div>
+</div>
+
+📢 4. Social Flex Features
+
+Add buttons under the chart:
+
+“🚀 Share on X (Twitter)” → opens tweet composer with:
+
+I called $[TOKEN] at $[INITIAL_MCAP] — now up [ROI]% 🚀
+[URL]
+
+
+“🖼️ Download Flex Card” → use html2canvas or html-to-image to screenshot the flex card section.
+
+“🔗 Copy Referral Link” → copies the current URL to clipboard with a toast.
+
+Also add OpenGraph metadata (token name, ROI, logo) so when the page link is shared on X or Telegram, a nice preview card shows automatically.
+
+📊 5. Referral Impact Section
+
+Add a section at the bottom of the page showing:
+
+Views: [views] · Clicks: [clicks] · Referrals: [referrals_count]
+
+
+(You can use existing counters or add a referrals table if needed later.)
+
+🧠 6. (Optional for later)
+
+Add /user/[alias] pages to show all calls by a user with their stats.
+
+Add badges for top callers or early apes.
+
+Auto-generate OG preview images for X/Telegram.
+
+✅ Goal: Transform the plain token call page into a beautiful, flex-worthy social referral page with:
+
+Token name/logo
+
+Caller attribution
+
+First shared stats
+
+Performance & ATH flex card
+
+Share/download buttons
+
+Dex chart
+
+Referral impact
+
+Use Tailwind dark theme, make it mobile friendly, clean, and visually similar to RickBot / PhanesBot flex cards but as a webpage.

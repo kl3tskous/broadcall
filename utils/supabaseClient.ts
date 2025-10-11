@@ -19,6 +19,17 @@ export interface Call {
   bullx_ref: string | null
   trojan_ref: string | null
   created_at: string
+  token_name: string | null
+  token_symbol: string | null
+  token_logo: string | null
+  initial_price: number | null
+  initial_mcap: number | null
+  current_price: number | null
+  current_mcap: number | null
+  ath_price: number | null
+  ath_mcap: number | null
+  first_shared_at: string | null
+  user_alias: string | null
 }
 
 export interface Platform {
@@ -36,6 +47,16 @@ export interface UserSettings {
   bullx_ref: string | null
   trojan_ref: string | null
   onboarded: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Profile {
+  id: string
+  wallet_address: string
+  alias: string | null
+  avatar_url: string | null
+  twitter_handle: string | null
   created_at: string
   updated_at: string
 }
