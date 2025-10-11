@@ -264,13 +264,13 @@ export default function CallPage() {
                 <img 
                   src={call.token_logo} 
                   alt={call.token_name || 'Token'} 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-purple-500/50 flex-shrink-0"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-orange-500/50 flex-shrink-0"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none'
                   }}
                 />
               ) : (
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-orange-600 to-red-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
                   {call.token_symbol?.charAt(0) || '?'}
                 </div>
               )}
@@ -302,7 +302,7 @@ export default function CallPage() {
 
           {/* Compact Performance Stats */}
           {call.initial_price && call.current_price && (
-            <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-3 md:p-4 mb-4">
+            <div className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-lg p-3 md:p-4 mb-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1">
                   <div className="text-xs text-gray-400 mb-0.5">ROI</div>
@@ -346,7 +346,7 @@ export default function CallPage() {
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 border border-purple-500/50 rounded-lg transition-all text-sm font-medium"
+                    className="flex items-center justify-center gap-2 px-3 py-2.5 bg-transparent hover:bg-orange-500/10 border-2 border-orange-500/50 hover:border-orange-400/70 rounded-lg transition-all text-sm font-medium"
                   >
                     <Logo className="w-4 h-4" />
                     <span className="hidden md:inline">{platform.name}</span>
