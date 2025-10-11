@@ -115,32 +115,37 @@ export default function CallPage() {
     
     switch (platformId) {
       case 'gmgn':
+        // Format: https://t.me/GMGN_sol_bot?start=i_{ref}_c_{token}
         const gmgnRef = call.gmgn_ref || creatorSettings?.gmgn_ref || DEFAULT_GMGN_REF
-        return `https://t.me/gmgnaibot?start=i_${gmgnRef}_sol_${tokenAddress}`
+        return `https://t.me/GMGN_sol_bot?start=i_${gmgnRef}_c_${tokenAddress}`
       
       case 'axiom':
+        // Format: https://axiom.trade/@{username} or direct token link
         const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || ''
         return axiomRef 
-          ? `https://axiom.trade/solana/${tokenAddress}?ref=${axiomRef}`
+          ? `https://axiom.trade/@${axiomRef}`
           : `https://axiom.trade/solana/${tokenAddress}`
       
       case 'photon':
+        // Format: https://photon-sol.tinyastro.io/{username} or direct token link
         const photonRef = call.photon_ref || creatorSettings?.photon_ref || ''
         return photonRef
-          ? `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}?ref=${photonRef}`
+          ? `https://photon-sol.tinyastro.io/${photonRef}`
           : `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}`
       
       case 'bullx':
+        // Format: https://neo.bullx.io/p/{referral_code}
         const bullxRef = call.bullx_ref || creatorSettings?.bullx_ref || ''
         return bullxRef
-          ? `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}&r=${bullxRef}`
+          ? `https://neo.bullx.io/p/${bullxRef}`
           : `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}`
       
       case 'trojan':
+        // Format: https://t.me/solana_trojanbot?start=r-{referralCode}
         const trojanRef = call.trojan_ref || creatorSettings?.trojan_ref || ''
         return trojanRef
-          ? `https://t.me/solana_trojanbot?start=${trojanRef}-${tokenAddress}`
-          : `https://t.me/solana_trojanbot?start=${tokenAddress}`
+          ? `https://t.me/solana_trojanbot?start=r-${trojanRef}`
+          : `https://t.me/solana_trojanbot`
       
       default:
         return ''
@@ -148,24 +153,30 @@ export default function CallPage() {
   }
 
   const handlePlatformClick = async (platformId: string) => {
-    if (call) {
-      const updatedClicks = (call.clicks || 0) + 1
-      setCall({ ...call, clicks: updatedClicks })
+    if (!call) return
 
-      void supabase
-        .from('calls')
-        .update({ clicks: updatedClicks })
-        .eq('id', id)
-        .catch((error) => {
+    const url = getPlatformUrl(platformId)
+    if (!url) return
+
+    // Update clicks optimistically
+    const updatedClicks = (call.clicks || 0) + 1
+    setCall({ ...call, clicks: updatedClicks })
+
+    // Open the platform URL
+    window.open(url, '_blank', 'noopener,noreferrer')
+
+    // Update database (non-blocking)
+    supabase
+      .from('calls')
+      .update({ clicks: updatedClicks })
+      .eq('id', id)
+      .then(({ error }) => {
+        if (error) {
           console.error('Error updating clicks:', error)
+          // Rollback on error
           setCall({ ...call, clicks: call.clicks })
-        })
-
-      const url = getPlatformUrl(platformId)
-      if (url) {
-        window.open(url, '_blank')
-      }
-    }
+        }
+      })
   }
 
   const formatNumber = (num: number) => {
