@@ -179,3 +179,5 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - ✅ **Auto-Refresh User Settings** - Homepage refetches user settings when page gains focus (after returning from settings page)
 - ✅ **Fixed Hydration Errors** - Added mounted state to prevent wallet button hydration mismatches
 - ✅ **Fixed Settings Save** - Added onConflict parameter to upsert operations for proper wallet_address conflict resolution
+- ✅ **Fixed Platform URLs** - Updated all platform referral link formats to match official documentation (Axiom @username, Photon username page, BullX neo.bullx.io, Trojan r- prefix, GMGN official bot)
+- ✅ **Fixed Click Tracking** - Corrected error handling in platform button clicks to prevent console errors
