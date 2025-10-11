@@ -70,11 +70,14 @@ export default function SettingsPage() {
     try {
       const { error } = await supabase
         .from('user_settings')
-        .upsert({
-          wallet_address: publicKey.toString(),
-          ...refCodes,
-          onboarded: true
-        })
+        .upsert(
+          {
+            wallet_address: publicKey.toString(),
+            ...refCodes,
+            onboarded: true
+          },
+          { onConflict: 'wallet_address' }
+        )
 
       if (error) throw error
 

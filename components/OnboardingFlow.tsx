@@ -24,11 +24,14 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
     try {
       const { error } = await supabase
         .from('user_settings')
-        .upsert({
-          wallet_address: walletAddress,
-          ...refCodes,
-          onboarded: true
-        })
+        .upsert(
+          {
+            wallet_address: walletAddress,
+            ...refCodes,
+            onboarded: true
+          },
+          { onConflict: 'wallet_address' }
+        )
 
       if (error) throw error
 
@@ -46,10 +49,13 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
     try {
       const { error } = await supabase
         .from('user_settings')
-        .upsert({
-          wallet_address: walletAddress,
-          onboarded: true
-        })
+        .upsert(
+          {
+            wallet_address: walletAddress,
+            onboarded: true
+          },
+          { onConflict: 'wallet_address' }
+        )
 
       if (error) throw error
 
