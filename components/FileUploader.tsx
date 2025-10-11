@@ -8,6 +8,7 @@ interface FileUploaderProps {
   maxSizeMB?: number
   buttonText?: string
   buttonClassName?: string
+  id?: string
 }
 
 export function FileUploader({
@@ -15,7 +16,8 @@ export function FileUploader({
   accept = 'image/*',
   maxSizeMB = 10,
   buttonText = 'Upload File',
-  buttonClassName = 'btn-primary'
+  buttonClassName = 'btn-primary',
+  id = 'file-upload'
 }: FileUploaderProps) {
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
@@ -70,13 +72,13 @@ export function FileUploader({
     <div>
       <input
         type="file"
-        id="file-upload"
+        id={id}
         accept={accept}
         onChange={handleFileChange}
         disabled={uploading}
         className="hidden"
       />
-      <label htmlFor="file-upload" className={`cursor-pointer ${buttonClassName} inline-block ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+      <label htmlFor={id} className={`cursor-pointer ${buttonClassName} inline-block ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
         {uploading ? 'Uploading...' : buttonText}
       </label>
       {error && (

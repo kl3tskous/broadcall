@@ -180,6 +180,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               className="input-field flex-1"
             />
             <FileUploader
+              id="avatar-upload"
               onUploadComplete={handleAvatarUpload}
               accept="image/*"
               maxSizeMB={5}
@@ -206,6 +207,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               className="input-field flex-1"
             />
             <FileUploader
+              id="banner-upload"
               onUploadComplete={handleBannerUpload}
               accept="image/*"
               maxSizeMB={10}
