@@ -51,26 +51,26 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     setMessage('')
 
     try {
-      const profileData: any = {
+      const profileData = {
         wallet_address: walletAddress,
         alias: alias || null,
         avatar_url: avatarUrl || null,
-        twitter_handle: twitterHandle || null,
-        updated_at: new Date().toISOString()
+        banner_url: bannerUrl || null,
+        twitter_handle: twitterHandle || null
       }
 
-      // Add banner_url if provided
-      if (bannerUrl) {
-        profileData.banner_url = bannerUrl
+      // Use API route to bypass Supabase schema cache issues
+      const response = await fetch('/api/profile/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileData)
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to save profile')
       }
-
-      const { error } = await supabase
-        .from('profiles')
-        .upsert(profileData, { 
-          onConflict: 'wallet_address'
-        })
-
-      if (error) throw error
 
       setMessage('Profile saved successfully!')
       setTimeout(() => setMessage(''), 3000)
