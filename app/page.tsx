@@ -14,38 +14,50 @@ export default function Home() {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null)
   const [showOnboarding, setShowOnboarding] = useState(false)
 
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      if (!publicKey) {
-        setLoading(false)
-        return
+  const fetchUserSettings = async () => {
+    if (!publicKey) {
+      setLoading(false)
+      return
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('wallet_address', publicKey.toString())
+        .single()
+
+      if (error && error.code !== 'PGRST116') {
+        throw error
       }
 
-      try {
-        const { data, error } = await supabase
-          .from('user_settings')
-          .select('*')
-          .eq('wallet_address', publicKey.toString())
-          .single()
+      if (!data || !data.onboarded) {
+        setShowOnboarding(true)
+      } else {
+        setUserSettings(data)
+      }
+    } catch (error) {
+      console.error('Error checking onboarding:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-        if (error && error.code !== 'PGRST116') {
-          throw error
-        }
+  useEffect(() => {
+    fetchUserSettings()
+  }, [publicKey])
 
-        if (!data || !data.onboarded) {
-          setShowOnboarding(true)
-        } else {
-          setUserSettings(data)
-        }
-      } catch (error) {
-        console.error('Error checking onboarding:', error)
-      } finally {
-        setLoading(false)
+  // Refetch settings when page gains focus (user returns from settings)
+  useEffect(() => {
+    const handleFocus = () => {
+      if (publicKey && !showOnboarding) {
+        fetchUserSettings()
       }
     }
 
-    checkOnboarding()
-  }, [publicKey])
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [publicKey, showOnboarding])
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false)
