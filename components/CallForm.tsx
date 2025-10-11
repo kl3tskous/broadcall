@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
-import { platforms } from './PlatformLogos'
+import Link from 'next/link'
 
 interface CallFormProps {
   walletAddress: string
@@ -14,24 +14,6 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [generatedLink, setGeneratedLink] = useState('')
-  
-  // Referral codes for each platform - auto-populate from user settings
-  const [gmgnRef, setGmgnRef] = useState(userSettings?.gmgn_ref || '')
-  const [axiomRef, setAxiomRef] = useState(userSettings?.axiom_ref || '')
-  const [photonRef, setPhotonRef] = useState(userSettings?.photon_ref || '')
-  const [bullxRef, setBullxRef] = useState(userSettings?.bullx_ref || '')
-  const [trojanRef, setTrojanRef] = useState(userSettings?.trojan_ref || '')
-
-  // Update referral codes when userSettings changes
-  useEffect(() => {
-    if (userSettings) {
-      setGmgnRef(userSettings.gmgn_ref || '')
-      setAxiomRef(userSettings.axiom_ref || '')
-      setPhotonRef(userSettings.photon_ref || '')
-      setBullxRef(userSettings.bullx_ref || '')
-      setTrojanRef(userSettings.trojan_ref || '')
-    }
-  }, [userSettings])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,11 +29,11 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
             token_address: tokenAddress,
             platform: 'GMGN',
             thesis: thesis || null,
-            gmgn_ref: gmgnRef || null,
-            axiom_ref: axiomRef || null,
-            photon_ref: photonRef || null,
-            bullx_ref: bullxRef || null,
-            trojan_ref: trojanRef || null,
+            gmgn_ref: userSettings?.gmgn_ref || null,
+            axiom_ref: userSettings?.axiom_ref || null,
+            photon_ref: userSettings?.photon_ref || null,
+            bullx_ref: userSettings?.bullx_ref || null,
+            trojan_ref: userSettings?.trojan_ref || null,
           },
         ])
         .select()
@@ -63,12 +45,6 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
       setGeneratedLink(link)
       setTokenAddress('')
       setThesis('')
-      // Keep referral codes populated from user settings
-      setGmgnRef(userSettings?.gmgn_ref || '')
-      setAxiomRef(userSettings?.axiom_ref || '')
-      setPhotonRef(userSettings?.photon_ref || '')
-      setBullxRef(userSettings?.bullx_ref || '')
-      setTrojanRef(userSettings?.trojan_ref || '')
     } catch (error: any) {
       console.error('Error creating call:', error)
       const errorMessage = error?.message || error?.error_description || JSON.stringify(error)
@@ -117,94 +93,21 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
           />
         </div>
 
-        {/* Referral Codes Section */}
-        <div className="border border-gray-700 rounded-lg p-4 bg-dark-bg/50">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-              Your Referral Codes
-            </span>
-            <span className="text-xs text-gray-500 font-normal">(Optional)</span>
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* GMGN */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-                {platforms.find(p => p.id === 'gmgn')?.Logo && 
-                  React.createElement(platforms.find(p => p.id === 'gmgn')!.Logo, { className: 'w-4 h-4' })}
-                GMGN
-              </label>
-              <input
-                type="text"
-                value={gmgnRef}
-                onChange={(e) => setGmgnRef(e.target.value)}
-                placeholder="Your GMGN ref code"
-                className="input-field text-sm"
-              />
+        {/* Referral Info */}
+        <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="text-purple-400 mt-0.5">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
             </div>
-
-            {/* Axiom */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-                {platforms.find(p => p.id === 'axiom')?.Logo && 
-                  React.createElement(platforms.find(p => p.id === 'axiom')!.Logo, { className: 'w-4 h-4' })}
-                Axiom
-              </label>
-              <input
-                type="text"
-                value={axiomRef}
-                onChange={(e) => setAxiomRef(e.target.value)}
-                placeholder="Your Axiom ref code"
-                className="input-field text-sm"
-              />
-            </div>
-
-            {/* Photon */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-                {platforms.find(p => p.id === 'photon')?.Logo && 
-                  React.createElement(platforms.find(p => p.id === 'photon')!.Logo, { className: 'w-4 h-4' })}
-                Photon
-              </label>
-              <input
-                type="text"
-                value={photonRef}
-                onChange={(e) => setPhotonRef(e.target.value)}
-                placeholder="Your Photon ref code"
-                className="input-field text-sm"
-              />
-            </div>
-
-            {/* BullX */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-                {platforms.find(p => p.id === 'bullx')?.Logo && 
-                  React.createElement(platforms.find(p => p.id === 'bullx')!.Logo, { className: 'w-4 h-4' })}
-                BullX
-              </label>
-              <input
-                type="text"
-                value={bullxRef}
-                onChange={(e) => setBullxRef(e.target.value)}
-                placeholder="Your BullX ref code"
-                className="input-field text-sm"
-              />
-            </div>
-
-            {/* Trojan */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-                {platforms.find(p => p.id === 'trojan')?.Logo && 
-                  React.createElement(platforms.find(p => p.id === 'trojan')!.Logo, { className: 'w-4 h-4' })}
-                Trojan
-              </label>
-              <input
-                type="text"
-                value={trojanRef}
-                onChange={(e) => setTrojanRef(e.target.value)}
-                placeholder="Your Trojan ref code"
-                className="input-field text-sm"
-              />
+            <div className="flex-1">
+              <p className="text-sm text-gray-300">
+                Your saved referral codes will be automatically attached to this call.
+              </p>
+              <Link href="/settings" className="text-sm text-purple-400 hover:text-purple-300 inline-flex items-center gap-1 mt-1">
+                Manage codes in Settings →
+              </Link>
             </div>
           </div>
         </div>
