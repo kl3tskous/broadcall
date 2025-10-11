@@ -5,6 +5,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
+import { UserProfile } from '@/components/UserProfile'
 
 export default function SettingsPage() {
   const { publicKey } = useWallet()
@@ -130,7 +131,9 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div className="card">
+        <UserProfile walletAddress={publicKey.toString()} />
+
+        <div className="card mt-6">
           <h2 className="text-xl font-bold mb-4">Your Referral Codes</h2>
           <p className="text-gray-400 mb-6 text-sm">
             These codes will be automatically attached to all your token calls. Update them anytime.
