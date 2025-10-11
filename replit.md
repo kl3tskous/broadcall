@@ -123,9 +123,11 @@ Server runs on http://localhost:5000
 4. **Start Creating**: Begin creating token calls with your referral codes pre-filled
 
 ### Creating & Sharing Calls:
-1. **Create Call**: Enter a Solana token address and optional thesis (referral codes auto-filled from your settings)
+1. **Create Call**: Enter a Solana token address and optional thesis (your saved referral codes are automatically attached)
 2. **Get Shareable Link**: Receive an auto-generated link like `/call/[id]` to share
 3. **Share & Track**: Share your link and track views/clicks in real-time
+
+**Note**: Referral codes are no longer editable during call creation - they're managed only in Settings and automatically applied to all new calls.
 
 ### Viewing Calls:
 1. **Price Data**: See live price, 24h change, liquidity, volume, and market cap
@@ -173,3 +175,5 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - ✅ Fixed click tracking race condition with optimistic updates
 - ✅ Fixed page loading issue by making view tracking non-blocking
 - ✅ Fixed referral code persistence across multiple call creations
+- ✅ **Simplified Call Creation** - Removed referral code inputs from CallForm, codes now auto-attach from user settings
+- ✅ **Auto-Refresh User Settings** - Homepage refetches user settings when page gains focus (after returning from settings page)
