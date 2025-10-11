@@ -122,6 +122,51 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           </p>
         </div>
 
+        {/* Image Previews Section */}
+        <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700">
+          <h3 className="text-sm font-medium text-gray-300 mb-4">Image Previews</h3>
+          <div className="flex gap-6">
+            {/* Profile Picture Preview */}
+            <div className="flex-shrink-0">
+              <p className="text-xs text-gray-400 mb-2">Profile Picture</p>
+              <div className="w-24 h-24 rounded-full border-2 border-orange-500/50 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+                {avatarUrl ? (
+                  <img 
+                    src={avatarUrl} 
+                    alt="Avatar preview" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500 text-center px-2">No avatar</span>
+                )}
+              </div>
+            </div>
+
+            {/* Banner Preview */}
+            <div className="flex-1">
+              <p className="text-xs text-gray-400 mb-2">Banner (Flex Card Background)</p>
+              <div className="w-full h-24 rounded-lg border-2 border-orange-500/50 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+                {bannerUrl ? (
+                  <img 
+                    src={bannerUrl} 
+                    alt="Banner preview" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500">No banner</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Picture Upload */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Profile Picture
@@ -145,24 +190,12 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           <p className="text-xs text-gray-400">
             Paste a URL or upload from your device (max 5MB)
           </p>
-          {avatarUrl && (
-            <div className="mt-3">
-              <p className="text-xs text-gray-400 mb-2">Preview:</p>
-              <img 
-                src={avatarUrl} 
-                alt="Avatar preview" 
-                className="w-16 h-16 rounded-full border-2 border-orange-500/50"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none'
-                }}
-              />
-            </div>
-          )}
         </div>
 
+        {/* Banner Upload */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
-            Banner Image
+            Banner Image (Flex Card Background)
           </label>
           <div className="flex gap-2 mb-2">
             <input
@@ -181,23 +214,8 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             />
           </div>
           <p className="text-xs text-gray-400">
-            Banner will be used as background for your token call flex cards (max 10MB)
+            This banner will be used as the background on your token call flex cards (max 10MB)
           </p>
-          {bannerUrl && (
-            <div className="mt-3">
-              <p className="text-xs text-gray-400 mb-2">Preview:</p>
-              <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-orange-500/50">
-                <img 
-                  src={bannerUrl} 
-                  alt="Banner preview" 
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         <div>
