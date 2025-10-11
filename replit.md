@@ -177,3 +177,5 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - ✅ Fixed referral code persistence across multiple call creations
 - ✅ **Simplified Call Creation** - Removed referral code inputs from CallForm, codes now auto-attach from user settings
 - ✅ **Auto-Refresh User Settings** - Homepage refetches user settings when page gains focus (after returning from settings page)
+- ✅ **Fixed Hydration Errors** - Added mounted state to prevent wallet button hydration mismatches
+- ✅ **Fixed Settings Save** - Added onConflict parameter to upsert operations for proper wallet_address conflict resolution
