@@ -28,14 +28,17 @@ export async function GET(
   try {
     const objectPath = params.path.join('/');
     const privateDir = process.env.PRIVATE_OBJECT_DIR || '';
-    const fullPath = `${privateDir}/${objectPath}`;
-
-    const pathParts = fullPath.split('/').filter(p => p);
+    
+    // privateDir format: /bucket-name/.private
+    const pathParts = privateDir.split('/').filter(p => p);
     const bucketName = pathParts[0];
-    const objectName = pathParts.slice(1).join('/');
+    const privatePath = pathParts.slice(1).join('/');
+    
+    // Construct full object path: .private/objectPath
+    const fullObjectPath = privatePath ? `${privatePath}/${objectPath}` : objectPath;
 
     const bucket = storage.bucket(bucketName);
-    const file = bucket.file(objectName);
+    const file = bucket.file(fullObjectPath);
 
     const [exists] = await file.exists();
     if (!exists) {

@@ -51,13 +51,17 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     setMessage('')
 
     try {
-      const profileData = {
+      const profileData: any = {
         wallet_address: walletAddress,
         alias: alias || null,
         avatar_url: avatarUrl || null,
-        banner_url: bannerUrl || null,
         twitter_handle: twitterHandle || null,
         updated_at: new Date().toISOString()
+      }
+
+      // Add banner_url if provided
+      if (bannerUrl) {
+        profileData.banner_url = bannerUrl
       }
 
       const { error } = await supabase
@@ -80,13 +84,11 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
   }
 
   const handleAvatarUpload = (url: string) => {
-    const normalized = normalizeUploadURL(url)
-    setAvatarUrl(normalized)
+    setAvatarUrl(url)
   }
 
   const handleBannerUpload = (url: string) => {
-    const normalized = normalizeUploadURL(url)
-    setBannerUrl(normalized)
+    setBannerUrl(url)
   }
 
   if (loading) {

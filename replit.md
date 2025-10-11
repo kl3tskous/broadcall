@@ -204,6 +204,13 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - Ensure reliable installation in Replit environment
 
 ## Recent Changes
+- ✅ **File Upload System** (October 2025)
+  - Integrated Replit App Storage for secure file hosting
+  - Users can upload profile pictures (max 5MB) and banners (max 10MB)
+  - Support for both URL paste and device upload
+  - Automatic path normalization and file serving via `/api/objects` endpoint
+  - Banner displays as background on token call performance sections (20% opacity)
+- ✅ **Orange Gradient Theme** - Complete UI redesign with orange-to-red gradient throughout
 - ✅ MVP complete with Next.js 14, TypeScript, and Tailwind CSS
 - ✅ Phantom wallet connection integrated via Solana Wallet Adapter  
 - ✅ Supabase database for storing calls with view/click tracking

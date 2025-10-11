@@ -49,7 +49,14 @@ export function FileUploader({
         throw new Error('Upload failed')
       }
 
-      onUploadComplete(uploadURL.split('?')[0])
+      // Extract just the object path from the signed URL
+      const url = new URL(uploadURL)
+      const pathname = decodeURIComponent(url.pathname)
+      const parts = pathname.split('/').filter(p => p)
+      const objectPath = parts.slice(1).join('/')
+      const normalizedURL = `/api/objects/${objectPath}`
+      
+      onUploadComplete(normalizedURL)
     } catch (err) {
       console.error('Upload error:', err)
       setError('Upload failed. Please try again.')

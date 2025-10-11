@@ -6,6 +6,7 @@ create table if not exists profiles (
   wallet_address text unique not null,
   alias text,
   avatar_url text,
+  banner_url text,
   twitter_handle text,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
@@ -19,4 +20,5 @@ comment on table profiles is 'User profile information for KOLs and influencers'
 comment on column profiles.wallet_address is 'Solana wallet address (unique identifier)';
 comment on column profiles.alias is 'Display name/handle for the user';
 comment on column profiles.avatar_url is 'URL to user avatar image';
+comment on column profiles.banner_url is 'URL to user banner image for token call backgrounds';
 comment on column profiles.twitter_handle is 'Twitter/X handle (without @)';

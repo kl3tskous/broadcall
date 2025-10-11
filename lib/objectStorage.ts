@@ -28,19 +28,20 @@ export function normalizeUploadURL(uploadURL: string): string {
   }
 
   const url = new URL(uploadURL);
-  const rawObjectPath = url.pathname;
-
-  let objectEntityDir = process.env.PRIVATE_OBJECT_DIR || "";
-  if (!objectEntityDir.endsWith("/")) {
-    objectEntityDir = `${objectEntityDir}/`;
+  const pathname = decodeURIComponent(url.pathname);
+  
+  // Extract the path after the bucket name
+  // Format: /bucket-name/path/to/object -> uploads/uuid
+  const parts = pathname.split('/').filter(p => p);
+  
+  if (parts.length < 3) {
+    return uploadURL;
   }
-
-  if (!rawObjectPath.startsWith(objectEntityDir)) {
-    return rawObjectPath;
-  }
-
-  const entityId = rawObjectPath.slice(objectEntityDir.length);
-  return `/api/objects/${entityId}`;
+  
+  // Skip bucket name (first part) and get the rest
+  const objectPath = parts.slice(1).join('/');
+  
+  return `/api/objects/${objectPath}`;
 }
 
 function parseObjectPath(path: string): {
