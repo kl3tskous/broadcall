@@ -32,13 +32,10 @@ export async function GET(
     // privateDir format: /bucket-name/.private
     const pathParts = privateDir.split('/').filter(p => p);
     const bucketName = pathParts[0];
-    const privatePath = pathParts.slice(1).join('/');
     
-    // Construct full object path: .private/objectPath
-    const fullObjectPath = privatePath ? `${privatePath}/${objectPath}` : objectPath;
-
+    // objectPath already contains the full path from URL (e.g., .private/uploads/uuid)
     const bucket = storage.bucket(bucketName);
-    const file = bucket.file(fullObjectPath);
+    const file = bucket.file(objectPath);
 
     const [exists] = await file.exists();
     if (!exists) {

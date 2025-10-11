@@ -128,7 +128,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           </label>
           <div className="flex gap-2 mb-2">
             <input
-              type="url"
+              type="text"
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="Paste image URL or upload file"
@@ -166,7 +166,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           </label>
           <div className="flex gap-2 mb-2">
             <input
-              type="url"
+              type="text"
               value={bannerUrl}
               onChange={(e) => setBannerUrl(e.target.value)}
               placeholder="Paste image URL or upload file"
