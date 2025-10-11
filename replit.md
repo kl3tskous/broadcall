@@ -239,3 +239,9 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
   - **Token Header**: Professional display with logo, name, symbol, caller attribution
   - **ATH Tracking**: Auto-update all-time high price and market cap with every price fetch
   - **Enhanced UI**: Modern, flex-worthy design similar to RickBot/PhanesBot style
+- ✅ **COMPACT CALL PAGE REDESIGN** (October 2025)
+  - **Token Header Redesign**: Token image next to $TICKER and current market cap for instant recognition
+  - **Mobile-Optimized Performance**: Compact 3-column stats (ROI, ATH, Entry) fits perfectly on mobile
+  - **Streamlined Layout**: Token info → Platform buttons → Chart for optimal sharing experience
+  - **Removed Clutter**: Eliminated share buttons for cleaner, more focused design
+  - **16:9 Chart Ratio**: Professional chart display on all devices
