@@ -115,15 +115,15 @@ export default function CallPage() {
     
     switch (platformId) {
       case 'gmgn':
-        // Format: https://t.me/GMGN_sol_bot?start=i_{ref}_c_{token}
+        // Format: https://gmgn.ai/sol/token/{refCode}_{tokenAddress}
         const gmgnRef = call.gmgn_ref || creatorSettings?.gmgn_ref || DEFAULT_GMGN_REF
-        return `https://t.me/GMGN_sol_bot?start=i_${gmgnRef}_c_${tokenAddress}`
+        return `https://gmgn.ai/sol/token/${gmgnRef}_${tokenAddress}`
       
       case 'axiom':
-        // Format: https://axiom.trade/@{username} or direct token link
+        // Format: https://axiom.trade/t/{tokenAddress}/@{username}
         const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || ''
         return axiomRef 
-          ? `https://axiom.trade/@${axiomRef}`
+          ? `https://axiom.trade/t/${tokenAddress}/@${axiomRef}`
           : `https://axiom.trade/solana/${tokenAddress}`
       
       case 'photon':
