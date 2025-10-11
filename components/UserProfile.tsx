@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { supabase, Profile } from '@/utils/supabaseClient'
+import { FileUploader } from './FileUploader'
+import { normalizeUploadURL } from '@/lib/objectStorage'
 
 interface UserProfileProps {
   walletAddress: string
@@ -11,6 +13,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [alias, setAlias] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  const [bannerUrl, setBannerUrl] = useState('')
   const [twitterHandle, setTwitterHandle] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -29,6 +32,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           setProfile(data)
           setAlias(data.alias || '')
           setAvatarUrl(data.avatar_url || '')
+          setBannerUrl(data.banner_url || '')
           setTwitterHandle(data.twitter_handle || '')
         }
       } catch (error) {
@@ -51,6 +55,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
         wallet_address: walletAddress,
         alias: alias || null,
         avatar_url: avatarUrl || null,
+        banner_url: bannerUrl || null,
         twitter_handle: twitterHandle || null,
         updated_at: new Date().toISOString()
       }
@@ -72,6 +77,16 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleAvatarUpload = (url: string) => {
+    const normalized = normalizeUploadURL(url)
+    setAvatarUrl(normalized)
+  }
+
+  const handleBannerUpload = (url: string) => {
+    const normalized = normalizeUploadURL(url)
+    setBannerUrl(normalized)
   }
 
   if (loading) {
@@ -101,24 +116,32 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             className="input-field"
           />
           <p className="text-xs text-gray-400 mt-1">
-            This will appear on your calls as "First shared by @{alias || 'yourname'}"
+            This will appear on your calls as "Called by @{alias || 'yourname'}"
           </p>
         </div>
 
         <div>
-          <label htmlFor="avatarUrl" className="block text-sm font-medium text-gray-300 mb-2">
-            Avatar URL (Optional)
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Profile Picture
           </label>
-          <input
-            id="avatarUrl"
-            type="url"
-            value={avatarUrl}
-            onChange={(e) => setAvatarUrl(e.target.value)}
-            placeholder="https://example.com/avatar.png"
-            className="input-field"
-          />
-          <p className="text-xs text-gray-400 mt-1">
-            Direct link to your avatar image
+          <div className="flex gap-2 mb-2">
+            <input
+              type="url"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="Paste image URL or upload file"
+              className="input-field flex-1"
+            />
+            <FileUploader
+              onUploadComplete={handleAvatarUpload}
+              accept="image/*"
+              maxSizeMB={5}
+              buttonText="Upload"
+              buttonClassName="btn-primary whitespace-nowrap"
+            />
+          </div>
+          <p className="text-xs text-gray-400">
+            Paste a URL or upload from your device (max 5MB)
           </p>
           {avatarUrl && (
             <div className="mt-3">
@@ -131,6 +154,46 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
                   e.currentTarget.style.display = 'none'
                 }}
               />
+            </div>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Banner Image
+          </label>
+          <div className="flex gap-2 mb-2">
+            <input
+              type="url"
+              value={bannerUrl}
+              onChange={(e) => setBannerUrl(e.target.value)}
+              placeholder="Paste image URL or upload file"
+              className="input-field flex-1"
+            />
+            <FileUploader
+              onUploadComplete={handleBannerUpload}
+              accept="image/*"
+              maxSizeMB={10}
+              buttonText="Upload"
+              buttonClassName="btn-primary whitespace-nowrap"
+            />
+          </div>
+          <p className="text-xs text-gray-400">
+            Banner will be used as background for your token call flex cards (max 10MB)
+          </p>
+          {bannerUrl && (
+            <div className="mt-3">
+              <p className="text-xs text-gray-400 mb-2">Preview:</p>
+              <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-orange-500/50">
+                <img 
+                  src={bannerUrl} 
+                  alt="Banner preview" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
+              </div>
             </div>
           )}
         </div>

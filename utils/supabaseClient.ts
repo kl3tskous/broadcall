@@ -56,6 +56,7 @@ export interface Profile {
   wallet_address: string
   alias: string | null
   avatar_url: string | null
+  banner_url: string | null
   twitter_handle: string | null
   created_at: string
   updated_at: string

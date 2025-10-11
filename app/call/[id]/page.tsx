@@ -24,6 +24,7 @@ export default function CallPage() {
   const id = params.id as string
   const [call, setCall] = useState<Call | null>(null)
   const [creatorSettings, setCreatorSettings] = useState<UserSettings | null>(null)
+  const [creatorBanner, setCreatorBanner] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
   const [priceLoading, setPriceLoading] = useState(true)
@@ -49,6 +50,16 @@ export default function CallPage() {
 
         if (settingsData) {
           setCreatorSettings(settingsData)
+        }
+
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('banner_url')
+          .eq('wallet_address', data.creator_wallet)
+          .single()
+
+        if (profileData?.banner_url) {
+          setCreatorBanner(profileData.banner_url)
         }
 
         setLoading(false)
@@ -302,8 +313,16 @@ export default function CallPage() {
 
           {/* Compact Performance Stats */}
           {call.initial_price && call.current_price && (
-            <div className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-lg p-3 md:p-4 mb-4">
-              <div className="flex items-center justify-between gap-4">
+            <div 
+              className="relative bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-lg p-3 md:p-4 mb-4 overflow-hidden"
+            >
+              {creatorBanner && (
+                <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-20"
+                  style={{ backgroundImage: `url(${creatorBanner})` }}
+                />
+              )}
+              <div className="relative flex items-center justify-between gap-4">
                 <div className="flex-1">
                   <div className="text-xs text-gray-400 mb-0.5">ROI</div>
                   <div className={`text-xl md:text-2xl font-bold ${roi >= 0 ? 'text-green-400' : 'text-red-400'}`}>
