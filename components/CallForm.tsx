@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
+import { fetchTokenMetadata, fetchTokenLogo } from '@/utils/dexscreener'
 import Link from 'next/link'
 
 interface CallFormProps {
@@ -14,13 +15,26 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [generatedLink, setGeneratedLink] = useState('')
+  const [fetchingMetadata, setFetchingMetadata] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setFetchingMetadata(true)
     setGeneratedLink('')
 
     try {
+      const tokenMetadata = await fetchTokenMetadata(tokenAddress)
+      const tokenLogo = await fetchTokenLogo(tokenAddress)
+      
+      setFetchingMetadata(false)
+
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('alias')
+        .eq('wallet_address', walletAddress)
+        .single()
+
       const { data, error } = await supabase
         .from('calls')
         .insert([
@@ -34,6 +48,13 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
             photon_ref: userSettings?.photon_ref || null,
             bullx_ref: userSettings?.bullx_ref || null,
             trojan_ref: userSettings?.trojan_ref || null,
+            token_name: tokenMetadata?.name || null,
+            token_symbol: tokenMetadata?.symbol || null,
+            token_logo: tokenLogo || null,
+            initial_price: tokenMetadata?.price || null,
+            initial_mcap: tokenMetadata?.marketCap || null,
+            first_shared_at: new Date().toISOString(),
+            user_alias: profileData?.alias || null,
           },
         ])
         .select()
@@ -51,6 +72,7 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
       alert(`Failed to create call: ${errorMessage}`)
     } finally {
       setLoading(false)
+      setFetchingMetadata(false)
     }
   }
 
@@ -117,7 +139,7 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
           disabled={loading}
           className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Generating...' : 'Generate Link'}
+          {fetchingMetadata ? 'Fetching token data...' : loading ? 'Creating call...' : 'Generate Link'}
         </button>
       </form>
 
