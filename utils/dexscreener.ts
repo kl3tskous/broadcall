@@ -38,6 +38,13 @@ export interface DexScreenerPair {
   }
   fdv?: number
   marketCap?: number
+  info?: {
+    imageUrl?: string
+    header?: string
+    openGraph?: string
+    websites?: { label: string; url: string }[]
+    socials?: { type: string; url: string }[]
+  }
 }
 
 export interface DexScreenerResponse {
@@ -104,11 +111,18 @@ export async function fetchTokenLogo(tokenAddress: string): Promise<string | nul
 
     const pair = data.pairs[0]
     
-    const logoUrl = `https://dd.dexscreener.com/ds-data/tokens/solana/${pair.baseToken.address}.png`
+    if (pair.info?.imageUrl) {
+      return pair.info.imageUrl
+    }
     
-    const imgResponse = await fetch(logoUrl, { method: 'HEAD' })
-    if (imgResponse.ok) {
-      return logoUrl
+    const constructedUrl = `https://dd.dexscreener.com/ds-data/tokens/solana/${pair.baseToken.address}.png`
+    
+    try {
+      const imgResponse = await fetch(constructedUrl, { method: 'HEAD' })
+      if (imgResponse.ok) {
+        return constructedUrl
+      }
+    } catch {
     }
     
     return null
