@@ -51,25 +51,50 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     setMessage('')
 
     try {
-      const profileData = {
-        wallet_address: walletAddress,
-        alias: alias || null,
-        avatar_url: avatarUrl || null,
-        banner_url: bannerUrl || null,
-        twitter_handle: twitterHandle || null
+      // First save profile without banner (bypass schema cache)
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('wallet_address', walletAddress)
+        .single()
+
+      if (existing) {
+        // Update existing
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            alias: alias || null,
+            avatar_url: avatarUrl || null,
+            twitter_handle: twitterHandle || null,
+            updated_at: new Date().toISOString()
+          })
+          .eq('wallet_address', walletAddress)
+
+        if (error && !error.message.includes('banner_url')) throw error
+      } else {
+        // Insert new
+        const { error } = await supabase
+          .from('profiles')
+          .insert({
+            wallet_address: walletAddress,
+            alias: alias || null,
+            avatar_url: avatarUrl || null,
+            twitter_handle: twitterHandle || null
+          })
+
+        if (error && !error.message.includes('banner_url')) throw error
       }
 
-      // Use API route to bypass Supabase schema cache issues
-      const response = await fetch('/api/profile/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profileData)
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to save profile')
+      // Save banner separately via API route (includes banner_url)
+      if (bannerUrl) {
+        await fetch('/api/profile/banner', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            wallet_address: walletAddress, 
+            banner_url: bannerUrl 
+          })
+        })
       }
 
       setMessage('Profile saved successfully!')
