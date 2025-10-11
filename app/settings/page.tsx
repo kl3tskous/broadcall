@@ -12,6 +12,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [settings, setSettings] = useState<UserSettings | null>(null)
+  const [mounted, setMounted] = useState(false)
   const [refCodes, setRefCodes] = useState({
     gmgn_ref: '',
     axiom_ref: '',
@@ -19,6 +20,10 @@ export default function SettingsPage() {
     bullx_ref: '',
     trojan_ref: ''
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -90,7 +95,7 @@ export default function SettingsPage() {
           <p className="text-gray-400 mb-6">
             Please connect your wallet to access settings
           </p>
-          <WalletMultiButton className="btn-primary mx-auto" />
+          {mounted && <WalletMultiButton className="btn-primary mx-auto" />}
         </div>
       </div>
     )

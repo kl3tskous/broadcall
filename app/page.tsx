@@ -13,6 +13,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const fetchUserSettings = async () => {
     if (!publicKey) {
@@ -42,6 +43,10 @@ export default function Home() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     fetchUserSettings()
@@ -82,8 +87,8 @@ export default function Home() {
 
         <div className="card mb-8">
           <div className="flex flex-col items-center space-y-4">
-            <WalletMultiButton />
-            {publicKey && (
+            {mounted && <WalletMultiButton />}
+            {publicKey && mounted && (
               <div className="flex items-center gap-4">
                 <div className="text-sm text-gray-400">
                   Connected: {publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}
