@@ -204,6 +204,9 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - Ensure reliable installation in Replit environment
 
 ## Recent Changes
+- ✅ **Axiom Logo Integration** (October 2025)
+  - Added official Axiom logo (two triangles) to Axiom platform button
+  - Logo stored in `/public/axiom-logo.png` and displays on all call pages
 - ✅ **File Upload System** (October 2025)
   - Integrated Replit App Storage for secure file hosting
   - Users can upload profile pictures (max 5MB) and banners (max 10MB)

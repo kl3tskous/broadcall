@@ -17,16 +17,12 @@ export const GmgnLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
 )
 
 export const AxiomLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 4L4 8V16L12 20L20 16V8L12 4Z" fill="url(#axiom-gradient)" />
-    <path d="M12 9L8 11V15L12 17L16 15V11L12 9Z" fill="currentColor" fillOpacity="0.4" />
-    <defs>
-      <linearGradient id="axiom-gradient" x1="4" y1="4" x2="20" y2="20">
-        <stop offset="0%" stopColor="#a855f7" />
-        <stop offset="100%" stopColor="#ec4899" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/axiom-logo.png" 
+    alt="Axiom" 
+    className={className}
+    style={{ objectFit: 'contain' }}
+  />
 )
 
 export const PhotonLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
