@@ -255,14 +255,6 @@ export default function CallPage() {
     ? calculateROI(call.initial_price, call.ath_price)
     : 0
 
-  // Determine ape background based on multiplier tier
-  const getApeBackground = () => {
-    // Future tier images will be added - fallback to 0x for now
-    if (multiplier >= 5 && false) return '/ape-flex-5x.webp' // 5x+ tier (coming soon)
-    if (multiplier >= 2 && false) return '/ape-flex-2x.webp' // 2-5x tier (coming soon)
-    return '/ape-flex-0x.webp' // 0-2x tier (current default for all)
-  }
-
   return (
     <>
       <Head>
@@ -276,87 +268,90 @@ export default function CallPage() {
       <main className="min-h-screen py-4 md:py-8 px-3 md:px-4">
         <div className="max-w-5xl mx-auto">
           
-          {/* Flex Card with Ape Background */}
-          <div className="relative mb-4 rounded-2xl overflow-hidden border-2 border-orange-500/40">
-            {/* Ape Background Image */}
+          {/* Flex Card Banner with Ape on Right */}
+          <div 
+            className="relative mb-4 rounded-2xl overflow-hidden border-2 border-orange-500/40"
+            style={{ height: '420px' }}
+          >
+            {/* Ape Background Image - Positioned Right, Contained */}
             <div 
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0"
               style={{ 
-                backgroundImage: `url(${getApeBackground()})`,
-                filter: 'brightness(0.7)'
+                backgroundImage: 'url(/banner-ape-chill.webp)',
+                backgroundSize: 'contain',
+                backgroundPosition: 'right center',
+                backgroundRepeat: 'no-repeat'
               }}
             />
             
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+            {/* Dark Gradient Overlay - Left to Right */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
             
-            {/* Content */}
-            <div className="relative p-4 md:p-6">
-              <div className="flex items-start justify-between gap-4">
-                {/* Left: Token Info */}
-                <div className="flex items-center gap-3 flex-1">
-                  {call.token_logo ? (
-                    <img 
-                      src={call.token_logo} 
-                      alt={call.token_name || 'Token'} 
-                      className="w-16 h-16 md:w-20 md:h-20 rounded-full border-3 border-white/30 shadow-xl flex-shrink-0"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
-                  ) : (
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow-xl">
-                      {call.token_symbol?.charAt(0) || '?'}
-                    </div>
-                  )}
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">
-                      ${call.token_symbol || 'TOKEN'}
-                    </h1>
-                    <p className="text-sm md:text-base text-white/80 drop-shadow">
-                      {call.token_name || 'Unknown Token'}
-                    </p>
-                    {call.user_alias && (
-                      <p className="text-xs text-white/60 mt-1 drop-shadow">
-                        Called by @{call.user_alias}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right: ROI Flex Display */}
-                {call.initial_price && call.current_price && (
-                  <div className="text-right">
-                    <div className={`text-4xl md:text-6xl font-black drop-shadow-2xl ${
-                      roi >= 0 ? 'text-green-400' : 'text-red-400'
-                    }`}>
-                      {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
-                    </div>
-                    <div className="text-lg md:text-xl font-bold text-white/90 drop-shadow mt-1">
-                      {multiplier.toFixed(2)}x
-                    </div>
-                    {call.ath_price && (
-                      <div className="text-sm text-yellow-400 drop-shadow mt-2">
-                        ATH: +{athROI.toFixed(1)}%
-                      </div>
-                    )}
+            {/* Content - Aligned Left */}
+            <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
+              {/* Top: Token Info */}
+              <div className="flex items-start gap-4 max-w-xl">
+                {call.token_logo ? (
+                  <img 
+                    src={call.token_logo} 
+                    alt={call.token_name || 'Token'} 
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-full border-3 border-white/30 shadow-2xl flex-shrink-0"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-2xl">
+                    {call.token_symbol?.charAt(0) || '?'}
                   </div>
                 )}
+                <div>
+                  <h1 className="text-3xl md:text-5xl font-black text-white drop-shadow-2xl mb-2">
+                    ${call.token_symbol || 'TOKEN'}
+                  </h1>
+                  <p className="text-base md:text-xl text-white/90 drop-shadow-lg">
+                    {call.token_name || 'Unknown Token'}
+                  </p>
+                  {call.user_alias && (
+                    <p className="text-sm text-white/70 mt-2 drop-shadow">
+                      Called by @{call.user_alias}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              {/* Bottom Stats Bar */}
+              {/* Middle: ROI Flex Display */}
+              {call.initial_price && call.current_price && (
+                <div className="max-w-xl">
+                  <div className={`text-6xl md:text-8xl font-black drop-shadow-2xl ${
+                    roi >= 0 ? 'text-green-400' : 'text-red-400'
+                  }`}>
+                    {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
+                  </div>
+                  <div className="text-2xl md:text-3xl font-bold text-white/90 drop-shadow-lg mt-2">
+                    {multiplier.toFixed(2)}x Multiplier
+                  </div>
+                  {call.ath_price && (
+                    <div className="text-lg text-yellow-400 drop-shadow-lg mt-3">
+                      All-Time High: +{athROI.toFixed(1)}%
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Bottom: Stats Bar */}
               {call.initial_price && (
-                <div className="mt-4 flex items-center justify-between gap-4 text-xs md:text-sm text-white/70 bg-black/30 rounded-lg p-2 backdrop-blur-sm">
-                  <div>
-                    <span className="text-white/50">Entry:</span>{' '}
-                    <span className="font-semibold text-white/90">
+                <div className="flex items-center gap-6 text-sm md:text-base text-white/80 max-w-2xl">
+                  <div className="bg-black/40 backdrop-blur-sm rounded-lg px-4 py-2">
+                    <span className="text-white/60">Entry: </span>
+                    <span className="font-bold text-white">
                       {call.initial_mcap && formatMarketCap(call.initial_mcap)}
                     </span>
                   </div>
                   {priceData && (
-                    <div>
-                      <span className="text-white/50">Current:</span>{' '}
-                      <span className="font-semibold text-white/90">
+                    <div className="bg-black/40 backdrop-blur-sm rounded-lg px-4 py-2">
+                      <span className="text-white/60">Current: </span>
+                      <span className="font-bold text-white">
                         {formatMarketCap(priceData.marketCap)}
                       </span>
                     </div>
