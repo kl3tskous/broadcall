@@ -5,20 +5,17 @@ interface LogoProps {
 }
 
 export const GmgnLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" fill="url(#gmgn-gradient)" stroke="currentColor" strokeWidth="2"/>
-    <defs>
-      <linearGradient id="gmgn-gradient" x1="2" y1="2" x2="22" y2="22">
-        <stop offset="0%" stopColor="#a855f7" />
-        <stop offset="100%" stopColor="#ec4899" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/gmgn-logo.webp" 
+    alt="GMGN" 
+    className={className}
+    style={{ objectFit: 'contain' }}
+  />
 )
 
 export const AxiomLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
   <img 
-    src="/axiom-logo.png" 
+    src="/axiom-logo-optimized.webp" 
     alt="Axiom" 
     className={className}
     style={{ objectFit: 'contain' }}

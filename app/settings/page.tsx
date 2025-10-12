@@ -6,6 +6,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
+import { GmgnLogo, AxiomLogo } from '@/components/PlatformLogos'
 
 export default function SettingsPage() {
   const { publicKey } = useWallet()
@@ -141,8 +142,9 @@ export default function SettingsPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                <span className="text-orange-400">●</span> GMGN Referral Code
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                <GmgnLogo className="w-5 h-5" />
+                <span>GMGN Referral Code</span>
               </label>
               <input
                 type="text"
@@ -157,8 +159,9 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
-                <span className="text-orange-400">●</span> Axiom Referral Code
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                <AxiomLogo className="w-5 h-5" />
+                <span>Axiom Referral Code</span>
               </label>
               <input
                 type="text"
