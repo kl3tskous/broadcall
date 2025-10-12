@@ -204,6 +204,13 @@ The project uses `npm install --ignore-scripts --legacy-peer-deps` to:
 - Ensure reliable installation in Replit environment
 
 ## Recent Changes
+- ✅ **Dynamic Flex Card Header** (October 2025)
+  - Redesigned token call page with flex/celebration card design featuring ape background
+  - ROI % prominently displayed in large green (profit) or red (loss) text
+  - Dynamic background changes based on multiplier tiers (0-2x, 2-5x, 5x+)
+  - Ape background image stored in `/public/ape-flex-0x.webp` (93KB, optimized from 2.6MB)
+  - Token info, caller attribution, and performance stats integrated into flex card
+  - Professional drop shadows, gradient overlays, and backdrop blur effects
 - ✅ **Platform Logo Integration** (October 2025)
   - Added official GMGN logo (pixel frog) to GMGN platform button and settings field
   - Added official Axiom logo (two triangles) to Axiom platform button and settings field

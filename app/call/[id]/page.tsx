@@ -255,6 +255,14 @@ export default function CallPage() {
     ? calculateROI(call.initial_price, call.ath_price)
     : 0
 
+  // Determine ape background based on multiplier tier
+  const getApeBackground = () => {
+    // Future tier images will be added - fallback to 0x for now
+    if (multiplier >= 5 && false) return '/ape-flex-5x.webp' // 5x+ tier (coming soon)
+    if (multiplier >= 2 && false) return '/ape-flex-2x.webp' // 2-5x tier (coming soon)
+    return '/ape-flex-0x.webp' // 0-2x tier (current default for all)
+  }
+
   return (
     <>
       <Head>
@@ -268,93 +276,95 @@ export default function CallPage() {
       <main className="min-h-screen py-4 md:py-8 px-3 md:px-4">
         <div className="max-w-5xl mx-auto">
           
-          {/* Compact Token Header with Image */}
-          <div className="mb-4">
-            <div className="flex items-center gap-3">
-              {call.token_logo ? (
-                <img 
-                  src={call.token_logo} 
-                  alt={call.token_name || 'Token'} 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-orange-500/50 flex-shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-              ) : (
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-orange-600 to-red-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
-                  {call.token_symbol?.charAt(0) || '?'}
-                </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <h1 className="text-xl md:text-2xl font-bold truncate">
-                    ${call.token_symbol || 'TOKEN'}
-                  </h1>
-                  {priceData && (
-                    <span className="text-sm md:text-base text-gray-400">
-                      {formatMarketCap(priceData.marketCap)}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs md:text-sm text-gray-400 truncate">
-                  {call.token_name || 'Unknown Token'}
-                </p>
-              </div>
-            </div>
-
-            {/* Caller Attribution */}
-            {call.user_alias && (
-              <p className="text-xs text-gray-500 mt-2">
-                Called by @{call.user_alias}
-                {call.first_shared_at && ` • ${formatTimeAgo(call.first_shared_at)}`}
-              </p>
-            )}
-          </div>
-
-          {/* Compact Performance Stats */}
-          {call.initial_price && call.current_price && (
+          {/* Flex Card with Ape Background */}
+          <div className="relative mb-4 rounded-2xl overflow-hidden border-2 border-orange-500/40">
+            {/* Ape Background Image */}
             <div 
-              className="relative bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-lg p-3 md:p-4 mb-4 overflow-hidden"
-            >
-              {creatorBanner && (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-20"
-                  style={{ backgroundImage: `url(${creatorBanner})` }}
-                />
-              )}
-              <div className="relative flex items-center justify-between gap-4">
-                <div className="flex-1">
-                  <div className="text-xs text-gray-400 mb-0.5">ROI</div>
-                  <div className={`text-xl md:text-2xl font-bold ${roi >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ 
+                backgroundImage: `url(${getApeBackground()})`,
+                filter: 'brightness(0.7)'
+              }}
+            />
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+            
+            {/* Content */}
+            <div className="relative p-4 md:p-6">
+              <div className="flex items-start justify-between gap-4">
+                {/* Left: Token Info */}
+                <div className="flex items-center gap-3 flex-1">
+                  {call.token_logo ? (
+                    <img 
+                      src={call.token_logo} 
+                      alt={call.token_name || 'Token'} 
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-full border-3 border-white/30 shadow-xl flex-shrink-0"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  ) : (
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow-xl">
+                      {call.token_symbol?.charAt(0) || '?'}
+                    </div>
+                  )}
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">
+                      ${call.token_symbol || 'TOKEN'}
+                    </h1>
+                    <p className="text-sm md:text-base text-white/80 drop-shadow">
+                      {call.token_name || 'Unknown Token'}
+                    </p>
+                    {call.user_alias && (
+                      <p className="text-xs text-white/60 mt-1 drop-shadow">
+                        Called by @{call.user_alias}
+                      </p>
+                    )}
                   </div>
-                  <div className="text-xs text-gray-400">{multiplier.toFixed(2)}x</div>
                 </div>
 
-                {call.ath_price && (
-                  <div className="flex-1 text-center">
-                    <div className="text-xs text-gray-400 mb-0.5">ATH</div>
-                    <div className="text-lg md:text-xl font-bold text-yellow-400">
-                      +{athROI.toFixed(1)}%
+                {/* Right: ROI Flex Display */}
+                {call.initial_price && call.current_price && (
+                  <div className="text-right">
+                    <div className={`text-4xl md:text-6xl font-black drop-shadow-2xl ${
+                      roi >= 0 ? 'text-green-400' : 'text-red-400'
+                    }`}>
+                      {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
                     </div>
-                    <div className="text-xs text-gray-400">
-                      {call.ath_mcap && formatMarketCap(call.ath_mcap)}
+                    <div className="text-lg md:text-xl font-bold text-white/90 drop-shadow mt-1">
+                      {multiplier.toFixed(2)}x
                     </div>
+                    {call.ath_price && (
+                      <div className="text-sm text-yellow-400 drop-shadow mt-2">
+                        ATH: +{athROI.toFixed(1)}%
+                      </div>
+                    )}
                   </div>
                 )}
-
-                <div className="flex-1 text-right">
-                  <div className="text-xs text-gray-400 mb-0.5">Entry</div>
-                  <div className="text-sm md:text-base font-semibold text-gray-300">
-                    {call.initial_mcap && formatMarketCap(call.initial_mcap)}
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    ${formatPrice(call.initial_price)}
-                  </div>
-                </div>
               </div>
+
+              {/* Bottom Stats Bar */}
+              {call.initial_price && (
+                <div className="mt-4 flex items-center justify-between gap-4 text-xs md:text-sm text-white/70 bg-black/30 rounded-lg p-2 backdrop-blur-sm">
+                  <div>
+                    <span className="text-white/50">Entry:</span>{' '}
+                    <span className="font-semibold text-white/90">
+                      {call.initial_mcap && formatMarketCap(call.initial_mcap)}
+                    </span>
+                  </div>
+                  {priceData && (
+                    <div>
+                      <span className="text-white/50">Current:</span>{' '}
+                      <span className="font-semibold text-white/90">
+                        {formatMarketCap(priceData.marketCap)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Platform Buttons */}
           <div className="mb-4">
