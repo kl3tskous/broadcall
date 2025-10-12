@@ -284,8 +284,8 @@ export default function CallPage() {
               }}
             />
             
-            {/* Dark Gradient Overlay - Left to Right */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+            {/* Subtle Gradient Overlay - Left to Right */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
             
             {/* Content - Aligned Left */}
             <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
@@ -329,7 +329,7 @@ export default function CallPage() {
                     {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
                   </div>
                   <div className="text-2xl md:text-3xl font-bold text-white/90 drop-shadow-lg mt-2">
-                    {multiplier.toFixed(2)}x Multiplier
+                    {multiplier.toFixed(2)}x
                   </div>
                   {call.ath_price && (
                     <div className="text-lg text-yellow-400 drop-shadow-lg mt-3">
