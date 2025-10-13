@@ -35,14 +35,13 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 ## Recent Changes
 - ✅ **Twitter/X-Style Feed Layout** (October 2025)
-  - Transformed profile page token calls into a Twitter/X-style social feed:
-    - Post-style cards with user avatar on left (circular, 48px)
-    - Token info and metadata on right side
-    - "Called by @user · date" meta text under token name
-    - Performance banner thumbnail (ape background) with stats overlay
-    - Interaction buttons below each post (Buy, Share, Comment, More)
-    - Clean borders between posts with hover effects
-    - ROI display with proper null/zero guards to prevent "Infinity%" errors
+  - Completely redesigned profile page token calls to match X/Twitter post structure:
+    - **User's uploaded banner** as background for each post card (128px height with gradient overlay)
+    - Profile section overlaid on banner: avatar (48px circular), name, handle, and date
+    - **User bio** displayed immediately below banner (when available)
+    - **Token information** section below bio: logo, symbol, name, ROI badge
+    - Thesis quote, stats row (Entry, Current, ATH), and action buttons at bottom
+    - Ape banners are ONLY used on individual token call pages, not in feed
   - Enhanced token call pages with social interaction buttons:
     - Thesis displayed as styled quote block above chart
     - Prominent interaction bar below chart (Share on X, Copy Link, Comment)
