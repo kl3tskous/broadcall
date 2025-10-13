@@ -276,121 +276,149 @@ export default function ProfilePage() {
                 const timeAgo = new Date(call.created_at).toLocaleDateString()
                 
                 return (
-                  <div 
+                  <Link 
                     key={call.id}
-                    className="flex p-4 border-b border-gray-800 hover:bg-gray-900/40 transition-colors"
+                    href={`/call/${call.id}`}
+                    className="block border-b border-gray-800 hover:bg-gray-900/40 transition-colors"
                   >
-                    {/* User Avatar on Left */}
-                    <Link href={`/profile/${call.creator_wallet}`} className="flex-shrink-0">
-                      {profile.avatar_url ? (
+                    {/* User Profile Section with Banner Background */}
+                    <div className="relative h-32 overflow-hidden">
+                      {/* User's Banner as Background */}
+                      {profile.banner_url ? (
                         <img 
-                          src={profile.avatar_url} 
-                          alt={profile.alias || 'User'} 
-                          className="w-12 h-12 rounded-full"
+                          src={profile.banner_url} 
+                          alt="Profile banner" 
+                          className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg font-bold">
-                          {profile.alias?.charAt(0)?.toUpperCase() || '?'}
-                        </div>
+                        <div className="w-full h-full bg-gradient-to-br from-orange-900/50 to-red-900/50" />
                       )}
-                    </Link>
-
-                    {/* Post Content on Right */}
-                    <div className="flex-1 ml-3">
-                      {/* Header: Token Name & Meta */}
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <Link href={`/call/${call.id}`}>
-                            <h3 className="text-lg font-bold text-white hover:underline">
-                              ${call.token_symbol || 'TOKEN'}
-                            </h3>
-                          </Link>
-                          <p className="text-sm text-gray-400">
-                            Called by @{profile.alias || address.slice(0, 8)} · {timeAgo}
+                      
+                      {/* Gradient overlay for text readability */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
+                      
+                      {/* User Info Overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
+                        {/* Avatar */}
+                        {profile.avatar_url ? (
+                          <img 
+                            src={profile.avatar_url} 
+                            alt={profile.alias || 'User'} 
+                            className="w-12 h-12 rounded-full border-2 border-white/30"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg font-bold border-2 border-white/30">
+                            {profile.alias?.charAt(0)?.toUpperCase() || '?'}
+                          </div>
+                        )}
+                        
+                        {/* User Name & Handle */}
+                        <div className="flex-1">
+                          <p className="text-white font-bold text-sm">
+                            {profile.alias || 'Anonymous'}
+                          </p>
+                          <p className="text-white/70 text-xs">
+                            @{profile.alias || address.slice(0, 8)}
                           </p>
                         </div>
+
+                        {/* Date */}
+                        <p className="text-white/60 text-xs">
+                          {timeAgo}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* User Bio (if present) */}
+                    {profile.bio && (
+                      <div className="px-4 pt-3 pb-2 bg-gray-900/40 border-b border-gray-800/50">
+                        <p className="text-sm text-gray-300">{profile.bio}</p>
+                      </div>
+                    )}
+
+                    {/* Token Information Below Banner */}
+                    <div className="p-4">
+                      {/* Token Header */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          {call.token_logo ? (
+                            <img 
+                              src={call.token_logo} 
+                              alt={call.token_name || ''} 
+                              className="w-10 h-10 rounded-full"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm font-bold">
+                              {call.token_symbol?.charAt(0) || '?'}
+                            </div>
+                          )}
+                          <div>
+                            <h3 className="text-lg font-bold text-white">
+                              ${call.token_symbol || 'TOKEN'}
+                            </h3>
+                            <p className="text-xs text-gray-400">
+                              {call.token_name || 'Unknown Token'}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* ROI Badge */}
                         {roi !== 'N/A' && roiValue !== null && (
-                          <span className={`text-lg font-semibold ${
+                          <div className={`text-xl font-bold ${
                             roiValue >= 0 ? 'text-green-400' : 'text-red-400'
                           }`}>
                             {roi}
-                          </span>
+                          </div>
                         )}
                       </div>
 
                       {/* Thesis */}
                       {call.thesis && (
-                        <p className="mt-2 text-gray-300 text-sm">
-                          {call.thesis}
+                        <p className="text-sm text-gray-300 mb-3 italic">
+                          &ldquo;{call.thesis}&rdquo;
                         </p>
                       )}
 
-                      {/* Performance Banner Thumbnail */}
-                      <Link href={`/call/${call.id}`} className="block mt-3">
-                        <div className="rounded-lg overflow-hidden relative">
-                          {/* Ape Banner Background */}
-                          <div className="w-full h-40 bg-gradient-to-br from-orange-500 to-red-600 relative">
-                            <img 
-                              src="/banner-ape-chill.webp" 
-                              alt="Token banner" 
-                              className="w-full h-full object-cover"
-                            />
-                            {/* Gradient overlay for text */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
-                            
-                            {/* Stats Overlay */}
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 text-sm text-white">
-                              <div className="flex justify-between items-center">
-                                <div>
-                                  Entry: {call.initial_mcap ? formatMarketCap(call.initial_mcap) : 'N/A'}
-                                </div>
-                                {(call.current_price || call.ath_price) && (
-                                  <div>
-                                    Current: {call.current_price ? `$${call.current_price.toFixed(6)}` : 'N/A'}
-                                  </div>
-                                )}
-                                {call.ath_price && call.initial_price && call.initial_price > 0 && (
-                                  <div className="text-yellow-400">
-                                    ATH: {formatROI(call.initial_price, null, call.ath_price)}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
+                      {/* Stats Row */}
+                      <div className="flex gap-4 text-xs text-gray-400">
+                        {call.initial_mcap && (
+                          <span>Entry: {formatMarketCap(call.initial_mcap)}</span>
+                        )}
+                        {call.current_price && (
+                          <span>Current: ${call.current_price.toFixed(6)}</span>
+                        )}
+                        {call.ath_price && call.initial_price && call.initial_price > 0 && (
+                          <span className="text-yellow-400">
+                            ATH: {formatROI(call.initial_price, null, call.ath_price)}
+                          </span>
+                        )}
+                      </div>
 
                       {/* Action Buttons */}
-                      <div className="flex mt-3 space-x-6 text-gray-400">
-                        <Link 
-                          href={`/call/${call.id}`}
-                          className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
-                        >
-                          <span className="text-lg">👍</span>
-                          <span className="text-sm">Buy</span>
-                        </Link>
+                      <div className="flex mt-4 pt-3 border-t border-gray-700/50 space-x-6 text-gray-400 text-sm">
+                        <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
+                          <span>👍</span>
+                          <span>Buy</span>
+                        </button>
                         <button 
                           onClick={(e) => {
                             e.preventDefault()
                             const shareUrl = `${window.location.origin}/call/${call.id}`
-                            const shareText = `Check out my ${call.token_symbol} call ${roi !== 'N/A' ? `(${roi} ROI)` : ''} on Coin Call!`
+                            const shareText = `Check out ${profile.alias || 'this'}'s ${call.token_symbol} call ${roi !== 'N/A' ? `(${roi} ROI)` : ''} on Coin Call!`
                             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
                           }}
                           className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
                         >
-                          <span className="text-lg">🔁</span>
-                          <span className="text-sm">Share</span>
+                          <span>🔁</span>
+                          <span>Share</span>
                         </button>
                         <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-                          <span className="text-lg">💬</span>
-                          <span className="text-sm">Comment</span>
-                        </button>
-                        <button className="ml-auto hover:text-orange-400 transition-colors">
-                          <span className="text-lg">⋯</span>
+                          <span>💬</span>
+                          <span>Comment</span>
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               })
             )}
