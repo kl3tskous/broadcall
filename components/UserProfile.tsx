@@ -25,13 +25,12 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('wallet_address', walletAddress)
-          .single()
+        // Fetch via API route to bypass schema cache
+        const response = await fetch(`/api/profile/get?wallet_address=${walletAddress}`)
+        const result = await response.json()
 
-        if (data) {
+        if (result.data) {
+          const data = result.data
           setProfile(data)
           setAlias(data.alias || '')
           setAvatarUrl(data.avatar_url || '')
