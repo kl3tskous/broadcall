@@ -33,6 +33,16 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Performance Tracking:** Each call page displays ROI, multiplier, and ATH (All-Time High) price/market cap, which auto-updates.
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
+## Recent Changes
+- ✅ **Modern Full-Width Banner Design** (October 2025)
+  - Clean, modern 420px tall banner with full-width ape background using `background-size: cover`
+  - Gradient overlay from `black/80` on left to `transparent` on right for optimal text readability
+  - Removed solid black boxes - clean text directly on gradient overlay
+  - Left-aligned content layout with token info, PnL %, multiplier, and stats in a single column
+  - Banner image stored in `/public/banner-ape-chill.webp` (170KB optimized WebP)
+  - Fully responsive design that adapts to mobile devices
+  - Simplified structure perfect for social media sharing
+
 ## External Dependencies
 - **Supabase:** Used as the PostgreSQL database and for authentication.
 - **DexScreener API:** Provides real-time token data, including price, market cap, and chart information.
