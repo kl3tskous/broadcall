@@ -1,0 +1,213 @@
+🧠 Prompt for Replit AI — Build Token Page + User Profile System + Settings Page
+
+I want to build a modern token call page that combines:
+
+Social media–style user identity (like Twitter profiles),
+
+A dynamic ape banner for token calls,
+
+And a clean settings flow for users to upload their own banner and PFP.
+
+🧑 USER PROFILE IDENTITY LAYER (KOL)
+
+✅ Requirements:
+
+Each user can upload:
+
+A profile picture (PFP)
+
+A personal banner image
+
+A short bio (max 160 chars)
+
+Social links (X, Telegram, Website or Discord username)
+
+These are uploaded and stored in their Settings page and displayed on their Profile page.
+
+✅ Profile Page Layout:
+
+Full-width banner image at the top (user’s uploaded banner).
+
+Circular avatar overlapping the bottom of the banner on the left.
+
+Display name and handle next to the avatar.
+
+Bio text below.
+
+Social icons below the bio.
+
+Follower / following / performance stats below.
+
+Tabs or navigation bar below (e.g., “Calls”, “Stats”, “About”).
+
+<div className="profile-header relative">
+  <img src="[userBanner]" className="w-full h-[300px] object-cover" />
+  <div className="absolute bottom-[-60px] left-8">
+    <img src="[userPFP]" className="w-28 h-28 rounded-full border-4 border-black" />
+  </div>
+  <div className="mt-20 px-8">
+    <h1 className="text-3xl font-bold text-white">{displayName}</h1>
+    <p className="text-gray-400">@{handle}</p>
+    <p className="mt-2 text-gray-300">{bio}</p>
+    <div className="flex space-x-3 mt-3">
+      {telegram && <a href={telegram}>✈️</a>}
+      {twitter && <a href={twitter}>🐦</a>}
+      {website && <a href={website}>🌐</a>}
+    </div>
+    <div className="mt-3 flex space-x-4 text-gray-400">
+      <span><strong>{followers}</strong> Followers</span>
+      <span><strong>{calls}</strong> Calls</span>
+      <span><strong>{roi}%</strong> Avg ROI</span>
+    </div>
+  </div>
+</div>
+
+
+⚡ Notes:
+
+Responsive layout (mobile → stack text below avatar).
+
+Dark theme with smooth gradients and light accent colors.
+
+Avatar and banner are user-uploaded through the Settings page.
+
+🪙 TOKEN CALL PAGE
+
+✅ Requirements:
+
+Each token call has:
+
+Token name, ticker, PnL %, entry and current values
+
+Ape banner image (not the user banner) behind it — dynamically selected by performance multiplier:
+
+0–2x → Chill Ape
+
+2–5x → Party Ape
+
+5–10x → Rocket Ape
+
+10x+ → God Ape
+
+Caller’s avatar and username below the token name (“Called by @user 1h ago”)
+
+A short message / thesis from the caller (optional)
+
+Chart embedded below the banner
+
+Buy / share buttons
+
+✅ Layout:
+
+The ape image should cover the top section of the token card or token page background.
+
+Overlay a dark transparent gradient over the ape image to make text readable.
+
+Text (token name, % change, entry/current, etc.) is aligned to the left.
+
+The ape image should always display fully, not cropped.
+
+<div className="token-call-page">
+  <div className="relative h-[300px]">
+    <img src="[apeBanner]" className="w-full h-full object-cover" />
+    <div className="absolute inset-0 bg-black/60 flex flex-col justify-center px-10">
+      <h1 className="text-5xl font-bold text-white">$FUTARDIO</h1>
+      <p className="text-2xl text-green-400">+12.4% • 1.15x</p>
+      <p className="text-gray-300 text-sm">Entry: $253K • Current: $280K</p>
+      <div className="flex items-center space-x-3 mt-4">
+        <img src="[userPFP]" className="w-10 h-10 rounded-full" />
+        <p className="text-gray-200">Called by <strong>@Jobba</strong> • 1h ago</p>
+      </div>
+      <p className="mt-2 italic text-gray-300">“Ape now or cry later 🦍🚀”</p>
+    </div>
+  </div>
+
+  <div className="chart-section p-4">
+    [DexScreener embed or chart component]
+  </div>
+
+  <div className="actions flex gap-3 p-4">
+    <button className="bg-gray-800 px-4 py-2 rounded">🐒 Buy</button>
+    <button className="bg-gray-800 px-4 py-2 rounded">📎 Copy Link</button>
+    <button className="bg-gray-800 px-4 py-2 rounded">🐦 Share</button>
+  </div>
+
+  <div className="other-calls p-4 mt-6">
+    <h2 className="text-lg font-bold mb-2">📊 More Calls by @Jobba</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="token-card">[Token 1]</div>
+      <div className="token-card">[Token 2]</div>
+      <div className="token-card">[Token 3]</div>
+    </div>
+  </div>
+</div>
+
+⚙️ SETTINGS PAGE (UPLOAD + SOCIAL)
+
+✅ Features:
+
+Upload banner image (with live preview)
+
+Upload avatar image (with live preview)
+
+Edit name, bio, and social links (Twitter, Telegram, Website)
+
+Save profile
+
+<div className="settings-page max-w-2xl mx-auto p-6">
+  <h1 className="text-2xl font-bold text-white mb-4">Profile Settings</h1>
+
+  <label>Banner Image</label>
+  <input type="file" accept="image/*" onChange={uploadBanner} />
+  <img src={bannerPreview} className="mt-2 w-full rounded-lg" />
+
+  <label>Profile Picture</label>
+  <input type="file" accept="image/*" onChange={uploadAvatar} />
+  <img src={avatarPreview} className="mt-2 w-20 h-20 rounded-full" />
+
+  <label>Display Name</label>
+  <input type="text" value={name} onChange={setName} />
+
+  <label>Bio</label>
+  <textarea value={bio} onChange={setBio}></textarea>
+
+  <label>Social Links</label>
+  <input type="text" placeholder="Twitter URL" value={twitter} onChange={setTwitter} />
+  <input type="text" placeholder="Telegram link or username" value={telegram} onChange={setTelegram} />
+  <input type="text" placeholder="Website" value={website} onChange={setWebsite} />
+
+  <button onClick={saveProfile} className="bg-orange-500 text-white px-4 py-2 mt-4 rounded">Save</button>
+</div>
+
+
+🧡 Notes:
+
+Store banner and avatar URLs in the user’s database record.
+
+Token call banners use predefined ape images, not user uploads.
+
+Keep UI consistent with the orange gradient design of the site.
+
+Responsive and mobile friendly.
+
+✨ Summary:
+
+User uploads → Banner + PFP → used on their profile page.
+
+Token calls → Use dynamic ape banner based on performance.
+
+Token call page looks like a social post with embedded chart and share buttons.
+
+Settings page allows customization.
+
+Everything uses a clean dark theme with warm orange accent.
+
+✅ Expected result:
+
+Token call pages feel social and dynamic
+
+KOL profiles look personal and recognizable
+
+Clean upload flow for user assets
+
+Ape banners remain consistent and performance-based

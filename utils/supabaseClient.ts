@@ -58,6 +58,9 @@ export interface Profile {
   avatar_url: string | null
   banner_url: string | null
   twitter_handle: string | null
+  bio: string | null
+  telegram: string | null
+  website: string | null
   created_at: string
   updated_at: string
 }
