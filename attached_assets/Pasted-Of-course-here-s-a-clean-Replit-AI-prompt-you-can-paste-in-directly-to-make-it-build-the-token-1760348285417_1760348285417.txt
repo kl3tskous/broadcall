@@ -1,0 +1,98 @@
+Of course 👌 — here’s a clean, Replit AI prompt you can paste in directly to make it build the token call page in the new Twitter/X-style feed layout, while also letting it use your uploaded image as a UI reference:
+
+⸻
+
+🧠 Prompt for Replit AI — Build Token Page UI (X / Twitter Feed Style)
+
+I’ve uploaded a reference image showing the desired UI layout.
+Use that image as the design inspiration.
+
+✅ Goal:
+Build a token call page that looks and feels like a Twitter/X profile feed, not a dashboard.
+
+⸻
+
+🧑 Profile Header (Top Section)
+	•	Full-width user banner image at the top.
+	•	Dark gradient overlay for text contrast.
+	•	Circular PFP avatar overlapping the bottom of the banner, positioned on the left.
+	•	To the right of the avatar:
+	•	Display name (large, bold)
+	•	@handle (gray)
+	•	Bio text (max 160 chars)
+	•	Social icons (X, Telegram, website)
+	•	Underneath: small metrics line (followers, total calls, average ROI).
+	•	Clean dark theme with orange accent colors.
+	•	Fully responsive (stack elements on mobile).
+
+⸻
+
+🧾 Feed Layout (Main Section)
+	•	Below the header is a scrollable feed of token calls.
+	•	Each token call should look like a post/tweet card, not a dashboard block.
+
+✅ Each post should contain:
+	•	Left side: user avatar
+	•	Right side:
+	•	Token name + ticker (bold)
+	•	“Called by @user · X hours ago”
+	•	Performance stats (PnL %, Entry, Current, ATH)
+	•	Ape banner thumbnail or mini background
+	•	Small gradient overlay behind text
+	•	Buttons underneath: 🐵 Buy | 🔁 Share | 💬 Comment
+
+<div className="token-call-post flex p-4 border-b border-gray-800 hover:bg-gray-900/40">
+  <img src="[PFP]" className="w-12 h-12 rounded-full mr-3" />
+  <div className="flex-1">
+    <div className="flex justify-between">
+      <div>
+        <h3 className="text-lg font-bold">$FUTARDIO</h3>
+        <p className="text-gray-400 text-sm">Called by @Jobba · 2h ago</p>
+      </div>
+      <span className="text-green-400 font-semibold text-lg">+12.3%</span>
+    </div>
+    <div className="mt-2 rounded-lg overflow-hidden relative">
+      <img src="[apeBanner]" className="w-full h-40 object-cover" />
+      <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-3 text-sm text-white">
+        Entry: $250K · Current: $280K · ATH: +18.5%
+      </div>
+    </div>
+    <div className="flex mt-3 space-x-4 text-gray-400">
+      <button>🐒 Buy</button>
+      <button>🔁 Share</button>
+      <button>💬 Comment</button>
+    </div>
+  </div>
+</div>
+
+
+⸻
+
+🪙 Single Token Page (Expanded Post)
+	•	When clicking a token call, open a full view:
+	•	Full ape banner
+	•	Token stats on top
+	•	Embedded Dex chart
+	•	Action buttons (Buy, Share)
+	•	Comments/replies below
+
+⸻
+
+🧰 Additional Notes:
+	•	Profile banner & PFP are uploaded by the user in their Settings page.
+	•	Ape banners are dynamically selected by token performance (0–2x chill, 2–5x party, etc.).
+	•	UI must match the dark, clean, orange-accent style shown in the uploaded image.
+	•	Feed should scroll smoothly like a social timeline.
+	•	Keep the layout lightweight and mobile friendly.
+
+✅ Expected Result:
+	•	A profile header at the top like X
+	•	A feed of token calls displayed like tweets/posts
+	•	Clicking a post opens the full token call view
+	•	Clean orange-dark style, not a dashboard.
+
+⸻
+
+🧡 Tip: You can mention to the AI that the uploaded image is only for visual reference, not to copy pixel-perfect.
+
+Would you like me to also add the prompt for the Settings page for uploading banner/PFP right after this one, so they’re connected? 🧑✨

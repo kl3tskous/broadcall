@@ -388,6 +388,13 @@ export default function CallPage() {
             </div>
           </div>
 
+          {/* Thesis Quote */}
+          {call.thesis && (
+            <div className="mb-4 p-4 bg-gray-800/30 border-l-4 border-orange-500 rounded-r-lg">
+              <p className="text-gray-300 italic">&ldquo;{call.thesis}&rdquo;</p>
+            </div>
+          )}
+
           {/* Live Chart */}
           <div className="card p-0 overflow-hidden">
             {priceLoading ? (
@@ -414,14 +421,40 @@ export default function CallPage() {
             )}
           </div>
 
-          {/* Compact Stats Footer */}
-          <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
-            <div>
-              {call.thesis && (
-                <p className="text-sm text-gray-400 max-w-2xl">{call.thesis}</p>
-              )}
+          {/* Twitter/X Style Interaction Buttons */}
+          <div className="mt-4 flex items-center justify-between border-t border-b border-gray-800 py-3">
+            <div className="flex space-x-8 text-gray-400">
+              <button 
+                onClick={() => {
+                  const shareUrl = `${window.location.origin}/call/${call.id}`
+                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on Coin Call`
+                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
+                }}
+                className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+              >
+                <span className="text-xl">🔁</span>
+                <span className="text-sm font-medium">Share on X</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/call/${call.id}`)
+                  alert('Link copied to clipboard!')
+                }}
+                className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+              >
+                <span className="text-xl">🔗</span>
+                <span className="text-sm font-medium">Copy Link</span>
+              </button>
+
+              <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
+                <span className="text-xl">💬</span>
+                <span className="text-sm font-medium">Comment</span>
+                <span className="text-xs text-gray-500">(soon)</span>
+              </button>
             </div>
-            <div className="flex gap-4">
+
+            <div className="flex gap-4 text-xs text-gray-500">
               <span>{call.views} views</span>
               <span>{call.clicks} clicks</span>
             </div>
