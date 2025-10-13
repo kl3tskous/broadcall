@@ -28,6 +28,7 @@ export default function CallPage() {
   const [creatorBanner, setCreatorBanner] = useState<string | null>(null)
   const [creatorAvatar, setCreatorAvatar] = useState<string | null>(null)
   const [creatorAlias, setCreatorAlias] = useState<string | null>(null)
+  const [creatorBio, setCreatorBio] = useState<string | null>(null)
   const [moreCalls, setMoreCalls] = useState<Call[]>([])
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
@@ -58,7 +59,7 @@ export default function CallPage() {
 
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('banner_url, avatar_url, alias')
+          .select('banner_url, avatar_url, alias, bio')
           .eq('wallet_address', data.creator_wallet)
           .single()
 
@@ -66,6 +67,7 @@ export default function CallPage() {
           setCreatorBanner(profileData.banner_url || null)
           setCreatorAvatar(profileData.avatar_url || null)
           setCreatorAlias(profileData.alias || null)
+          setCreatorBio(profileData.bio || null)
         }
 
         // Fetch more calls by the same creator
@@ -286,6 +288,62 @@ export default function CallPage() {
 
       <main className="min-h-screen py-4 md:py-8 px-3 md:px-4">
         <div className="max-w-5xl mx-auto">
+          
+          {/* User Profile Section */}
+          {call.creator_wallet && (
+            <div className="mb-6 overflow-hidden rounded-2xl border border-gray-800">
+              {/* User Banner Background */}
+              <div className="relative h-40 overflow-hidden">
+                {creatorBanner ? (
+                  <img 
+                    src={creatorBanner} 
+                    alt="Profile banner" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-orange-900/50 to-red-900/50" />
+                )}
+                
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+                
+                {/* User Info Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
+                  <Link href={`/profile/${call.creator_wallet}`}>
+                    {creatorAvatar ? (
+                      <img 
+                        src={creatorAvatar} 
+                        alt={creatorAlias || 'User'} 
+                        className="w-16 h-16 rounded-full border-4 border-black/50"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold border-4 border-black/50">
+                        {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
+                      </div>
+                    )}
+                  </Link>
+                  
+                  <div className="flex-1">
+                    <Link href={`/profile/${call.creator_wallet}`}>
+                      <p className="text-white font-bold text-lg hover:underline">
+                        {creatorAlias || 'Anonymous'}
+                      </p>
+                      <p className="text-white/70 text-sm">
+                        @{creatorAlias || call.creator_wallet.slice(0, 8)}
+                      </p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Bio */}
+              {creatorBio && (
+                <div className="px-4 py-3 bg-gray-900/60 border-t border-gray-800">
+                  <p className="text-sm text-gray-300">{creatorBio}</p>
+                </div>
+              )}
+            </div>
+          )}
           
           {/* Full-Width Banner with Ape Background */}
           <div 
