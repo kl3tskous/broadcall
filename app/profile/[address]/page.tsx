@@ -4,12 +4,24 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase, Profile } from '@/utils/supabaseClient'
 import Link from 'next/link'
+import EmbeddedChart from '@/components/EmbeddedChart'
+import { platforms } from '@/components/PlatformLogos'
 
 interface CallStats {
   total_calls: number
   avg_roi: number
   best_call_roi: number
 }
+
+interface UserSettings {
+  gmgn_ref?: string
+  axiom_ref?: string
+  photon_ref?: string
+  bullx_ref?: string
+  trojan_ref?: string
+}
+
+const DEFAULT_GMGN_REF = 'cKHW_sol'
 
 export default function ProfilePage() {
   const params = useParams()
@@ -18,6 +30,7 @@ export default function ProfilePage() {
   
   const [profile, setProfile] = useState<Profile | null>(null)
   const [calls, setCalls] = useState<any[]>([])
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(null)
   const [stats, setStats] = useState<CallStats>({
     total_calls: 0,
     avg_roi: 0,
@@ -40,6 +53,17 @@ export default function ProfilePage() {
 
         if (profileData) {
           setProfile(profileData)
+        }
+
+        // Fetch user settings for referral codes
+        const { data: settingsData } = await supabase
+          .from('user_settings')
+          .select('gmgn_ref, axiom_ref, photon_ref, bullx_ref, trojan_ref')
+          .eq('wallet_address', address)
+          .single()
+
+        if (settingsData) {
+          setUserSettings(settingsData)
         }
 
         // Fetch user's calls
@@ -99,6 +123,43 @@ export default function ProfilePage() {
     if (mcap >= 1_000_000) return `$${(mcap / 1_000_000).toFixed(2)}M`
     if (mcap >= 1_000) return `$${(mcap / 1_000).toFixed(1)}K`
     return `$${mcap.toFixed(0)}`
+  }
+
+  const getPlatformUrl = (platformId: string, call: any) => {
+    const tokenAddress = call.token_address
+    
+    switch (platformId) {
+      case 'gmgn':
+        const gmgnRef = call.gmgn_ref || userSettings?.gmgn_ref || DEFAULT_GMGN_REF
+        return `https://gmgn.ai/sol/token/${gmgnRef}_${tokenAddress}`
+      
+      case 'axiom':
+        const axiomRef = call.axiom_ref || userSettings?.axiom_ref || ''
+        return axiomRef 
+          ? `https://axiom.trade/t/${tokenAddress}/@${axiomRef}`
+          : `https://axiom.trade/solana/${tokenAddress}`
+      
+      case 'photon':
+        const photonRef = call.photon_ref || userSettings?.photon_ref || ''
+        return photonRef
+          ? `https://photon-sol.tinyastro.io/${photonRef}`
+          : `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}`
+      
+      case 'bullx':
+        const bullxRef = call.bullx_ref || userSettings?.bullx_ref || ''
+        return bullxRef
+          ? `https://neo.bullx.io/p/${bullxRef}`
+          : `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}`
+      
+      case 'trojan':
+        const trojanRef = call.trojan_ref || userSettings?.trojan_ref || ''
+        return trojanRef
+          ? `https://t.me/solana_trojanbot?start=r-${trojanRef}`
+          : `https://t.me/solana_trojanbot`
+      
+      default:
+        return ''
+    }
   }
 
   if (loading) {
@@ -269,156 +330,102 @@ export default function ProfilePage() {
               </div>
             ) : (
               calls.map((call) => {
-                const roi = (call.initial_price && call.initial_price > 0) ? 
-                  formatROI(call.initial_price, call.current_price, call.ath_price) : 'N/A'
-                const roiValue = (call.initial_price && call.initial_price > 0 && (call.ath_price || call.current_price)) ?
-                  (((call.ath_price || call.current_price || 0) - call.initial_price) / call.initial_price) * 100 : null
                 const timeAgo = new Date(call.created_at).toLocaleDateString()
                 
                 return (
-                  <Link 
+                  <div 
                     key={call.id}
-                    href={`/call/${call.id}`}
-                    className="block border-b border-gray-800 hover:bg-gray-900/40 transition-colors"
+                    className="border-b border-gray-800 hover:bg-gray-900/40 transition-colors"
                   >
-                    {/* User Profile Section with Banner Background */}
-                    <div className="relative h-32 overflow-hidden">
-                      {/* User's Banner as Background */}
-                      {profile.banner_url ? (
-                        <img 
-                          src={profile.banner_url} 
-                          alt="Profile banner" 
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-orange-900/50 to-red-900/50" />
-                      )}
-                      
-                      {/* Gradient overlay for text readability */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
-                      
-                      {/* User Info Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
-                        {/* Avatar */}
+                    {/* User Info Header - clickable to call detail */}
+                    <Link href={`/call/${call.id}`} className="block p-4 pb-0">
+                      <div className="flex items-center gap-3">
                         {profile.avatar_url ? (
                           <img 
                             src={profile.avatar_url} 
                             alt={profile.alias || 'User'} 
-                            className="w-12 h-12 rounded-full border-2 border-white/30"
+                            className="w-10 h-10 rounded-full"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg font-bold border-2 border-white/30">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm font-bold">
                             {profile.alias?.charAt(0)?.toUpperCase() || '?'}
                           </div>
                         )}
                         
-                        {/* User Name & Handle */}
                         <div className="flex-1">
                           <p className="text-white font-bold text-sm">
                             {profile.alias || 'Anonymous'}
                           </p>
-                          <p className="text-white/70 text-xs">
-                            @{profile.alias || address.slice(0, 8)}
+                          <p className="text-gray-400 text-xs">
+                            {timeAgo}
                           </p>
                         </div>
-
-                        {/* Date */}
-                        <p className="text-white/60 text-xs">
-                          {timeAgo}
-                        </p>
                       </div>
-                    </div>
+                    </Link>
 
-                    {/* User Bio (if present) */}
-                    {profile.bio && (
-                      <div className="px-4 pt-3 pb-2 bg-gray-900/40 border-b border-gray-800/50">
-                        <p className="text-sm text-gray-300">{profile.bio}</p>
-                      </div>
-                    )}
-
-                    {/* Token Information Below Banner */}
-                    <div className="p-4">
-                      {/* Token Header */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
+                    {/* Token Information with "shared @ X mcap" */}
+                    <div className="px-4 pt-3">
+                      <Link href={`/call/${call.id}`} className="block">
+                        <div className="flex items-center gap-3 mb-2">
                           {call.token_logo ? (
                             <img 
                               src={call.token_logo} 
                               alt={call.token_name || ''} 
-                              className="w-10 h-10 rounded-full"
+                              className="w-12 h-12 rounded-full"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm font-bold">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-base font-bold">
                               {call.token_symbol?.charAt(0) || '?'}
                             </div>
                           )}
                           <div>
                             <h3 className="text-lg font-bold text-white">
-                              ${call.token_symbol || 'TOKEN'}
+                              {call.token_name || call.token_symbol || 'Unknown Token'}
                             </h3>
-                            <p className="text-xs text-gray-400">
-                              {call.token_name || 'Unknown Token'}
+                            <p className="text-sm text-gray-400">
+                              {call.initial_mcap ? `shared @ ${formatMarketCap(call.initial_mcap)} mcap` : 'Token call'}
                             </p>
                           </div>
                         </div>
-                        
-                        {/* ROI Badge */}
-                        {roi !== 'N/A' && roiValue !== null && (
-                          <div className={`text-xl font-bold ${
-                            roiValue >= 0 ? 'text-green-400' : 'text-red-400'
-                          }`}>
-                            {roi}
-                          </div>
+
+                        {/* Thesis */}
+                        {call.thesis && (
+                          <p className="text-sm text-gray-300 mb-3 mt-2">
+                            {call.thesis}
+                          </p>
                         )}
+                      </Link>
+
+                      {/* Embedded Chart */}
+                      <div className="my-3">
+                        <EmbeddedChart tokenAddress={call.token_address} />
                       </div>
 
-                      {/* Thesis */}
-                      {call.thesis && (
-                        <p className="text-sm text-gray-300 mb-3 italic">
-                          &ldquo;{call.thesis}&rdquo;
-                        </p>
-                      )}
-
-                      {/* Stats Row */}
-                      <div className="flex gap-4 text-xs text-gray-400">
-                        {call.initial_mcap && (
-                          <span>Entry: {formatMarketCap(call.initial_mcap)}</span>
-                        )}
-                        {call.current_price && (
-                          <span>Current: ${call.current_price.toFixed(6)}</span>
-                        )}
-                        {call.ath_price && call.initial_price && call.initial_price > 0 && (
-                          <span className="text-yellow-400">
-                            ATH: {formatROI(call.initial_price, null, call.ath_price)}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex mt-4 pt-3 border-t border-gray-700/50 space-x-6 text-gray-400 text-sm">
-                        <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-                          <span>👍</span>
-                          <span>Buy</span>
-                        </button>
-                        <button 
-                          onClick={(e) => {
-                            e.preventDefault()
-                            const shareUrl = `${window.location.origin}/call/${call.id}`
-                            const shareText = `Check out ${profile.alias || 'this'}'s ${call.token_symbol} call ${roi !== 'N/A' ? `(${roi} ROI)` : ''} on Coin Call!`
-                            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
-                          }}
-                          className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
-                        >
-                          <span>🔁</span>
-                          <span>Share</span>
-                        </button>
-                        <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-                          <span>💬</span>
-                          <span>Comment</span>
-                        </button>
+                      {/* Platform Buy Buttons - direct links to platforms */}
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+                        {platforms.map((platform) => {
+                          const Logo = platform.Logo
+                          const platformUrl = getPlatformUrl(platform.id, call)
+                          return (
+                            <button
+                              key={platform.id}
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                if (platformUrl) {
+                                  window.open(platformUrl, '_blank', 'noopener,noreferrer')
+                                }
+                              }}
+                              className="flex items-center justify-center gap-2 px-3 py-2 bg-transparent hover:bg-orange-500/10 border border-orange-500/50 hover:border-orange-400/70 rounded-lg transition-all text-xs font-medium"
+                            >
+                              <Logo className="w-4 h-4" />
+                              <span className="hidden md:inline">{platform.name}</span>
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 )
               })
             )}
