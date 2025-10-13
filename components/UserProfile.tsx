@@ -57,56 +57,26 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     setMessage('')
 
     try {
-      // First save profile without banner (bypass schema cache)
-      const { data: existing } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('wallet_address', walletAddress)
-        .single()
-
-      if (existing) {
-        // Update existing
-        const { error } = await supabase
-          .from('profiles')
-          .update({
-            alias: alias || null,
-            avatar_url: avatarUrl || null,
-            twitter_handle: twitterHandle || null,
-            bio: bio || null,
-            telegram: telegram || null,
-            website: website || null,
-            updated_at: new Date().toISOString()
-          })
-          .eq('wallet_address', walletAddress)
-
-        if (error && !error.message.includes('banner_url')) throw error
-      } else {
-        // Insert new
-        const { error } = await supabase
-          .from('profiles')
-          .insert({
-            wallet_address: walletAddress,
-            alias: alias || null,
-            avatar_url: avatarUrl || null,
-            twitter_handle: twitterHandle || null,
-            bio: bio || null,
-            telegram: telegram || null,
-            website: website || null
-          })
-
-        if (error && !error.message.includes('banner_url')) throw error
-      }
-
-      // Save banner separately via API route (includes banner_url)
-      if (bannerUrl) {
-        await fetch('/api/profile/banner', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            wallet_address: walletAddress, 
-            banner_url: bannerUrl 
-          })
+      // Save all profile data via API route (bypasses schema cache)
+      const response = await fetch('/api/profile/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          wallet_address: walletAddress,
+          alias: alias || null,
+          avatar_url: avatarUrl || null,
+          banner_url: bannerUrl || null,
+          twitter_handle: twitterHandle || null,
+          bio: bio || null,
+          telegram: telegram || null,
+          website: website || null
         })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save profile')
       }
 
       setMessage('Profile saved successfully!')

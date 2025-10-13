@@ -7,7 +7,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { wallet_address, alias, avatar_url, banner_url, twitter_handle } = body;
+    const { wallet_address, alias, avatar_url, banner_url, twitter_handle, bio, telegram, website } = body;
 
     if (!wallet_address) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
           avatar_url: avatar_url || null,
           banner_url: banner_url || null,
           twitter_handle: twitter_handle || null,
+          bio: bio || null,
+          telegram: telegram || null,
+          website: website || null,
           updated_at: new Date().toISOString()
         })
         .eq('wallet_address', wallet_address)
@@ -50,7 +53,10 @@ export async function POST(request: NextRequest) {
           alias: alias || null,
           avatar_url: avatar_url || null,
           banner_url: banner_url || null,
-          twitter_handle: twitter_handle || null
+          twitter_handle: twitter_handle || null,
+          bio: bio || null,
+          telegram: telegram || null,
+          website: website || null
         })
         .select()
         .single();
