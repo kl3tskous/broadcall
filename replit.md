@@ -34,13 +34,21 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Embedded Live Charts in Profile Feed** (October 2025)
+  - Redesigned profile page token calls as self-contained social media posts:
+    - **Simplified header**: User avatar, name, and date (no banner on feed cards)
+    - **Token information**: Image, name, and "shared @ X mcap" format
+    - **Thesis display**: Clean text block (when available)
+    - **Embedded DexScreener chart**: Live 1-second candles with dark theme (300px height) directly in each card
+    - **Platform buy buttons**: GMGN, Axiom, Photon, BullX, Trojan with proper referral codes below chart
+  - Platform buttons correctly link to external trading platforms with referral code priority:
+    - Call-specific referral code → User settings → Default fallback
+    - Buttons open in new tab without interfering with card navigation
+  - Card navigation: User info and token info sections are clickable to view call details
+  - Mobile-responsive grid: 2 columns for buttons on mobile, 5 columns on desktop
+  - Created reusable `EmbeddedChart` component for DexScreener integration
+  
 - ✅ **Twitter/X-Style Feed Layout** (October 2025)
-  - Completely redesigned profile page token calls to match X/Twitter post structure:
-    - **User's uploaded banner** as background for each post card (128px height with gradient overlay)
-    - Profile section overlaid on banner: avatar (48px circular), name, handle, and date
-    - **User bio** displayed immediately below banner (when available)
-    - **Token information** section below bio: logo, symbol, name, ROI badge
-    - Thesis quote, stats row (Entry, Current, ATH), and action buttons at bottom
   - Individual token call pages now display user profile at top:
     - User's banner, avatar (64px), name, handle, and bio at the very top
     - Ape banner with token performance stats displayed below the profile section
