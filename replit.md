@@ -34,6 +34,19 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **KOL Profile System** (October 2025)
+  - Added bio (160 char max), telegram, and website fields to user profiles
+  - Created public profile page at `/profile/[address]` with Twitter-style layout:
+    - Full-width user banner at top with circular avatar overlapping
+    - Display name, handle, bio, and social links (Twitter, Telegram, Website)
+    - Performance stats: Total Calls, Avg ROI, Best Call
+    - Tabs for "Calls" and "Stats" views
+    - List of user's calls with ROI display using ATH fallback
+  - Updated Settings page with new profile fields in organized grid layout
+  - Token call pages now show caller's avatar with clickable link to profile
+  - Added "More Calls by @user" section on token pages (shows 3 recent calls)
+  - Database schema updated with new profile fields (bio, telegram, website)
+  
 - ✅ **Modern Full-Width Banner Design** (October 2025)
   - Clean, modern 420px tall banner with full-width ape background using `background-size: cover`
   - Gradient overlay from `black/80` on left to `transparent` on right for optimal text readability

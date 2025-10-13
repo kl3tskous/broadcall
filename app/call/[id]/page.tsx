@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
@@ -25,6 +26,9 @@ export default function CallPage() {
   const [call, setCall] = useState<Call | null>(null)
   const [creatorSettings, setCreatorSettings] = useState<UserSettings | null>(null)
   const [creatorBanner, setCreatorBanner] = useState<string | null>(null)
+  const [creatorAvatar, setCreatorAvatar] = useState<string | null>(null)
+  const [creatorAlias, setCreatorAlias] = useState<string | null>(null)
+  const [moreCalls, setMoreCalls] = useState<Call[]>([])
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
   const [priceLoading, setPriceLoading] = useState(true)
@@ -54,12 +58,27 @@ export default function CallPage() {
 
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('banner_url')
+          .select('banner_url, avatar_url, alias')
           .eq('wallet_address', data.creator_wallet)
           .single()
 
-        if (profileData?.banner_url) {
-          setCreatorBanner(profileData.banner_url)
+        if (profileData) {
+          setCreatorBanner(profileData.banner_url || null)
+          setCreatorAvatar(profileData.avatar_url || null)
+          setCreatorAlias(profileData.alias || null)
+        }
+
+        // Fetch more calls by the same creator
+        const { data: moreCallsData } = await supabase
+          .from('calls')
+          .select('*')
+          .eq('creator_wallet', data.creator_wallet)
+          .neq('id', id)
+          .order('created_at', { ascending: false })
+          .limit(3)
+
+        if (moreCallsData) {
+          setMoreCalls(moreCallsData)
         }
 
         setLoading(false)
@@ -290,10 +309,29 @@ export default function CallPage() {
               <p className="text-base md:text-lg text-white/80 mb-1">
                 {call.token_name || 'Unknown Token'}
               </p>
-              {call.user_alias && (
-                <p className="text-sm text-white/70 mb-6">
-                  Called by @{call.user_alias}
-                </p>
+              {call.creator_wallet && (
+                <Link 
+                  href={`/profile/${call.creator_wallet}`}
+                  className="flex items-center gap-2 mt-3 mb-6 hover:opacity-80 transition-opacity"
+                >
+                  {creatorAvatar ? (
+                    <img 
+                      src={creatorAvatar} 
+                      alt={creatorAlias || 'User'} 
+                      className="w-8 h-8 rounded-full border-2 border-white/30"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xs font-bold border-2 border-white/30">
+                      {(creatorAlias || call.user_alias)?.charAt(0)?.toUpperCase() || '?'}
+                    </div>
+                  )}
+                  <span className="text-sm text-white/90">
+                    Called by <strong>@{creatorAlias || call.user_alias || 'Anonymous'}</strong>
+                  </span>
+                </Link>
               )}
 
               {/* ROI & PnL Display */}
@@ -388,6 +426,62 @@ export default function CallPage() {
               <span>{call.clicks} clicks</span>
             </div>
           </div>
+
+          {/* More Calls by User */}
+          {moreCalls.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                📊 More Calls by @{creatorAlias || call.user_alias || 'This User'}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {moreCalls.map((otherCall) => {
+                  const otherROI = otherCall.initial_price && otherCall.current_price
+                    ? calculateROI(otherCall.initial_price, otherCall.current_price)
+                    : 0
+
+                  return (
+                    <Link
+                      key={otherCall.id}
+                      href={`/call/${otherCall.id}`}
+                      className="bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        {otherCall.token_logo ? (
+                          <img 
+                            src={otherCall.token_logo} 
+                            alt={otherCall.token_name || ''} 
+                            className="w-10 h-10 rounded-full"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none'
+                            }}
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm font-bold">
+                            {otherCall.token_symbol?.charAt(0) || '?'}
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="font-bold text-white">
+                            ${otherCall.token_symbol || 'TOKEN'}
+                          </h3>
+                          <p className="text-xs text-gray-400 truncate">
+                            {otherCall.token_name || 'Unknown'}
+                          </p>
+                        </div>
+                      </div>
+                      {otherCall.initial_price && otherCall.current_price && (
+                        <div className={`text-2xl font-bold ${
+                          otherROI >= 0 ? 'text-green-400' : 'text-red-400'
+                        }`}>
+                          {otherROI >= 0 ? '+' : ''}{otherROI.toFixed(1)}%
+                        </div>
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </>

@@ -15,6 +15,9 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [bannerUrl, setBannerUrl] = useState('')
   const [twitterHandle, setTwitterHandle] = useState('')
+  const [bio, setBio] = useState('')
+  const [telegram, setTelegram] = useState('')
+  const [website, setWebsite] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -34,6 +37,9 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
           setAvatarUrl(data.avatar_url || '')
           setBannerUrl(data.banner_url || '')
           setTwitterHandle(data.twitter_handle || '')
+          setBio(data.bio || '')
+          setTelegram(data.telegram || '')
+          setWebsite(data.website || '')
         }
       } catch (error) {
         console.error('Error fetching profile:', error)
@@ -66,6 +72,9 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             alias: alias || null,
             avatar_url: avatarUrl || null,
             twitter_handle: twitterHandle || null,
+            bio: bio || null,
+            telegram: telegram || null,
+            website: website || null,
             updated_at: new Date().toISOString()
           })
           .eq('wallet_address', walletAddress)
@@ -79,7 +88,10 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             wallet_address: walletAddress,
             alias: alias || null,
             avatar_url: avatarUrl || null,
-            twitter_handle: twitterHandle || null
+            twitter_handle: twitterHandle || null,
+            bio: bio || null,
+            telegram: telegram || null,
+            website: website || null
           })
 
         if (error && !error.message.includes('banner_url')) throw error
@@ -246,23 +258,71 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
         </div>
 
         <div>
-          <label htmlFor="twitterHandle" className="block text-sm font-medium text-gray-300 mb-2">
-            Twitter/X Handle (Optional)
+          <label htmlFor="bio" className="block text-sm font-medium text-gray-300 mb-2">
+            Bio
           </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">@</span>
+          <textarea
+            id="bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value.slice(0, 160))}
+            placeholder="Tell people about yourself..."
+            maxLength={160}
+            rows={3}
+            className="input-field resize-none"
+          />
+          <p className="text-xs text-gray-400 mt-1">
+            {bio.length}/160 characters
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label htmlFor="twitterHandle" className="block text-sm font-medium text-gray-300 mb-2">
+              Twitter/X
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">@</span>
+              <input
+                id="twitterHandle"
+                type="text"
+                value={twitterHandle}
+                onChange={(e) => setTwitterHandle(e.target.value.replace('@', ''))}
+                placeholder="username"
+                className="input-field pl-8"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="telegram" className="block text-sm font-medium text-gray-300 mb-2">
+              Telegram
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">@</span>
+              <input
+                id="telegram"
+                type="text"
+                value={telegram}
+                onChange={(e) => setTelegram(e.target.value.replace('@', ''))}
+                placeholder="username"
+                className="input-field pl-8"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+              Website
+            </label>
             <input
-              id="twitterHandle"
-              type="text"
-              value={twitterHandle}
-              onChange={(e) => setTwitterHandle(e.target.value.replace('@', ''))}
-              placeholder="yourusername"
-              className="input-field pl-8"
+              id="website"
+              type="url"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="https://..."
+              className="input-field"
             />
           </div>
-          <p className="text-xs text-gray-400 mt-1">
-            Your X/Twitter handle without the @ symbol
-          </p>
         </div>
 
         <button
