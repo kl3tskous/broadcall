@@ -13,59 +13,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Create client with service key for direct SQL access
+    // Create client with service key
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // First, try to get existing profile
-    const { data: existing } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('wallet_address', wallet_address)
-      .single();
+    // Use RPC to save profile (bypasses schema cache)
+    const { data, error } = await supabase.rpc('upsert_profile_data', {
+      p_wallet_address: wallet_address,
+      p_alias: alias || null,
+      p_avatar_url: avatar_url || null,
+      p_banner_url: banner_url || null,
+      p_twitter_handle: twitter_handle || null,
+      p_bio: bio || null,
+      p_telegram: telegram || null,
+      p_website: website || null
+    });
 
-    let result;
-    if (existing) {
-      // Update existing profile
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({
-          alias: alias || null,
-          avatar_url: avatar_url || null,
-          banner_url: banner_url || null,
-          twitter_handle: twitter_handle || null,
-          bio: bio || null,
-          telegram: telegram || null,
-          website: website || null,
-          updated_at: new Date().toISOString()
-        })
-        .eq('wallet_address', wallet_address)
-        .select()
-        .single();
+    if (error) throw error;
 
-      if (error) throw error;
-      result = data;
-    } else {
-      // Insert new profile
-      const { data, error } = await supabase
-        .from('profiles')
-        .insert({
-          wallet_address,
-          alias: alias || null,
-          avatar_url: avatar_url || null,
-          banner_url: banner_url || null,
-          twitter_handle: twitter_handle || null,
-          bio: bio || null,
-          telegram: telegram || null,
-          website: website || null
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      result = data;
-    }
-
-    return NextResponse.json({ success: true, data: result });
+    // RPC returns an array, get first item
+    const profileData = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    return NextResponse.json({ success: true, data: profileData });
   } catch (error: any) {
     console.error('API error:', error);
     return NextResponse.json({ error: error.message || 'Failed to save profile' }, { status: 500 });

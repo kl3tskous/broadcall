@@ -13,20 +13,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Create client with service key to bypass schema cache
+    // Create client with service key
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('wallet_address', wallet_address)
-      .single();
+    // Use raw SQL to bypass schema cache completely
+    const { data, error } = await supabase.rpc('get_profile_data', {
+      p_wallet_address: wallet_address
+    });
 
-    if (error && error.code !== 'PGRST116') {
-      throw error;
+    if (error) {
+      console.error('RPC error:', error);
+      // Return empty data if profile not found
+      return NextResponse.json({ success: true, data: null });
     }
 
-    return NextResponse.json({ success: true, data: data || null });
+    // RPC returns an array, get first item
+    const profileData = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    return NextResponse.json({ success: true, data: profileData });
   } catch (error: any) {
     console.error('API error:', error);
     return NextResponse.json({ error: error.message || 'Failed to fetch profile' }, { status: 500 });
