@@ -34,6 +34,23 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Twitter/X-Style Feed Layout** (October 2025)
+  - Transformed profile page token calls into a Twitter/X-style social feed:
+    - Post-style cards with user avatar on left (circular, 48px)
+    - Token info and metadata on right side
+    - "Called by @user · date" meta text under token name
+    - Performance banner thumbnail (ape background) with stats overlay
+    - Interaction buttons below each post (Buy, Share, Comment, More)
+    - Clean borders between posts with hover effects
+    - ROI display with proper null/zero guards to prevent "Infinity%" errors
+  - Enhanced token call pages with social interaction buttons:
+    - Thesis displayed as styled quote block above chart
+    - Prominent interaction bar below chart (Share on X, Copy Link, Comment)
+    - Views and clicks stats shown alongside buttons
+    - Clean Twitter/X-style borders and hover effects
+  - Maintained mobile responsiveness with flexbox and grid layouts
+  - Fixed divide-by-zero ROI calculation bugs for calls without initial_price
+  
 - ✅ **KOL Profile System** (October 2025)
   - Added bio (160 char max), telegram, and website fields to user profiles
   - Created public profile page at `/profile/[address]` with Twitter-style layout:
