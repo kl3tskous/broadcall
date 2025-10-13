@@ -41,7 +41,10 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
     - **User bio** displayed immediately below banner (when available)
     - **Token information** section below bio: logo, symbol, name, ROI badge
     - Thesis quote, stats row (Entry, Current, ATH), and action buttons at bottom
-    - Ape banners are ONLY used on individual token call pages, not in feed
+  - Individual token call pages now display user profile at top:
+    - User's banner, avatar (64px), name, handle, and bio at the very top
+    - Ape banner with token performance stats displayed below the profile section
+    - Clean visual hierarchy: Profile → Token Info → Chart → Interactions
   - Enhanced token call pages with social interaction buttons:
     - Thesis displayed as styled quote block above chart
     - Prominent interaction bar below chart (Share on X, Copy Link, Comment)
