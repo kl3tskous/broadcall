@@ -74,14 +74,18 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Added "More Calls by @user" section on token pages (shows 3 recent calls)
   - Database schema updated with new profile fields (bio, telegram, website)
   
-- ✅ **Modern Full-Width Banner Design** (October 2025)
-  - Clean, modern 420px tall banner with full-width ape background using `background-size: cover`
-  - Gradient overlay from `black/80` on left to `transparent` on right for optimal text readability
-  - Removed solid black boxes - clean text directly on gradient overlay
-  - Left-aligned content layout with token info, PnL %, multiplier, and stats in a single column
-  - Banner image stored in `/public/banner-ape-chill.webp` (170KB optimized WebP)
-  - Fully responsive design that adapts to mobile devices
-  - Simplified structure perfect for social media sharing
+- ✅ **Custom Dark Card with Gradient Borders** (October 2025)
+  - Replaced full-width ape banner with sleek dark card design
+  - Gradient border effect using orange → purple → pink gradient (`from-orange-500/50 via-purple-500/50 to-pink-500/50`)
+  - Dark inner background (`bg-gray-900`) for high contrast and readability
+  - Card layout features:
+    - Token image (64-80px circular) on the left
+    - Token symbol, name, and market cap displayed prominently
+    - Green dot indicator with "shared at X MC" format
+    - ROI percentage and multiplier badge on the right
+    - Stats row at bottom showing Entry, Current, and ATH values
+  - Mobile-responsive flexbox layout with proper spacing
+  - Modern, clean design matching social media platform aesthetics
 
 ## External Dependencies
 - **Supabase:** Used as the PostgreSQL database and for authentication.
