@@ -15,7 +15,7 @@ export const GmgnLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
 
 export const AxiomLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
   <img 
-    src="/axiom-logo-optimized.webp" 
+    src="/platforms/axiom.png" 
     alt="Axiom" 
     className={className}
     style={{ objectFit: 'contain' }}
