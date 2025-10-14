@@ -6,7 +6,7 @@ interface LogoProps {
 
 export const GmgnLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
   <img 
-    src="/gmgn-logo.webp" 
+    src="/platforms/gmgn.png" 
     alt="GMGN" 
     className={className}
     style={{ objectFit: 'contain' }}
