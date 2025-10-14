@@ -478,6 +478,9 @@ export default function CallPage() {
             <LivePriceChart 
               tokenAddress={call.token_address} 
               pairAddress={priceData?.pairAddress}
+              tokenName={call.token_name || undefined}
+              tokenSymbol={call.token_symbol || undefined}
+              tokenLogo={call.token_logo || undefined}
             />
           </div>
 

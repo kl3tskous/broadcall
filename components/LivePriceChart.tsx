@@ -5,11 +5,20 @@ import { useEffect, useRef, useState } from 'react'
 interface LivePriceChartProps {
   tokenAddress: string
   pairAddress?: string
+  tokenName?: string
+  tokenSymbol?: string
+  tokenLogo?: string
 }
 
-export default function LivePriceChart({ tokenAddress, pairAddress }: LivePriceChartProps) {
+interface TokenData {
+  price: number
+  marketCap: number
+}
+
+export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, tokenSymbol, tokenLogo }: LivePriceChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [priceHistory, setPriceHistory] = useState<number[]>([])
+  const [currentData, setCurrentData] = useState<TokenData | null>(null)
   const maxDataPoints = 60 // 60 seconds of data
 
   useEffect(() => {
@@ -26,10 +35,12 @@ export default function LivePriceChart({ tokenAddress, pairAddress }: LivePriceC
 
         if (data.pairs && data.pairs.length > 0 && isMounted) {
           const price = parseFloat(data.pairs[0].priceUsd || '0')
+          const marketCap = parseFloat(data.pairs[0].marketCap || '0')
+          
+          setCurrentData({ price, marketCap })
           
           setPriceHistory(prev => {
             const newHistory = [...prev, price]
-            // Keep only last maxDataPoints
             return newHistory.slice(-maxDataPoints)
           })
         }
@@ -38,10 +49,7 @@ export default function LivePriceChart({ tokenAddress, pairAddress }: LivePriceC
       }
     }
 
-    // Initial fetch
     fetchPrice()
-
-    // Fetch every 1 second
     const interval = setInterval(fetchPrice, 1000)
 
     return () => {
@@ -60,28 +68,22 @@ export default function LivePriceChart({ tokenAddress, pairAddress }: LivePriceC
     const dpr = window.devicePixelRatio || 1
     const rect = canvas.getBoundingClientRect()
 
-    // Set canvas size for retina displays
     canvas.width = rect.width * dpr
     canvas.height = rect.height * dpr
     ctx.scale(dpr, dpr)
 
-    // Clear canvas
     ctx.clearRect(0, 0, rect.width, rect.height)
 
-    // Find min and max for scaling
     const minPrice = Math.min(...priceHistory)
     const maxPrice = Math.max(...priceHistory)
     const priceRange = maxPrice - minPrice || 1
-
-    // Add padding
     const padding = rect.height * 0.1
 
-    // Create gradient for line stroke
     const gradient = ctx.createLinearGradient(0, 0, rect.width, 0)
-    gradient.addColorStop(0, '#f97316') // orange-500
-    gradient.addColorStop(1, '#ea580c') // orange-600
+    gradient.addColorStop(0, '#f97316')
+    gradient.addColorStop(1, '#ea580c')
 
-    // Draw line
+    // Draw smooth curved line using quadratic curves
     ctx.beginPath()
     ctx.strokeStyle = gradient
     ctx.lineWidth = 3
@@ -95,16 +97,66 @@ export default function LivePriceChart({ tokenAddress, pairAddress }: LivePriceC
       if (index === 0) {
         ctx.moveTo(x, y)
       } else {
-        ctx.lineTo(x, y)
+        // Get previous point
+        const prevPrice = priceHistory[index - 1]
+        const prevX = ((index - 1) / (maxDataPoints - 1)) * rect.width
+        const prevY = rect.height - padding - ((prevPrice - minPrice) / priceRange) * (rect.height - padding * 2)
+        
+        // Calculate control point for smooth curve
+        const cpX = (prevX + x) / 2
+        const cpY = (prevY + y) / 2
+        
+        ctx.quadraticCurveTo(prevX, prevY, cpX, cpY)
       }
     })
+
+    // Complete the path to the last point
+    if (priceHistory.length > 1) {
+      const lastPrice = priceHistory[priceHistory.length - 1]
+      const lastX = rect.width
+      const lastY = rect.height - padding - ((lastPrice - minPrice) / priceRange) * (rect.height - padding * 2)
+      ctx.lineTo(lastX, lastY)
+    }
 
     ctx.stroke()
 
   }, [priceHistory, maxDataPoints])
 
+  const formatMarketCap = (mc: number) => {
+    if (mc >= 1000000) {
+      return `$${(mc / 1000000).toFixed(2)}M`
+    } else if (mc >= 1000) {
+      return `$${(mc / 1000).toFixed(2)}K`
+    }
+    return `$${mc.toFixed(2)}`
+  }
+
   return (
     <div className="relative w-full bg-gray-900/90 backdrop-blur-sm overflow-hidden" style={{ paddingBottom: '56.25%' }}>
+      {/* Token Info Overlay */}
+      {currentData && (
+        <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
+          {tokenLogo && (
+            <img 
+              src={tokenLogo} 
+              alt={tokenSymbol || 'Token'} 
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full"
+            />
+          )}
+          <div>
+            <h3 className="text-white font-bold text-lg md:text-xl">
+              {tokenSymbol || 'TOKEN'}
+            </h3>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
+              <span className="text-green-500 font-semibold text-sm">
+                {formatMarketCap(currentData.marketCap)} MC
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"

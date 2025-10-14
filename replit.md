@@ -37,7 +37,8 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - ✅ **Live Price Chart with Orange Gradient** (October 2025)
   - Implemented custom real-time price chart for token pages
   - **Live updates**: Fetches price data every 1 second from DexScreener API
-  - **Minimal design**: Clean chart with no axes, labels, or gridlines - just the price line
+  - **Smooth curved lines**: Uses quadratic bezier curves for vector-like smooth rendering (not blocky)
+  - **Token info overlay**: Displays token image, symbol, and live market cap in top-left corner
   - **Orange gradient stroke**: Matches app's gradient theme (orange-500 to orange-600)
   - **Lightweight**: Uses Canvas API for smooth rendering on mobile and Safari
   - **Responsive**: Handles retina displays and different screen sizes
