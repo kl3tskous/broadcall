@@ -64,12 +64,11 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Buttons now visible on all screen sizes (removed mobile hidden state)
   - Applied to both call pages and profile feed cards
 
-- ✅ **Twitter/X-Style Profile & Tabbed Feed** (October 2025)
-  - Complete Twitter/X-style redesign of token call pages:
-    - **Full-width banner header**: User's banner displayed at top (192-256px height, responsive) in full vibrant colors
-    - **Overlapping profile image**: Circular avatar (96-128px) positioned halfway over banner with orange gradient outline
-    - **Left-aligned profile section**: Username with orange verified badge, bio display, follower/following counts (0/0 placeholder for now)
-    - **Wider centered content**: Using max-w-6xl to match Twitter/X layout
+- ✅ **Simplified Profile Header & Tabbed Feed** (October 2025)
+  - Clean, compact profile header on token call pages:
+    - **Left-aligned layout**: Small profile image (48-64px) next to username with verified badge
+    - **No bio section**: Streamlined header focuses on the call content
+    - **Wider centered content**: Using max-w-6xl for optimal reading width
   - **Tabbed feed system** with "Pinned Call" and "Recent Calls":
     - **Pinned Call tab**: Shows the specific call with:
       - Custom dark card with gradient orange border
