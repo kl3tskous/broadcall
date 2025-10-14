@@ -345,83 +345,76 @@ export default function CallPage() {
             </div>
           )}
           
-          {/* Full-Width Banner with Ape Background */}
-          <div 
-            className="relative mb-4 rounded-2xl overflow-hidden border-2 border-orange-500/40 h-[420px] flex items-center"
-            style={{ 
-              backgroundImage: 'url(/banner-ape-chill.webp)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            {/* Gradient Overlay - Left to Right */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
-            
-            {/* Content - Left Aligned */}
-            <div className="relative z-10 pl-6 md:pl-12 max-w-[600px] text-white">
-              {/* Token Name & Ticker */}
-              <h1 className="text-3xl md:text-5xl font-black mb-1">
-                ${call.token_symbol || 'TOKEN'}
-              </h1>
-              <p className="text-base md:text-lg text-white/80 mb-1">
-                {call.token_name || 'Unknown Token'}
-              </p>
-              {call.creator_wallet && (
-                <Link 
-                  href={`/profile/${call.creator_wallet}`}
-                  className="flex items-center gap-2 mt-3 mb-6 hover:opacity-80 transition-opacity"
-                >
-                  {creatorAvatar ? (
+          {/* Custom Dark Card with Gradient Outline */}
+          <div className="mb-6 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 via-purple-500/50 to-pink-500/50">
+            <div className="bg-gray-900 rounded-2xl p-6">
+              <div className="flex items-start gap-4">
+                {/* Token Image */}
+                <div className="flex-shrink-0">
+                  {call.token_logo ? (
                     <img 
-                      src={creatorAvatar} 
-                      alt={creatorAlias || 'User'} 
-                      className="w-8 h-8 rounded-full border-2 border-white/30"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                      }}
+                      src={call.token_logo} 
+                      alt={call.token_name || call.token_symbol || 'Token'} 
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-full"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xs font-bold border-2 border-white/30">
-                      {(creatorAlias || call.user_alias)?.charAt(0)?.toUpperCase() || '?'}
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl md:text-3xl font-bold">
+                      {call.token_symbol?.charAt(0) || '?'}
                     </div>
                   )}
-                  <span className="text-sm text-white/90">
-                    Called by <strong>@{creatorAlias || call.user_alias || 'Anonymous'}</strong>
-                  </span>
-                </Link>
-              )}
-
-              {/* ROI & PnL Display */}
-              {call.initial_price && call.current_price && (
-                <div className="mb-4">
-                  <div className={`text-5xl md:text-7xl font-black ${
-                    roi >= 0 ? 'text-green-400' : 'text-red-500'
-                  }`}>
-                    {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
-                  </div>
-                  <div className="text-xl md:text-2xl font-bold text-white/90 mt-1">
-                    {multiplier.toFixed(2)}x
-                  </div>
                 </div>
-              )}
 
-              {/* Stats Line */}
-              <div className="text-sm md:text-base text-gray-300 flex flex-wrap gap-3">
-                {call.ath_price && (
-                  <span className="text-yellow-400">
-                    ATH: +{athROI.toFixed(1)}%
-                  </span>
+                {/* Token Info */}
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-2xl md:text-3xl font-black text-white mb-1">
+                    {call.token_symbol || 'TOKEN'}
+                  </h1>
+                  <p className="text-base md:text-lg text-gray-400 mb-3">
+                    {call.token_name || 'Unknown Token'}
+                  </p>
+                  
+                  {/* Shared at Market Cap */}
+                  {call.initial_mcap && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                      <span className="text-sm text-gray-400">
+                        <span className="text-green-500 font-semibold">{formatMarketCap(call.initial_mcap)}</span> MC
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* ROI Badge (Right Side) */}
+                {call.initial_price && call.current_price && (
+                  <div className="flex-shrink-0 text-right">
+                    <div className={`text-3xl md:text-4xl font-black ${
+                      roi >= 0 ? 'text-green-400' : 'text-red-500'
+                    }`}>
+                      {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
+                    </div>
+                    <div className="text-sm text-gray-400 mt-1">
+                      {multiplier.toFixed(2)}x
+                    </div>
+                  </div>
                 )}
+              </div>
+
+              {/* Stats Row */}
+              <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap gap-4 text-sm">
                 {call.initial_mcap && (
-                  <span>
-                    Entry: {formatMarketCap(call.initial_mcap)}
-                  </span>
+                  <div className="text-gray-400">
+                    Entry: <span className="text-white font-semibold">{formatMarketCap(call.initial_mcap)}</span>
+                  </div>
                 )}
                 {priceData && (
-                  <span>
-                    Current: {formatMarketCap(priceData.marketCap)}
-                  </span>
+                  <div className="text-gray-400">
+                    Current: <span className="text-white font-semibold">{formatMarketCap(priceData.marketCap)}</span>
+                  </div>
+                )}
+                {call.ath_price && (
+                  <div className="text-gray-400">
+                    ATH: <span className="text-yellow-400 font-semibold">+{athROI.toFixed(1)}%</span>
+                  </div>
                 )}
               </div>
             </div>
