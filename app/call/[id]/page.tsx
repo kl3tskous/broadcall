@@ -474,10 +474,10 @@ export default function CallPage() {
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex items-center gap-2 px-2 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
+                    className="flex flex-col items-center justify-center gap-2 px-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
                   >
-                    <Logo className="w-8 h-8" />
-                    <span className="text-white font-bold text-sm">{platform.name}</span>
+                    <Logo className="w-16 h-16" />
+                    <span className="text-white font-bold text-xs">{platform.name}</span>
                   </button>
                 )
               })}
