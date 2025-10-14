@@ -34,6 +34,15 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Dynamic Banner Backgrounds with Gradient Fade** (October 2025)
+  - Token call pages now feature the creator's uploaded banner as a full-page dynamic background
+  - **Jupiter wallet-inspired design**: Banner fades smoothly into dark background using gradient overlay
+  - **Gradient overlay system**: Transparent at top → semi-transparent middle → solid dark (gray-900) at bottom
+  - **Fixed background positioning**: Banner stays in place while content scrolls over it
+  - **Semi-transparent cards**: Token cards use `bg-gray-900/90` with backdrop blur for subtle banner visibility
+  - **Fallback handling**: Pages without banner display solid gray-900 background
+  - **Performance optimized**: Uses CSS fixed positioning and gradient overlays for smooth rendering
+
 - ✅ **Gradient Platform Buttons with Custom Logos** (October 2025)
   - Redesigned all platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with:
     - **Orange gradient background**: `from-orange-500 to-orange-600` with hover effect

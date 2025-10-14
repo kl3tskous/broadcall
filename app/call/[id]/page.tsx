@@ -277,26 +277,34 @@ export default function CallPage() {
     : 0
 
   return (
-      <main className="min-h-screen">
+    <main className="min-h-screen relative bg-gray-900">
+        {/* Dynamic Banner Background with Gradient Fade */}
+        {creatorBanner && (
+          <>
+            {/* Banner Background Image */}
+            <div className="fixed top-0 left-0 w-full h-screen z-0">
+              <img 
+                src={creatorBanner} 
+                alt="Profile banner" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Dark Gradient Overlay - Fades from transparent to dark */}
+            <div className="fixed top-0 left-0 w-full h-screen z-0 bg-gradient-to-b from-transparent via-gray-900/60 to-gray-900" />
+          </>
+        )}
+
+        {/* Content Layer */}
+        <div className="relative z-10">
         {/* Twitter/X Style Profile Header */}
         {call.creator_wallet && (
-          <div className="border-b border-gray-800">
-            {/* Full-Width Banner */}
-            <div className="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-orange-900/50 to-red-900/50">
-              {creatorBanner && (
-                <img 
-                  src={creatorBanner} 
-                  alt="Profile banner" 
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
+          <div className="border-b border-gray-800/50">
 
             {/* Profile Info Section */}
-            <div className="max-w-6xl mx-auto px-4">
-              {/* Profile Image (Overlapping) */}
+            <div className="max-w-6xl mx-auto px-4 pt-24">
+              {/* Profile Image */}
               <div className="relative">
-                <div className="absolute -top-16 md:-top-20 left-0">
+                <div className="mb-4">
                   <Link href={`/profile/${call.creator_wallet}`}>
                     <div className="p-[4px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
                       {creatorAvatar ? (
@@ -316,7 +324,7 @@ export default function CallPage() {
               </div>
 
               {/* User Info */}
-              <div className="pt-20 md:pt-24 pb-4">
+              <div className="pb-4">
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
@@ -389,7 +397,7 @@ export default function CallPage() {
             <div className="border-b border-gray-800 p-4">
               {/* Pinned Call - Custom Dark Card with Gradient Outline */}
               <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
-            <div className="bg-gray-900 rounded-2xl p-6">
+            <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6">
               <div className="flex items-start gap-4">
                 {/* Token Image */}
                 <div className="flex-shrink-0">
@@ -621,6 +629,7 @@ export default function CallPage() {
               )}
             </div>
           )}
+        </div>
         </div>
       </main>
   )
