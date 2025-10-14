@@ -423,7 +423,7 @@ export default function ProfilePage() {
                                 className="flex flex-col items-center justify-center gap-2 px-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
                               >
                                 <Logo className="w-16 h-16" />
-                                <span className="text-white font-bold text-xs">{platform.name}</span>
+                                <span className="text-white font-extrabold text-sm">{platform.name}</span>
                               </button>
                             )
                           })}

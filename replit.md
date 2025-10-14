@@ -38,7 +38,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Redesigned all platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with:
     - **Orange gradient background**: `from-orange-500 to-orange-600` with hover effect
     - **Extra large custom platform logos**: 64px size (w-16 h-16) for maximum visibility
-    - **White bold text**: Platform name in compact font below logo
+    - **White bold text**: Platform name in text-sm font-extrabold below logo
     - **Vertical compact design**: Logo stacked above text (flex-col) for minimal width and maximum logo size
     - **Minimal padding**: px-2 py-3 for compact square-like buttons
     - **Personalized title**: "Buy with @{username} on your preferred platform" displayed above button grid
