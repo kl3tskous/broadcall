@@ -39,7 +39,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - **Jupiter wallet-inspired design**: Banner fades smoothly into dark background using gradient overlay
   - **Gradient overlay system**: Transparent at top → semi-transparent middle → solid dark (gray-900) at bottom
   - **Fixed background positioning**: Banner stays in place while content scrolls over it
-  - **Responsive heights**: Limited to 220px on mobile (stops right after profile header and tabs), full-screen on desktop
+  - **Responsive heights**: Limited to 100px on mobile (stops at profile image, fades before tabs), full-screen on desktop
   - **Semi-transparent cards**: Token cards use `bg-gray-900/90` with backdrop blur for subtle banner visibility
   - **Fallback handling**: Pages without banner display solid gray-900 background
   - **Performance optimized**: Uses CSS fixed positioning and gradient overlays for smooth rendering
