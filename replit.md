@@ -34,6 +34,15 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Live Price Chart with Orange Gradient** (October 2025)
+  - Implemented custom real-time price chart for token pages
+  - **Live updates**: Fetches price data every 1 second from DexScreener API
+  - **Minimal design**: Clean chart with no axes, labels, or gridlines - just the price line
+  - **Orange gradient stroke**: Matches app's gradient theme (orange-500 to orange-600)
+  - **Lightweight**: Uses Canvas API for smooth rendering on mobile and Safari
+  - **Responsive**: Handles retina displays and different screen sizes
+  - **60-second history**: Shows last 60 data points for real-time movement visualization
+
 - ✅ **Dynamic Banner Backgrounds with Gradient Fade** (October 2025)
   - Token call pages now feature the creator's uploaded banner as a full-page dynamic background
   - **Jupiter wallet-inspired design**: Banner fades smoothly into dark background using gradient overlay

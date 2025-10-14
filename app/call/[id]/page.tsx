@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
+import LivePriceChart from '@/components/LivePriceChart'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
 
@@ -474,28 +475,10 @@ export default function CallPage() {
 
           {/* Live Chart */}
           <div className="card p-0 overflow-hidden">
-            {priceLoading ? (
-              <div className="relative w-full bg-dark-bg flex items-center justify-center" style={{ paddingBottom: '56.25%' }}>
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  Loading chart...
-                </div>
-              </div>
-            ) : priceData?.pairAddress ? (
-              <div className="relative w-full bg-dark-bg overflow-hidden" style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                  className="absolute inset-0 w-full h-full border-0"
-                  title="DexScreener Chart"
-                  loading="lazy"
-                />
-              </div>
-            ) : (
-              <div className="relative w-full bg-dark-bg flex items-center justify-center" style={{ paddingBottom: '56.25%' }}>
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  Chart unavailable
-                </div>
-              </div>
-            )}
+            <LivePriceChart 
+              tokenAddress={call.token_address} 
+              pairAddress={priceData?.pairAddress}
+            />
           </div>
 
           {/* Twitter/X Style Interaction Buttons */}
