@@ -76,14 +76,21 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
 
     const minPrice = Math.min(...priceHistory)
     const maxPrice = Math.max(...priceHistory)
-    const priceRange = maxPrice - minPrice || 1
+    let priceRange = maxPrice - minPrice
+    
+    // Handle flat line - add minimum range and center it
+    if (priceRange === 0 || priceRange < maxPrice * 0.001) {
+      priceRange = maxPrice * 0.05 // 5% range for flat lines
+    }
+    
     const padding = rect.height * 0.1
+    const centerPrice = (minPrice + maxPrice) / 2
 
     const gradient = ctx.createLinearGradient(0, 0, rect.width, 0)
     gradient.addColorStop(0, '#f97316')
     gradient.addColorStop(1, '#ea580c')
 
-    // Draw smooth curved line using quadratic curves
+    // Draw smooth curved line using quadratic bezier curves
     ctx.beginPath()
     ctx.strokeStyle = gradient
     ctx.lineWidth = 3
@@ -91,36 +98,38 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
     ctx.lineCap = 'round'
 
     priceHistory.forEach((price, index) => {
-      const x = (index / (maxDataPoints - 1)) * rect.width
-      const y = rect.height - padding - ((price - minPrice) / priceRange) * (rect.height - padding * 2)
+      const x = (index / (priceHistory.length - 1)) * rect.width
+      const normalizedPrice = (price - centerPrice) / priceRange
+      const y = rect.height / 2 - normalizedPrice * (rect.height - padding * 2)
 
       if (index === 0) {
         ctx.moveTo(x, y)
+      } else if (index === 1) {
+        // First segment, just draw a line
+        ctx.lineTo(x, y)
       } else {
-        // Get previous point
+        // Get current and previous points
         const prevPrice = priceHistory[index - 1]
-        const prevX = ((index - 1) / (maxDataPoints - 1)) * rect.width
-        const prevY = rect.height - padding - ((prevPrice - minPrice) / priceRange) * (rect.height - padding * 2)
+        const prevX = ((index - 1) / (priceHistory.length - 1)) * rect.width
+        const prevNormalizedPrice = (prevPrice - centerPrice) / priceRange
+        const prevY = rect.height / 2 - prevNormalizedPrice * (rect.height - padding * 2)
         
-        // Calculate control point for smooth curve
-        const cpX = (prevX + x) / 2
-        const cpY = (prevY + y) / 2
+        // Get point before previous for smooth curve calculation
+        const beforePrice = priceHistory[index - 2]
+        const beforeNormalizedPrice = (beforePrice - centerPrice) / priceRange
+        const beforeY = rect.height / 2 - beforeNormalizedPrice * (rect.height - padding * 2)
         
-        ctx.quadraticCurveTo(prevX, prevY, cpX, cpY)
+        // Calculate control point for smooth quadratic curve
+        const cpX = prevX
+        const cpY = prevY
+        
+        ctx.quadraticCurveTo(cpX, cpY, x, y)
       }
     })
 
-    // Complete the path to the last point
-    if (priceHistory.length > 1) {
-      const lastPrice = priceHistory[priceHistory.length - 1]
-      const lastX = rect.width
-      const lastY = rect.height - padding - ((lastPrice - minPrice) / priceRange) * (rect.height - padding * 2)
-      ctx.lineTo(lastX, lastY)
-    }
-
     ctx.stroke()
 
-  }, [priceHistory, maxDataPoints])
+  }, [priceHistory])
 
   const formatMarketCap = (mc: number) => {
     if (mc >= 1000000) {
