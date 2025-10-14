@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
-import Head from 'next/head'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
 
@@ -33,6 +32,7 @@ export default function CallPage() {
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
   const [priceLoading, setPriceLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'pinned' | 'recent'>('pinned')
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -277,75 +277,118 @@ export default function CallPage() {
     : 0
 
   return (
-    <>
-      <Head>
-        <title>{call.token_name || 'Token Call'} - Performance Tracker</title>
-        <meta property="og:title" content={`${call.token_name || 'Token'} Call - ${roi > 0 ? '+' : ''}${roi.toFixed(1)}% ROI`} />
-        <meta property="og:description" content={`First shared at ${call.initial_mcap ? formatMarketCap(call.initial_mcap) : 'N/A'}${call.user_alias ? ' by @' + call.user_alias : ''}`} />
-        {call.token_logo && <meta property="og:image" content={call.token_logo} />}
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
+      <main className="min-h-screen">
+        {/* Twitter/X Style Profile Header */}
+        {call.creator_wallet && (
+          <div className="border-b border-gray-800">
+            {/* Full-Width Banner */}
+            <div className="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-orange-900/50 to-red-900/50">
+              {creatorBanner && (
+                <img 
+                  src={creatorBanner} 
+                  alt="Profile banner" 
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
 
-      <main className="min-h-screen py-4 md:py-8 px-3 md:px-4">
-        <div className="max-w-5xl mx-auto">
-          
-          {/* User Profile Section */}
-          {call.creator_wallet && (
-            <div className="mb-6 overflow-hidden rounded-2xl border border-gray-800">
-              {/* User Banner Background */}
-              <div className="relative h-40 overflow-hidden">
-                {creatorBanner ? (
-                  <img 
-                    src={creatorBanner} 
-                    alt="Profile banner" 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-orange-900/50 to-red-900/50" />
-                )}
-                
-                {/* User Info Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
+            {/* Profile Info Section */}
+            <div className="max-w-6xl mx-auto px-4">
+              {/* Profile Image (Overlapping) */}
+              <div className="relative">
+                <div className="absolute -top-16 md:-top-20 left-0">
                   <Link href={`/profile/${call.creator_wallet}`}>
-                    <div className="p-[3px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
+                    <div className="p-[4px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
                       {creatorAvatar ? (
                         <img 
                           src={creatorAvatar} 
                           alt={creatorAlias || 'User'} 
-                          className="w-20 h-20 rounded-full border-2 border-black"
+                          className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black"
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold border-2 border-black">
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl font-bold border-4 border-black">
                           {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
                         </div>
                       )}
                     </div>
                   </Link>
-                  
-                  <div className="flex-1">
-                    <Link href={`/profile/${call.creator_wallet}`}>
-                      <p className="text-white font-bold text-lg hover:underline" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-                        {creatorAlias || 'Anonymous'}
-                      </p>
-                      <p className="text-white/90 text-sm" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-                        @{creatorAlias || call.creator_wallet.slice(0, 8)}
-                      </p>
-                    </Link>
-                  </div>
                 </div>
               </div>
 
-              {/* User Bio */}
-              {creatorBio && (
-                <div className="px-4 py-3 bg-gray-900/60 border-t border-gray-800">
-                  <p className="text-sm text-gray-300">{creatorBio}</p>
+              {/* User Info */}
+              <div className="pt-20 md:pt-24 pb-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Link href={`/profile/${call.creator_wallet}`}>
+                        <h1 className="text-xl md:text-2xl font-bold text-white hover:underline">
+                          {creatorAlias || 'Anonymous'}
+                        </h1>
+                      </Link>
+                      {/* Verified Badge */}
+                      <svg className="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.5 12.5l2.5 2.5 5-5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <p className="text-gray-400 text-sm mb-3">
+                      @{creatorAlias || call.creator_wallet.slice(0, 8)}
+                    </p>
+                    
+                    {/* Bio */}
+                    {creatorBio && (
+                      <p className="text-white text-base mb-3 max-w-xl">
+                        {creatorBio}
+                      </p>
+                    )}
+
+                    {/* Follower/Following Counts */}
+                    <div className="flex gap-4 text-sm">
+                      <span className="text-gray-400">
+                        <strong className="text-white">0</strong> Following
+                      </span>
+                      <span className="text-gray-400">
+                        <strong className="text-white">0</strong> Followers
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              )}
+
+                {/* Tabs */}
+                <div className="border-b border-gray-800 -mx-4 px-4">
+                  <div className="flex gap-8">
+                    <button
+                      onClick={() => setActiveTab('pinned')}
+                      className={`pb-3 px-1 border-b-2 transition-colors font-semibold ${
+                        activeTab === 'pinned' 
+                          ? 'border-orange-500 text-white' 
+                          : 'border-transparent text-gray-400 hover:text-gray-300'
+                      }`}
+                    >
+                      📌 Pinned Call
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('recent')}
+                      className={`pb-3 px-1 border-b-2 transition-colors font-semibold ${
+                        activeTab === 'recent' 
+                          ? 'border-orange-500 text-white' 
+                          : 'border-transparent text-gray-400 hover:text-gray-300'
+                      }`}
+                    >
+                      Recent Calls
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-          
-          {/* Custom Dark Card with Gradient Outline */}
-          <div className="mb-6 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
+          </div>
+        )}
+
+        {/* Feed Content */}
+        <div className="max-w-6xl mx-auto">
+          {activeTab === 'pinned' && (
+            <div className="border-b border-gray-800 p-4">
+              {/* Pinned Call - Custom Dark Card with Gradient Outline */}
+              <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
             <div className="bg-gray-900 rounded-2xl p-6">
               <div className="flex items-start gap-4">
                 {/* Token Image */}
@@ -510,14 +553,15 @@ export default function CallPage() {
             </div>
           </div>
 
-          {/* More Calls by User */}
-          {moreCalls.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                📊 More Calls by @{creatorAlias || call.user_alias || 'This User'}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {moreCalls.map((otherCall) => {
+            </div>
+          )}
+
+          {/* Recent Calls Tab */}
+          {activeTab === 'recent' && (
+            <div className="divide-y divide-gray-800 p-4">
+              {moreCalls.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {moreCalls.map((otherCall) => {
                   const otherROI = otherCall.initial_price && otherCall.current_price
                     ? calculateROI(otherCall.initial_price, otherCall.current_price)
                     : 0
@@ -562,11 +606,15 @@ export default function CallPage() {
                     </Link>
                   )
                 })}
-              </div>
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-400">
+                  No other calls yet
+                </div>
+              )}
             </div>
           )}
         </div>
       </main>
-    </>
   )
 }
