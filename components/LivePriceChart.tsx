@@ -15,16 +15,23 @@ interface TokenData {
   marketCap: number
 }
 
+interface Candle {
+  time: number
+  open: number
+  high: number
+  low: number
+  close: number
+}
+
 export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, tokenSymbol, tokenLogo }: LivePriceChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [priceHistory, setPriceHistory] = useState<number[]>([])
+  const [candles, setCandles] = useState<Candle[]>([])
   const [currentData, setCurrentData] = useState<TokenData | null>(null)
-  const maxDataPoints = 300 // 5 minutes of data (300 seconds at 1 second intervals)
 
   useEffect(() => {
     let isMounted = true
 
-    const fetchPrice = async () => {
+    const fetchCandles = async () => {
       if (!tokenAddress) return
 
       try {
@@ -34,23 +41,47 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
         const data = await response.json()
 
         if (data.pairs && data.pairs.length > 0 && isMounted) {
-          const price = parseFloat(data.pairs[0].priceUsd || '0')
-          const marketCap = parseFloat(data.pairs[0].marketCap || '0')
+          const pair = data.pairs[0]
+          const price = parseFloat(pair.priceUsd || '0')
+          const marketCap = parseFloat(pair.marketCap || '0')
           
           setCurrentData({ price, marketCap })
-          
-          setPriceHistory(prev => {
-            const newHistory = [...prev, price]
-            return newHistory.slice(-maxDataPoints)
+
+          // Create 5-minute candles from price updates
+          const now = Date.now()
+          const currentCandleTime = Math.floor(now / (5 * 60 * 1000)) * (5 * 60 * 1000)
+
+          setCandles(prev => {
+            const newCandles = [...prev]
+            const lastCandle = newCandles[newCandles.length - 1]
+
+            if (!lastCandle || lastCandle.time !== currentCandleTime) {
+              // New candle
+              newCandles.push({
+                time: currentCandleTime,
+                open: price,
+                high: price,
+                low: price,
+                close: price
+              })
+            } else {
+              // Update current candle
+              lastCandle.high = Math.max(lastCandle.high, price)
+              lastCandle.low = Math.min(lastCandle.low, price)
+              lastCandle.close = price
+            }
+
+            // Keep last 24 candles (2 hours of data)
+            return newCandles.slice(-24)
           })
         }
       } catch (error) {
-        console.error('Error fetching price:', error)
+        console.error('Error fetching candles:', error)
       }
     }
 
-    fetchPrice()
-    const interval = setInterval(fetchPrice, 1000)
+    fetchCandles()
+    const interval = setInterval(fetchCandles, 5000) // Update every 5 seconds
 
     return () => {
       isMounted = false
@@ -60,7 +91,7 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || priceHistory.length < 2) return
+    if (!canvas || candles.length === 0) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -74,62 +105,56 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
 
     ctx.clearRect(0, 0, rect.width, rect.height)
 
-    const minPrice = Math.min(...priceHistory)
-    const maxPrice = Math.max(...priceHistory)
+    // Find price range
+    const allPrices = candles.flatMap(c => [c.high, c.low])
+    const minPrice = Math.min(...allPrices)
+    const maxPrice = Math.max(...allPrices)
     let priceRange = maxPrice - minPrice
     
-    // Handle flat line - add minimum range and center it
     if (priceRange === 0 || priceRange < maxPrice * 0.001) {
-      priceRange = maxPrice * 0.05 // 5% range for flat lines
+      priceRange = maxPrice * 0.1
     }
     
     const padding = rect.height * 0.1
-    const centerPrice = (minPrice + maxPrice) / 2
+    const chartHeight = rect.height - padding * 2
 
-    const gradient = ctx.createLinearGradient(0, 0, rect.width, 0)
-    gradient.addColorStop(0, '#f97316')
-    gradient.addColorStop(1, '#ea580c')
+    // Calculate candle width
+    const candleWidth = (rect.width / candles.length) * 0.7
+    const candleSpacing = rect.width / candles.length
 
-    // Draw smooth curved line using quadratic bezier curves
-    ctx.beginPath()
-    ctx.strokeStyle = gradient
-    ctx.lineWidth = 3
-    ctx.lineJoin = 'round'
-    ctx.lineCap = 'round'
+    // Draw candles
+    candles.forEach((candle, index) => {
+      const x = index * candleSpacing + candleSpacing / 2
+      
+      // Calculate y positions (inverted because canvas y increases downward)
+      const yHigh = padding + ((maxPrice - candle.high) / priceRange) * chartHeight
+      const yLow = padding + ((maxPrice - candle.low) / priceRange) * chartHeight
+      const yOpen = padding + ((maxPrice - candle.open) / priceRange) * chartHeight
+      const yClose = padding + ((maxPrice - candle.close) / priceRange) * chartHeight
 
-    priceHistory.forEach((price, index) => {
-      const x = (index / (priceHistory.length - 1)) * rect.width
-      const normalizedPrice = (price - centerPrice) / priceRange
-      const y = rect.height / 2 - normalizedPrice * (rect.height - padding * 2)
+      // Determine if bullish or bearish
+      const isBullish = candle.close >= candle.open
 
-      if (index === 0) {
-        ctx.moveTo(x, y)
-      } else if (index === 1) {
-        // First segment, just draw a line
-        ctx.lineTo(x, y)
-      } else {
-        // Get current and previous points
-        const prevPrice = priceHistory[index - 1]
-        const prevX = ((index - 1) / (priceHistory.length - 1)) * rect.width
-        const prevNormalizedPrice = (prevPrice - centerPrice) / priceRange
-        const prevY = rect.height / 2 - prevNormalizedPrice * (rect.height - padding * 2)
-        
-        // Get point before previous for smooth curve calculation
-        const beforePrice = priceHistory[index - 2]
-        const beforeNormalizedPrice = (beforePrice - centerPrice) / priceRange
-        const beforeY = rect.height / 2 - beforeNormalizedPrice * (rect.height - padding * 2)
-        
-        // Calculate control point for smooth quadratic curve
-        const cpX = prevX
-        const cpY = prevY
-        
-        ctx.quadraticCurveTo(cpX, cpY, x, y)
-      }
+      // Set colors - orange theme
+      const bodyColor = isBullish ? '#f97316' : '#dc2626' // orange-500 for bullish, red-600 for bearish
+      const wickColor = isBullish ? '#fb923c' : '#ef4444' // orange-400 for bullish, red-500 for bearish
+
+      // Draw wick (high-low line)
+      ctx.strokeStyle = wickColor
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(x, yHigh)
+      ctx.lineTo(x, yLow)
+      ctx.stroke()
+
+      // Draw candle body
+      ctx.fillStyle = bodyColor
+      const bodyTop = Math.min(yOpen, yClose)
+      const bodyHeight = Math.abs(yClose - yOpen) || 1 // Minimum height of 1px for doji
+      ctx.fillRect(x - candleWidth / 2, bodyTop, candleWidth, bodyHeight)
     })
 
-    ctx.stroke()
-
-  }, [priceHistory])
+  }, [candles])
 
   const formatMarketCap = (mc: number) => {
     if (mc >= 1000000) {
@@ -171,9 +196,9 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
         className="absolute inset-0 w-full h-full"
         style={{ width: '100%', height: '100%' }}
       />
-      {priceHistory.length === 0 && (
+      {candles.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-          Loading price data...
+          Loading candle data...
         </div>
       )}
     </div>

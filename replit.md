@@ -34,15 +34,15 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
-- ✅ **Live Price Chart with Orange Gradient** (October 2025)
-  - Implemented custom real-time price chart for token pages
-  - **Live updates**: Fetches price data every 1 second from DexScreener API
-  - **Smooth curved lines**: Uses quadratic bezier curves for vector-like smooth rendering (not blocky)
+- ✅ **5-Minute Candlestick Chart with Orange Theme** (October 2025)
+  - Implemented custom 5-minute candlestick chart for token pages
+  - **Live updates**: Fetches price data every 5 seconds and builds real-time candles
+  - **Orange theme colors**: Bullish candles in orange-500, bearish in red-600 matching site theme
   - **Token info overlay**: Displays token image, symbol, and live market cap in top-left corner
-  - **Orange gradient stroke**: Matches app's gradient theme (orange-500 to orange-600)
+  - **Candlestick visualization**: Shows open, high, low, close with traditional candle bodies and wicks
   - **Lightweight**: Uses Canvas API for smooth rendering on mobile and Safari
   - **Responsive**: Handles retina displays and different screen sizes
-  - **5-minute history**: Shows last 300 data points (5 minutes) for price action context and trend visualization
+  - **2-hour history**: Shows last 24 candles (2 hours) of 5-minute intervals for price action analysis
 
 - ✅ **Dynamic Banner Backgrounds with Gradient Fade** (October 2025)
   - Token call pages now feature the creator's uploaded banner as a full-page dynamic background
