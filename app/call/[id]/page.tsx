@@ -307,17 +307,19 @@ export default function CallPage() {
                 {/* User Info Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
                   <Link href={`/profile/${call.creator_wallet}`}>
-                    {creatorAvatar ? (
-                      <img 
-                        src={creatorAvatar} 
-                        alt={creatorAlias || 'User'} 
-                        className="w-16 h-16 rounded-full border-4 border-black/50"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold border-4 border-black/50">
-                        {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-                      </div>
-                    )}
+                    <div className="p-[3px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
+                      {creatorAvatar ? (
+                        <img 
+                          src={creatorAvatar} 
+                          alt={creatorAlias || 'User'} 
+                          className="w-20 h-20 rounded-full border-2 border-black"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold border-2 border-black">
+                          {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
+                        </div>
+                      )}
+                    </div>
                   </Link>
                   
                   <div className="flex-1">
