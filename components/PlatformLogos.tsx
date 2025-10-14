@@ -32,17 +32,12 @@ export const PhotonLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
 )
 
 export const BullxLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 17L9 5L15 17" stroke="url(#bullx-gradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M7 13H13" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-    <path d="M15 5L19 17" stroke="url(#bullx-gradient)" strokeWidth="2.5" strokeLinecap="round"/>
-    <defs>
-      <linearGradient id="bullx-gradient" x1="5" y1="5" x2="19" y2="17">
-        <stop offset="0%" stopColor="#a855f7" />
-        <stop offset="100%" stopColor="#ec4899" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/platforms/bullx.png" 
+    alt="BullX" 
+    className={className}
+    style={{ objectFit: 'contain' }}
+  />
 )
 
 export const TrojanLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
