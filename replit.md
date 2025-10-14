@@ -76,7 +76,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   
 - ✅ **Custom Dark Card with Gradient Borders** (October 2025)
   - Replaced full-width ape banner with sleek dark card design
-  - Gradient border effect using orange → purple → pink gradient (`from-orange-500/50 via-purple-500/50 to-pink-500/50`)
+  - Orange gradient border effect matching platform buttons (`from-orange-500/50 to-orange-600/50`)
   - Dark inner background (`bg-gray-900`) for high contrast and readability
   - Card layout features:
     - Token image (64-80px circular) on the left

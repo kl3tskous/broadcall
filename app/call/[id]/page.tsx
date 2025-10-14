@@ -346,7 +346,7 @@ export default function CallPage() {
           )}
           
           {/* Custom Dark Card with Gradient Outline */}
-          <div className="mb-6 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 via-purple-500/50 to-pink-500/50">
+          <div className="mb-6 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
             <div className="bg-gray-900 rounded-2xl p-6">
               <div className="flex items-start gap-4">
                 {/* Token Image */}
