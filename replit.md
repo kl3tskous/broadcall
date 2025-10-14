@@ -34,6 +34,26 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Twitter/X-Style Profile & Tabbed Feed** (October 2025)
+  - Complete Twitter/X-style redesign of token call pages:
+    - **Full-width banner header**: User's banner displayed at top (192-256px height, responsive) in full vibrant colors
+    - **Overlapping profile image**: Circular avatar (96-128px) positioned halfway over banner with orange gradient outline
+    - **Left-aligned profile section**: Username with orange verified badge, bio display, follower/following counts (0/0 placeholder for now)
+    - **Wider centered content**: Using max-w-6xl to match Twitter/X layout
+  - **Tabbed feed system** with "Pinned Call" and "Recent Calls":
+    - **Pinned Call tab**: Shows the specific call with:
+      - Custom dark card with gradient orange border
+      - Token image, symbol, name, and "shared @ X mcap" format
+      - ROI percentage and multiplier badge
+      - Entry/Current/ATH stats row
+      - Platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with referral code priority
+      - Thesis displayed as styled quote block
+      - Live DexScreener chart (1-second candles, dark theme)
+      - Twitter/X-style interaction buttons (Share on X, Copy Link, Comment) with view/click counts
+    - **Recent Calls tab**: Grid layout showing user's other recent token calls with ROI display
+  - Mobile-responsive design with proper breakpoints for all elements
+  - Fixed Next.js App Router compatibility (removed old Head component)
+  
 - ✅ **Embedded Live Charts in Profile Feed** (October 2025)
   - Redesigned profile page token calls as self-contained social media posts:
     - **Simplified header**: User avatar, name, and date (no banner on feed cards)
@@ -47,22 +67,6 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Card navigation: User info and token info sections are clickable to view call details
   - Mobile-responsive grid: 2 columns for buttons on mobile, 5 columns on desktop
   - Created reusable `EmbeddedChart` component for DexScreener integration
-  
-- ✅ **Twitter/X-Style Feed Layout** (October 2025)
-  - Individual token call pages now display user profile at top:
-    - User's banner displayed in full vibrant colors (no dark overlay)
-    - Avatar (80px) with orange gradient outline for emphasis
-    - Name and handle with text shadow for readability
-    - Bio section below the banner
-    - Custom dark card with token info displayed below profile section
-    - Clean visual hierarchy: Profile → Token Info → Chart → Interactions
-  - Enhanced token call pages with social interaction buttons:
-    - Thesis displayed as styled quote block above chart
-    - Prominent interaction bar below chart (Share on X, Copy Link, Comment)
-    - Views and clicks stats shown alongside buttons
-    - Clean Twitter/X-style borders and hover effects
-  - Maintained mobile responsiveness with flexbox and grid layouts
-  - Fixed divide-by-zero ROI calculation bugs for calls without initial_price
   
 - ✅ **KOL Profile System** (October 2025)
   - Added bio (160 char max), telegram, and website fields to user profiles
