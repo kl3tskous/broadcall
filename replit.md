@@ -36,10 +36,12 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 ## Recent Changes
 - ✅ **5-Minute Candlestick Chart with Orange Theme** (October 2025)
   - Implemented custom 5-minute candlestick chart for token pages
-  - **Live updates**: Fetches price data every 5 seconds and builds real-time candles
+  - **Live updates**: Fetches price data every 5 seconds and builds real-time candles based on market cap
   - **Orange theme colors**: Bullish candles in orange-500, bearish in red-600 matching site theme
   - **Token info overlay**: Displays token image, symbol, and live market cap in top-left corner
+  - **Entry marker**: Displays horizontal dashed orange line with white-outlined dot marking where KOL shared the coin
   - **Candlestick visualization**: Shows open, high, low, close with traditional candle bodies and wicks
+  - **Proper scaling**: Chart uses market cap values with 10% padding and minimum 12 candle spacing for readability
   - **Lightweight**: Uses Canvas API for smooth rendering on mobile and Safari
   - **Responsive**: Handles retina displays and different screen sizes
   - **2-hour history**: Shows last 24 candles (2 hours) of 5-minute intervals for price action analysis

@@ -8,6 +8,7 @@ interface LivePriceChartProps {
   tokenName?: string
   tokenSymbol?: string
   tokenLogo?: string
+  entryMarketCap?: number
 }
 
 interface TokenData {
@@ -21,9 +22,10 @@ interface Candle {
   high: number
   low: number
   close: number
+  marketCap: number
 }
 
-export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, tokenSymbol, tokenLogo }: LivePriceChartProps) {
+export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, tokenSymbol, tokenLogo, entryMarketCap }: LivePriceChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [candles, setCandles] = useState<Candle[]>([])
   const [currentData, setCurrentData] = useState<TokenData | null>(null)
@@ -43,37 +45,42 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
         if (data.pairs && data.pairs.length > 0 && isMounted) {
           const pair = data.pairs[0]
           const price = parseFloat(pair.priceUsd || '0')
-          const marketCap = parseFloat(pair.marketCap || '0')
+          const marketCap = parseFloat(pair.fdv || pair.marketCap || '0')
           
-          setCurrentData({ price, marketCap })
+          // Only update if we have valid data
+          if (marketCap > 0) {
+            setCurrentData({ price, marketCap })
 
-          // Create 5-minute candles from price updates
-          const now = Date.now()
-          const currentCandleTime = Math.floor(now / (5 * 60 * 1000)) * (5 * 60 * 1000)
+            // Create 5-minute candles from price updates
+            const now = Date.now()
+            const currentCandleTime = Math.floor(now / (5 * 60 * 1000)) * (5 * 60 * 1000)
 
-          setCandles(prev => {
-            const newCandles = [...prev]
-            const lastCandle = newCandles[newCandles.length - 1]
+            setCandles(prev => {
+              const newCandles = [...prev]
+              const lastCandle = newCandles[newCandles.length - 1]
 
-            if (!lastCandle || lastCandle.time !== currentCandleTime) {
-              // New candle
-              newCandles.push({
-                time: currentCandleTime,
-                open: price,
-                high: price,
-                low: price,
-                close: price
-              })
-            } else {
-              // Update current candle
-              lastCandle.high = Math.max(lastCandle.high, price)
-              lastCandle.low = Math.min(lastCandle.low, price)
-              lastCandle.close = price
-            }
+              if (!lastCandle || lastCandle.time !== currentCandleTime) {
+                // New candle
+                newCandles.push({
+                  time: currentCandleTime,
+                  open: marketCap,
+                  high: marketCap,
+                  low: marketCap,
+                  close: marketCap,
+                  marketCap: marketCap
+                })
+              } else {
+                // Update current candle
+                lastCandle.high = Math.max(lastCandle.high, marketCap)
+                lastCandle.low = Math.min(lastCandle.low, marketCap)
+                lastCandle.close = marketCap
+                lastCandle.marketCap = marketCap
+              }
 
-            // Keep last 24 candles (2 hours of data)
-            return newCandles.slice(-24)
-          })
+              // Keep last 24 candles (2 hours of data)
+              return newCandles.slice(-24)
+            })
+          }
         }
       } catch (error) {
         console.error('Error fetching candles:', error)
@@ -105,32 +112,49 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
 
     ctx.clearRect(0, 0, rect.width, rect.height)
 
-    // Find price range
-    const allPrices = candles.flatMap(c => [c.high, c.low])
-    const minPrice = Math.min(...allPrices)
-    const maxPrice = Math.max(...allPrices)
-    let priceRange = maxPrice - minPrice
-    
-    if (priceRange === 0 || priceRange < maxPrice * 0.001) {
-      priceRange = maxPrice * 0.1
+    // Find market cap range (we're using MC, not price)
+    const allMcaps = candles.flatMap(c => [c.high, c.low]).filter(v => v > 0)
+    if (entryMarketCap && entryMarketCap > 0) {
+      allMcaps.push(entryMarketCap) // Include entry MC in range calculation
     }
     
-    const padding = rect.height * 0.1
+    // Guard against invalid data
+    if (allMcaps.length === 0) {
+      return
+    }
+    
+    const minMcap = Math.min(...allMcaps)
+    const maxMcap = Math.max(...allMcaps)
+    let mcapRange = maxMcap - minMcap
+    
+    // Add 10% padding to top and bottom
+    const mcapPadding = Math.max(mcapRange * 0.1, maxMcap * 0.05) // Minimum 5% padding
+    const paddedMinMcap = minMcap - mcapPadding
+    const paddedMaxMcap = maxMcap + mcapPadding
+    mcapRange = paddedMaxMcap - paddedMinMcap
+    
+    // Final guard against zero range
+    if (mcapRange === 0 || !isFinite(mcapRange)) {
+      mcapRange = maxMcap * 0.2 || 1
+    }
+    
+    const padding = 40 // Pixel padding for chart edges
     const chartHeight = rect.height - padding * 2
+    const chartWidth = rect.width - padding * 2
 
-    // Calculate candle width
-    const candleWidth = (rect.width / candles.length) * 0.7
-    const candleSpacing = rect.width / candles.length
+    // Calculate candle width and spacing
+    const candleSpacing = chartWidth / Math.max(candles.length, 12) // At least 12 spaces
+    const candleWidth = Math.max(candleSpacing * 0.6, 2) // Min 2px width
 
     // Draw candles
     candles.forEach((candle, index) => {
-      const x = index * candleSpacing + candleSpacing / 2
+      const x = padding + index * candleSpacing + candleSpacing / 2
       
       // Calculate y positions (inverted because canvas y increases downward)
-      const yHigh = padding + ((maxPrice - candle.high) / priceRange) * chartHeight
-      const yLow = padding + ((maxPrice - candle.low) / priceRange) * chartHeight
-      const yOpen = padding + ((maxPrice - candle.open) / priceRange) * chartHeight
-      const yClose = padding + ((maxPrice - candle.close) / priceRange) * chartHeight
+      const yHigh = padding + ((paddedMaxMcap - candle.high) / mcapRange) * chartHeight
+      const yLow = padding + ((paddedMaxMcap - candle.low) / mcapRange) * chartHeight
+      const yOpen = padding + ((paddedMaxMcap - candle.open) / mcapRange) * chartHeight
+      const yClose = padding + ((paddedMaxMcap - candle.close) / mcapRange) * chartHeight
 
       // Determine if bullish or bearish
       const isBullish = candle.close >= candle.open
@@ -141,7 +165,7 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
 
       // Draw wick (high-low line)
       ctx.strokeStyle = wickColor
-      ctx.lineWidth = 1
+      ctx.lineWidth = Math.max(1, candleWidth * 0.15)
       ctx.beginPath()
       ctx.moveTo(x, yHigh)
       ctx.lineTo(x, yLow)
@@ -150,11 +174,39 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
       // Draw candle body
       ctx.fillStyle = bodyColor
       const bodyTop = Math.min(yOpen, yClose)
-      const bodyHeight = Math.abs(yClose - yOpen) || 1 // Minimum height of 1px for doji
+      const bodyHeight = Math.abs(yClose - yOpen) || 2 // Minimum height of 2px for doji
       ctx.fillRect(x - candleWidth / 2, bodyTop, candleWidth, bodyHeight)
     })
 
-  }, [candles])
+    // Draw entry marker line if entryMarketCap is provided
+    if (entryMarketCap && entryMarketCap >= paddedMinMcap && entryMarketCap <= paddedMaxMcap) {
+      const yEntry = padding + ((paddedMaxMcap - entryMarketCap) / mcapRange) * chartHeight
+      
+      // Draw dashed horizontal line
+      ctx.strokeStyle = '#f97316'
+      ctx.lineWidth = 2
+      ctx.setLineDash([5, 5])
+      ctx.beginPath()
+      ctx.moveTo(padding, yEntry)
+      ctx.lineTo(rect.width - padding, yEntry)
+      ctx.stroke()
+      ctx.setLineDash([]) // Reset line dash
+      
+      // Draw orange dot at the start
+      ctx.fillStyle = '#f97316'
+      ctx.beginPath()
+      ctx.arc(padding + 10, yEntry, 6, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Draw white outline for dot
+      ctx.strokeStyle = '#ffffff'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.arc(padding + 10, yEntry, 6, 0, Math.PI * 2)
+      ctx.stroke()
+    }
+
+  }, [candles, entryMarketCap])
 
   const formatMarketCap = (mc: number) => {
     if (mc >= 1000000) {

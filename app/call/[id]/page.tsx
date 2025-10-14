@@ -481,6 +481,7 @@ export default function CallPage() {
               tokenName={call.token_name || undefined}
               tokenSymbol={call.token_symbol || undefined}
               tokenLogo={call.token_logo || undefined}
+              entryMarketCap={call.initial_mcap || undefined}
             />
           </div>
 
