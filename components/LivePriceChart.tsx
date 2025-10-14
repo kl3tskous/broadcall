@@ -19,7 +19,7 @@ export default function LivePriceChart({ tokenAddress, pairAddress, tokenName, t
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [priceHistory, setPriceHistory] = useState<number[]>([])
   const [currentData, setCurrentData] = useState<TokenData | null>(null)
-  const maxDataPoints = 60 // 60 seconds of data
+  const maxDataPoints = 300 // 5 minutes of data (300 seconds at 1 second intervals)
 
   useEffect(() => {
     let isMounted = true
