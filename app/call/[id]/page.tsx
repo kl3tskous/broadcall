@@ -304,9 +304,6 @@ export default function CallPage() {
                   <div className="w-full h-full bg-gradient-to-br from-orange-900/50 to-red-900/50" />
                 )}
                 
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
-                
                 {/* User Info Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
                   <Link href={`/profile/${call.creator_wallet}`}>
@@ -325,10 +322,10 @@ export default function CallPage() {
                   
                   <div className="flex-1">
                     <Link href={`/profile/${call.creator_wallet}`}>
-                      <p className="text-white font-bold text-lg hover:underline">
+                      <p className="text-white font-bold text-lg hover:underline" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
                         {creatorAlias || 'Anonymous'}
                       </p>
-                      <p className="text-white/70 text-sm">
+                      <p className="text-white/90 text-sm" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
                         @{creatorAlias || call.creator_wallet.slice(0, 8)}
                       </p>
                     </Link>

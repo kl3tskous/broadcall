@@ -50,8 +50,10 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   
 - ✅ **Twitter/X-Style Feed Layout** (October 2025)
   - Individual token call pages now display user profile at top:
-    - User's banner, avatar (64px), name, handle, and bio at the very top
-    - Ape banner with token performance stats displayed below the profile section
+    - User's banner displayed in full vibrant colors (no dark overlay)
+    - Avatar (64px), name, handle with text shadow for readability
+    - Bio section below the banner
+    - Custom dark card with token info displayed below profile section
     - Clean visual hierarchy: Profile → Token Info → Chart → Interactions
   - Enhanced token call pages with social interaction buttons:
     - Thesis displayed as styled quote block above chart
