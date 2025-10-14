@@ -464,6 +464,9 @@ export default function CallPage() {
 
           {/* Platform Buttons */}
           <div className="mb-4">
+            <h3 className="text-gray-400 text-sm font-medium mb-3">
+              Buy with @{call.user_alias || 'user'} on your preferred platform
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
               {platforms.map((platform) => {
                 const Logo = platform.Logo
@@ -471,9 +474,9 @@ export default function CallPage() {
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
+                    className="flex items-center gap-2 px-3 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
                   >
-                    <Logo className="w-5 h-5" />
+                    <Logo className="w-6 h-6" />
                     <span className="text-white font-bold text-sm">{platform.name}</span>
                   </button>
                 )
