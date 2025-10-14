@@ -416,10 +416,10 @@ export default function ProfilePage() {
                                   window.open(platformUrl, '_blank', 'noopener,noreferrer')
                                 }
                               }}
-                              className="flex items-center justify-center gap-2 px-3 py-2 bg-transparent hover:bg-orange-500/10 border border-orange-500/50 hover:border-orange-400/70 rounded-lg transition-all text-xs font-medium"
+                              className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
                             >
-                              <Logo className="w-4 h-4" />
-                              <span className="hidden md:inline">{platform.name}</span>
+                              <Logo className="w-5 h-5" />
+                              <span className="text-white font-bold text-sm">{platform.name}</span>
                             </button>
                           )
                         })}
