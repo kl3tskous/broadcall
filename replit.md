@@ -41,7 +41,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
     - **White bold text**: Platform name in text-sm font-extrabold below logo
     - **Vertical compact design**: Logo stacked above text (flex-col) for minimal width and maximum logo size
     - **Minimal padding**: px-2 py-3 for compact square-like buttons
-    - **Personalized title**: "Buy with @{username} on your preferred platform" displayed above button grid
+    - **Personalized title**: Large centered heading (text-2xl/3xl) with orange gradient @username, matching token name size
     - **Shadow effects**: Added `shadow-lg hover:shadow-xl` for depth
     - **Consistent layout**: Vertical logo + text layout on all pages
   - All platform logos replaced with custom uploaded images:
