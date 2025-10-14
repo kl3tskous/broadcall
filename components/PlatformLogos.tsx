@@ -23,17 +23,12 @@ export const AxiomLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
 )
 
 export const PhotonLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="9" fill="url(#photon-gradient)" />
-    <circle cx="12" cy="12" r="5" fill="currentColor" fillOpacity="0.3" />
-    <circle cx="12" cy="12" r="2" fill="currentColor" />
-    <defs>
-      <linearGradient id="photon-gradient" x1="3" y1="3" x2="21" y2="21">
-        <stop offset="0%" stopColor="#a855f7" />
-        <stop offset="100%" stopColor="#ec4899" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/platforms/photon.png" 
+    alt="Photon" 
+    className={className}
+    style={{ objectFit: 'contain' }}
+  />
 )
 
 export const BullxLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
