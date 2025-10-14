@@ -34,6 +34,17 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Gradient Platform Buttons with Logos** (October 2025)
+  - Redesigned all platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with:
+    - **Orange gradient background**: `from-orange-500 to-orange-600` with hover effect
+    - **Platform logo on left**: 20px size (w-5 h-5) displayed at button start
+    - **White bold text**: Platform name centered vertically in white bold font
+    - **Shadow effects**: Added `shadow-lg hover:shadow-xl` for depth
+    - **Consistent layout**: Logo + gap + text layout on all pages
+  - Updated GMGN logo to use custom uploaded image at `/public/platforms/gmgn.png`
+  - Buttons now visible on all screen sizes (removed mobile hidden state)
+  - Applied to both call pages and profile feed cards
+
 - ✅ **Twitter/X-Style Profile & Tabbed Feed** (October 2025)
   - Complete Twitter/X-style redesign of token call pages:
     - **Full-width banner header**: User's banner displayed at top (192-256px height, responsive) in full vibrant colors
