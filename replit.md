@@ -34,17 +34,13 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
-- ✅ **5-Minute Candlestick Chart with Orange Theme** (October 2025)
-  - Implemented custom 5-minute candlestick chart for token pages
-  - **Live updates**: Fetches price data every 5 seconds and builds real-time candles based on market cap
-  - **Orange theme colors**: Bullish candles in orange-500, bearish in red-600 matching site theme
-  - **Token info overlay**: Displays token image, symbol, and live market cap in top-left corner
-  - **Entry marker**: Displays horizontal dashed orange line with white-outlined dot marking where KOL shared the coin
-  - **Candlestick visualization**: Shows open, high, low, close with traditional candle bodies and wicks
-  - **Proper scaling**: Chart uses market cap values with 10% padding and minimum 12 candle spacing for readability
-  - **Lightweight**: Uses Canvas API for smooth rendering on mobile and Safari
-  - **Responsive**: Handles retina displays and different screen sizes
-  - **2-hour history**: Shows last 24 candles (2 hours) of 5-minute intervals for price action analysis
+- ✅ **Embedded DexScreener Chart in Call Card** (October 2025)
+  - Replaced custom chart with compact DexScreener embedded iframe
+  - **Positioned within call card**: Chart displays inside the orange bordered token card for a cleaner layout
+  - **Compact design**: 200px height on mobile, 250px on desktop for optimal viewing
+  - **Dark theme**: Matches site aesthetic with dark mode enabled
+  - **Clean UI**: Trades and info panels hidden for minimal, focused chart view
+  - **Live data**: Real-time price action powered by DexScreener's reliable API
 
 - ✅ **Dynamic Banner Backgrounds with Gradient Fade** (October 2025)
   - Token call pages now feature the creator's uploaded banner as a full-page dynamic background

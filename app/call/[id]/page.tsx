@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
-import LivePriceChart from '@/components/LivePriceChart'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
 
@@ -419,6 +418,16 @@ export default function CallPage() {
                 )}
               </div>
 
+              {/* Compact DexScreener Chart */}
+              {priceData?.pairAddress && (
+                <div className="mt-4 rounded-lg overflow-hidden">
+                  <iframe
+                    src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                    className="w-full h-[200px] md:h-[250px] border-0"
+                  />
+                </div>
+              )}
+
               {/* Stats Row */}
               <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap gap-4 text-sm">
                 {call.initial_mcap && (
@@ -472,18 +481,6 @@ export default function CallPage() {
               <p className="text-gray-300 italic">&ldquo;{call.thesis}&rdquo;</p>
             </div>
           )}
-
-          {/* Live Chart */}
-          <div className="card p-0 overflow-hidden">
-            <LivePriceChart 
-              tokenAddress={call.token_address} 
-              pairAddress={priceData?.pairAddress}
-              tokenName={call.token_name || undefined}
-              tokenSymbol={call.token_symbol || undefined}
-              tokenLogo={call.token_logo || undefined}
-              entryMarketCap={call.initial_mcap || undefined}
-            />
-          </div>
 
           {/* Twitter/X Style Interaction Buttons */}
           <div className="mt-4 flex items-center justify-between border-t border-b border-gray-800 py-3">
