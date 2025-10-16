@@ -366,8 +366,8 @@ export default function CallPage() {
             <div className="border-b border-gray-800 p-4">
               {/* Pinned Call - Custom Dark Card with Gradient Outline */}
               <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
-              {/* Signal Icon Badge - Top right corner */}
-              <div className="absolute -top-2 -right-2 z-10">
+              {/* Signal Icon Badge - Top left corner */}
+              <div className="absolute -top-2 -left-2 z-10">
                 <img 
                   src="/signal-icon.png" 
                   alt="Call Signal" 
@@ -550,7 +550,7 @@ export default function CallPage() {
                       className="relative bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
                     >
                       {/* Signal Icon Badge */}
-                      <div className="absolute -top-1 -right-1 z-10">
+                      <div className="absolute -top-1 -left-1 z-10">
                         <img 
                           src="/signal-icon.png" 
                           alt="Call Signal" 

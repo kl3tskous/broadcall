@@ -36,7 +36,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 ## Recent Changes
 - ✅ **Signal Icon Badge on Call Cards** (October 2025)
   - Added distinctive orange "C" signal/broadcast icon to all call cards
-  - **Corner sticker design**: Icon floats outside top-right corner of cards using negative positioning (-top-2/-right-2)
+  - **Corner sticker design**: Icon floats outside top-left corner of cards using negative positioning (-top-2/-left-2)
   - **Consistent placement**: Applied to both pinned call cards and recent call cards
   - **Responsive sizing**: 40px on desktop, 32px on mobile for pinned calls; 32px desktop, 24px mobile for recent calls
   - **Clean visual hierarchy**: Badge positioned outside card boundaries to avoid content overlap
