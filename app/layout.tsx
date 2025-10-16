@@ -1,10 +1,11 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { WalletProvider } from '@/components/WalletProvider'
+import { Header } from '@/components/Header'
 
 export const metadata: Metadata = {
-  title: 'Coin Call Platform',
-  description: 'Solana influencer coin-call referral platform',
+  title: 'Callor - Solana Influencer Platform',
+  description: 'Flex-worthy token call pages for Solana influencers',
 }
 
 export default function RootLayout({
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <WalletProvider>
+          <Header />
           {children}
         </WalletProvider>
       </body>

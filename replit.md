@@ -1,7 +1,7 @@
-# Coin Call Referral Platform
+# Callor - Coin Call Referral Platform
 
 ## Overview
-The Coin Call Referral Platform is a Next.js-based application designed for Solana influencers to create and share "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform enables users to publish professional token calls with automatic performance tracking (views, clicks, ROI, ATH stats) and social sharing capabilities. It supports multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan) by automatically attaching custom referral codes, allowing influencers to monetize their calls and track engagement. The business vision is to empower crypto influencers with a powerful tool for showcasing their insights and driving referrals, enhancing their market presence and potential earnings.
+Callor is a Next.js-based application designed for Solana influencers to create and share "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform enables users to publish professional token calls with automatic performance tracking (views, clicks, ROI, ATH stats) and social sharing capabilities. It supports multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan) by automatically attaching custom referral codes, allowing influencers to monetize their calls and track engagement. The business vision is to empower crypto influencers with a powerful tool for showcasing their insights and driving referrals, enhancing their market presence and potential earnings.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -34,6 +34,14 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Callor Branding & Navigation Header** (October 2025)
+  - Added official Callor logo to the website
+  - **Global navigation header**: Sticky header with logo, settings, and wallet connect
+  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon
+  - **Responsive header**: Mobile-optimized layout with proper spacing
+  - **Unified navigation**: Logo links to home, settings easily accessible
+  - Updated site metadata to reflect Callor brand identity
+
 - ✅ **Embedded DexScreener Chart in Call Card** (October 2025)
   - Replaced custom chart with compact DexScreener embedded iframe
   - **Positioned within call card**: Chart displays inside the orange bordered token card for a cleaner layout
