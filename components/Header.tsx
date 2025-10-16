@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -7,6 +8,11 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
 export function Header() {
   const { publicKey } = useWallet()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
@@ -16,15 +22,15 @@ export function Header() {
             <Image
               src="/callor-logo.png"
               alt="Callor"
-              width={180}
-              height={60}
-              className="h-10 w-auto"
+              width={220}
+              height={70}
+              className="h-12 w-auto"
               priority
             />
           </Link>
 
           <div className="flex items-center gap-4">
-            {publicKey && (
+            {mounted && publicKey && (
               <Link
                 href="/settings"
                 className="text-sm text-gray-400 hover:text-orange-400 transition-colors flex items-center gap-1"
@@ -36,7 +42,7 @@ export function Header() {
                 Settings
               </Link>
             )}
-            <WalletMultiButton />
+            {mounted && <WalletMultiButton />}
           </div>
         </div>
       </div>

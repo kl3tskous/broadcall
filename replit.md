@@ -35,9 +35,10 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 ## Recent Changes
 - ✅ **Callor Branding & Navigation Header** (October 2025)
-  - Added official Callor logo to the website
+  - Added official Callor logo to the website (transparent background version)
   - **Global navigation header**: Sticky header with logo, settings, and wallet connect
-  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon
+  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (48px height for visibility)
+  - **Transparent logo**: Clean PNG with no background, blends perfectly with dark theme
   - **Responsive header**: Mobile-optimized layout with proper spacing
   - **Unified navigation**: Logo links to home, settings easily accessible
   - Updated site metadata to reflect Callor brand identity
