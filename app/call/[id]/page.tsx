@@ -366,6 +366,15 @@ export default function CallPage() {
             <div className="border-b border-gray-800 p-4">
               {/* Pinned Call - Custom Dark Card with Gradient Outline */}
               <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
+              {/* Signal Icon Badge - Top right corner */}
+              <div className="absolute -top-2 -right-2 z-10">
+                <img 
+                  src="/signal-icon.png" 
+                  alt="Call Signal" 
+                  className="w-8 h-8 md:w-10 md:h-10 opacity-90"
+                />
+              </div>
+              
             <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6">
               <div className="flex items-start gap-4">
                 {/* Token Image */}
@@ -538,8 +547,17 @@ export default function CallPage() {
                     <Link
                       key={otherCall.id}
                       href={`/call/${otherCall.id}`}
-                      className="bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
+                      className="relative bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
                     >
+                      {/* Signal Icon Badge */}
+                      <div className="absolute -top-1 -right-1 z-10">
+                        <img 
+                          src="/signal-icon.png" 
+                          alt="Call Signal" 
+                          className="w-6 h-6 md:w-8 md:h-8 opacity-90"
+                        />
+                      </div>
+                      
                       <div className="flex items-center gap-3 mb-3">
                         {otherCall.token_logo ? (
                           <img 
