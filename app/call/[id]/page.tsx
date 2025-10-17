@@ -281,8 +281,8 @@ export default function CallPage() {
         {/* Dynamic Banner Background with Gradient Fade */}
         {creatorBanner && (
           <>
-            {/* Banner Background Image - Stops at profile image on mobile, full height on desktop */}
-            <div className="fixed top-0 left-0 w-full h-[100px] md:h-screen z-0">
+            {/* Banner Background Image - Top 1/3rd of page only */}
+            <div className="fixed top-0 left-0 w-full h-[100px] md:h-[33vh] z-0">
               <img 
                 src={creatorBanner} 
                 alt="Profile banner" 
@@ -290,7 +290,7 @@ export default function CallPage() {
               />
             </div>
             {/* Dark Gradient Overlay - Fades from transparent to dark */}
-            <div className="fixed top-0 left-0 w-full h-[100px] md:h-screen z-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900" />
+            <div className="fixed top-0 left-0 w-full h-[100px] md:h-[33vh] z-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900" />
           </>
         )}
 
