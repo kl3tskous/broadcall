@@ -367,11 +367,11 @@ export default function CallPage() {
               {/* Pinned Call - Custom Dark Card with Gradient Outline */}
               <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
               {/* Signal Icon Badge - Top left corner with rotation */}
-              <div className="absolute -top-2 -left-2 z-10 transform rotate-12">
+              <div className="absolute -top-[14px] -left-[14px] z-10 origin-top-left rotate-[17deg]">
                 <img 
                   src="/signal-icon.png" 
                   alt="Call Signal" 
-                  className="w-8 h-8 md:w-10 md:h-10 opacity-90"
+                  className="w-8 h-8 md:w-10 md:h-10 opacity-90 drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]"
                 />
               </div>
               
@@ -550,11 +550,11 @@ export default function CallPage() {
                       className="relative bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
                     >
                       {/* Signal Icon Badge */}
-                      <div className="absolute -top-1 -left-1 z-10 transform rotate-12">
+                      <div className="absolute -top-[10px] -left-[10px] z-10 origin-top-left rotate-[17deg]">
                         <img 
                           src="/signal-icon.png" 
                           alt="Call Signal" 
-                          className="w-6 h-6 md:w-8 md:h-8 opacity-90"
+                          className="w-6 h-6 md:w-8 md:h-8 opacity-90 drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]"
                         />
                       </div>
                       
