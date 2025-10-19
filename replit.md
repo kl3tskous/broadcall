@@ -43,13 +43,14 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 - ✅ **Callor Branding & Navigation Header** (October 2025)
   - Added official Callor logo to the website (transparent background version)
-  - **Compact header design**: Streamlined sticky header (48px height) with logo, settings, and wallet connect
-  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (36px height for clean layout)
-  - **Transparent logo**: Clean PNG with no background, blends perfectly with dark theme
-  - **Left-aligned layout**: Logo positioned flush to top-left edge with minimal padding (px-2 on mobile)
-  - **Compact wallet button**: Custom styling reduces wallet button to 32px height to fit compact header
-  - **Responsive header**: Mobile-optimized layout with settings icon-only view on small screens
-  - **Unified navigation**: Logo links to home, settings easily accessible
+  - **Clean minimal design**: Inspired by modern portfolio sites with 64px height header
+  - **Three-column layout**: Logo left, centered navigation, wallet button right
+  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (36px height)
+  - **Outlined wallet button**: Transparent background with white border (similar to "Contact Creator" style)
+  - **Center navigation**: Profile and Settings links centered between logo and wallet button
+  - **Enhanced backdrop**: Deeper blur (backdrop-blur-md) with semi-transparent dark background
+  - **Smooth transitions**: Hover effects on all interactive elements
+  - **Mobile responsive**: Navigation items hidden on mobile, wallet button always visible
   - Updated site metadata to reflect Callor brand identity
 
 - ✅ **Embedded DexScreener Chart in Call Card** (October 2025)
