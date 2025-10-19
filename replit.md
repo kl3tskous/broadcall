@@ -46,7 +46,9 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - **Compact header design**: Streamlined sticky header (48px height) with logo, settings, and wallet connect
   - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (36px height for clean layout)
   - **Transparent logo**: Clean PNG with no background, blends perfectly with dark theme
-  - **Responsive header**: Mobile-optimized layout with proper spacing
+  - **Left-aligned layout**: Logo positioned flush to top-left edge with minimal padding (px-2 on mobile)
+  - **Compact wallet button**: Custom styling reduces wallet button to 32px height to fit compact header
+  - **Responsive header**: Mobile-optimized layout with settings icon-only view on small screens
   - **Unified navigation**: Logo links to home, settings easily accessible
   - Updated site metadata to reflect Callor brand identity
 
