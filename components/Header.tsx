@@ -35,7 +35,13 @@ export function Header() {
             {mounted && publicKey && (
               <>
                 <Link
-                  href="/profile"
+                  href="/"
+                  className="text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  Create Call
+                </Link>
+                <Link
+                  href={`/profile/${publicKey.toString()}`}
                   className="text-sm text-gray-300 hover:text-white transition-colors"
                 >
                   Profile

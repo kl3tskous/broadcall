@@ -47,10 +47,11 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - **Three-column layout**: Logo left, centered navigation, wallet button right
   - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (36px height)
   - **Outlined wallet button**: Transparent background with white border (similar to "Contact Creator" style)
-  - **Center navigation**: Profile and Settings links centered between logo and wallet button
+  - **Center navigation**: Create Call, Profile, and Settings links centered between logo and wallet button
   - **Enhanced backdrop**: Deeper blur (backdrop-blur-md) with semi-transparent dark background
   - **Smooth transitions**: Hover effects on all interactive elements
   - **Mobile responsive**: Navigation items hidden on mobile, wallet button always visible
+  - **Create Call flow**: "Create Call" button links to home page where users can input token CA and thesis
   - Updated site metadata to reflect Callor brand identity
 
 - ✅ **Embedded DexScreener Chart in Call Card** (October 2025)
