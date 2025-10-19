@@ -62,15 +62,15 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - **Clean UI**: Trades and info panels hidden for minimal, focused chart view
   - **Live data**: Real-time price action powered by DexScreener's reliable API
 
-- ✅ **Dynamic Banner Backgrounds with Gradient Fade** (October 2025)
-  - Token call pages now feature the creator's uploaded banner as a dynamic background
-  - **Jupiter wallet-inspired design**: Banner fades smoothly into dark background using gradient overlay
-  - **Gradient overlay system**: Transparent at top → semi-transparent middle → solid dark (gray-900) at bottom
-  - **Fixed background positioning**: Banner stays in place while content scrolls over it
-  - **Responsive heights**: Limited to 100px on mobile (stops at profile image, fades before tabs), top 1/3rd only (33vh) on desktop for content readability
-  - **Semi-transparent cards**: Token cards use `bg-gray-900/90` with backdrop blur for subtle banner visibility
-  - **Fallback handling**: Pages without banner display solid gray-900 background
-  - **Performance optimized**: Uses CSS fixed positioning and gradient overlays for smooth rendering
+- ✅ **Modern Social Media Profile Layout** (October 2025)
+  - Redesigned token call pages with clean, centered social media profile aesthetic
+  - **Twitter/X-style banner**: Compact banner section (128px mobile, 192px desktop) at top of page, not as background
+  - **Classic profile layout**: Avatar overlaps bottom of banner (-mt-12/-mt-16) with proper border and gradient ring
+  - **Centered content**: Max-width 768px (max-w-3xl) for optimal reading and mobile-first design
+  - **Clean profile section**: Name, verified badge, bio, and tabs all in organized layout
+  - **No background overlays**: Removed fixed background system for cleaner, more focused content
+  - **Solid cards**: Token cards use solid `bg-gray-900` background instead of transparent overlay
+  - **Modern spacing**: Improved padding and margins throughout for professional appearance
 
 - ✅ **Gradient Platform Buttons with Custom Logos** (October 2025)
   - Redesigned all platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with:

@@ -277,91 +277,96 @@ export default function CallPage() {
     : 0
 
   return (
-    <main className="min-h-screen relative bg-gray-900">
-        {/* Dynamic Banner Background with Gradient Fade */}
-        {creatorBanner && (
-          <>
-            {/* Banner Background Image - Top 1/3rd of page only */}
-            <div className="fixed top-0 left-0 w-full h-[100px] md:h-[33vh] z-0">
-              <img 
-                src={creatorBanner} 
-                alt="Profile banner" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* Dark Gradient Overlay - Fades from transparent to dark */}
-            <div className="fixed top-0 left-0 w-full h-[100px] md:h-[33vh] z-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900" />
-          </>
-        )}
-
-        {/* Content Layer */}
-        <div className="relative z-10">
-        {/* Simple Profile Header */}
+    <main className="min-h-screen bg-gray-900">
+        {/* Modern Profile Section */}
         {call.creator_wallet && (
-          <div className="border-b border-gray-800/50">
-            <div className="max-w-6xl mx-auto px-4 py-4">
-              {/* Profile Image and Name - Left Aligned */}
-              <div className="flex items-center gap-3 mb-4">
-                <Link href={`/profile/${call.creator_wallet}`}>
-                  <div className="p-[2px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
-                    {creatorAvatar ? (
-                      <img 
-                        src={creatorAvatar} 
-                        alt={creatorAlias || 'User'} 
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-black"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg md:text-xl font-bold border-2 border-black">
-                        {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-                      </div>
-                    )}
-                  </div>
-                </Link>
-                
-                <div className="flex items-center gap-2">
-                  <Link href={`/profile/${call.creator_wallet}`}>
-                    <h1 className="text-lg md:text-xl font-bold text-white hover:underline">
-                      {creatorAlias || 'Anonymous'}
-                    </h1>
-                  </Link>
-                  {/* Verified Badge */}
-                  <svg className="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8.5 12.5l2.5 2.5 5-5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
+          <div className="border-b border-gray-800">
+            {/* Banner Section */}
+            {creatorBanner ? (
+              <div className="relative w-full h-32 md:h-48 overflow-hidden bg-gray-800">
+                <img 
+                  src={creatorBanner} 
+                  alt="Profile banner" 
+                  className="w-full h-full object-cover"
+                />
               </div>
+            ) : (
+              <div className="relative w-full h-32 md:h-48 bg-gradient-to-br from-gray-800 to-gray-900" />
+            )}
 
-              {/* Tabs */}
-              <div className="border-b border-gray-800 -mx-4 px-4">
-                <div className="flex gap-8">
-                  <button
-                    onClick={() => setActiveTab('pinned')}
-                    className={`pb-3 px-1 border-b-2 transition-colors font-semibold ${
-                      activeTab === 'pinned' 
-                        ? 'border-orange-500 text-white' 
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    📌 Pinned Call
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('recent')}
-                    className={`pb-3 px-1 border-b-2 transition-colors font-semibold ${
-                      activeTab === 'recent' 
-                        ? 'border-orange-500 text-white' 
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Recent Calls
-                  </button>
+            {/* Profile Info */}
+            <div className="max-w-3xl mx-auto px-4">
+              <div className="relative pb-4">
+                {/* Avatar */}
+                <div className="-mt-12 md:-mt-16 mb-3">
+                  <Link href={`/profile/${call.creator_wallet}`}>
+                    <div className="p-1 rounded-full bg-gray-900 inline-block">
+                      <div className="p-[2px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
+                        {creatorAvatar ? (
+                          <img 
+                            src={creatorAvatar} 
+                            alt={creatorAlias || 'User'} 
+                            className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-gray-900"
+                          />
+                        ) : (
+                          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl md:text-3xl font-bold border-4 border-gray-900">
+                            {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Name and Bio */}
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Link href={`/profile/${call.creator_wallet}`}>
+                      <h1 className="text-xl md:text-2xl font-bold text-white hover:underline">
+                        {creatorAlias || 'Anonymous'}
+                      </h1>
+                    </Link>
+                    <svg className="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8.5 12.5l2.5 2.5 5-5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                  {creatorBio && (
+                    <p className="text-gray-400 text-sm md:text-base mb-3">{creatorBio}</p>
+                  )}
+                </div>
+
+                {/* Tabs */}
+                <div className="border-b border-gray-800">
+                  <div className="flex gap-8">
+                    <button
+                      onClick={() => setActiveTab('pinned')}
+                      className={`pb-3 px-1 border-b-2 transition-colors font-medium ${
+                        activeTab === 'pinned' 
+                          ? 'border-orange-500 text-white' 
+                          : 'border-transparent text-gray-400 hover:text-gray-300'
+                      }`}
+                    >
+                      📌 Pinned Call
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('recent')}
+                      className={`pb-3 px-1 border-b-2 transition-colors font-medium ${
+                        activeTab === 'recent' 
+                          ? 'border-orange-500 text-white' 
+                          : 'border-transparent text-gray-400 hover:text-gray-300'
+                      }`}
+                    >
+                      Recent Calls
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Feed Content */}
-        <div className="max-w-6xl mx-auto">
+        {/* Feed Content - Centered */}
+        <div className="max-w-3xl mx-auto">
           {activeTab === 'pinned' && (
             <div className="border-b border-gray-800 p-4">
               {/* Pinned Call - Custom Dark Card with Gradient Outline */}
@@ -375,7 +380,7 @@ export default function CallPage() {
                 />
               </div>
               
-            <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6">
+            <div className="bg-gray-900 rounded-2xl p-6">
               <div className="flex items-start gap-4">
                 {/* Token Image */}
                 <div className="flex-shrink-0">
@@ -486,7 +491,7 @@ export default function CallPage() {
 
           {/* Thesis Quote */}
           {call.thesis && (
-            <div className="mb-4 p-4 bg-gray-800/30 border-l-4 border-orange-500 rounded-r-lg">
+            <div className="mb-4 p-4 bg-gray-800 border-l-4 border-orange-500 rounded-r-lg">
               <p className="text-gray-300 italic">&ldquo;{call.thesis}&rdquo;</p>
             </div>
           )}
@@ -547,7 +552,7 @@ export default function CallPage() {
                     <Link
                       key={otherCall.id}
                       href={`/call/${otherCall.id}`}
-                      className="relative bg-gray-800/50 hover:bg-gray-800/70 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
+                      className="relative bg-gray-800 hover:bg-gray-750 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
                     >
                       {/* Signal Icon Badge */}
                       <div className="absolute -top-[10px] -left-[10px] z-10 origin-top-left rotate-[17deg]">
@@ -600,7 +605,6 @@ export default function CallPage() {
               )}
             </div>
           )}
-        </div>
         </div>
       </main>
   )
