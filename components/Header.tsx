@@ -17,14 +17,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-12">
           <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <Image
               src="/callor-logo.png"
               alt="Callor"
-              width={220}
-              height={70}
-              className="h-12 w-auto"
+              width={180}
+              height={57}
+              className="h-9 w-auto"
               priority
             />
           </Link>
