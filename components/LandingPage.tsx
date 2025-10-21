@@ -60,19 +60,19 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <div className="relative max-w-[1019px] mx-auto mt-8 md:mt-16 lg:mt-[120px] px-4">
+      <div className="relative max-w-[1019px] mx-auto mt-6 md:mt-8 lg:mt-12 px-4">
         {/* Main Headline */}
-        <h1 className="text-center font-extrabold text-4xl md:text-6xl lg:text-[80px] leading-tight md:leading-tight lg:leading-[97px] bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] bg-clip-text text-transparent mb-4 md:mb-6">
+        <h1 className="text-center font-extrabold text-4xl md:text-6xl lg:text-[80px] leading-tight md:leading-tight lg:leading-[97px] bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] bg-clip-text text-transparent mb-3 md:mb-4">
           Turn Calls Into Income.
         </h1>
 
         {/* Subtitle */}
-        <p className="text-center text-white/80 font-semibold text-base md:text-xl lg:text-[28px] leading-relaxed md:leading-relaxed lg:leading-[39px] mb-8 md:mb-12 max-w-3xl mx-auto">
+        <p className="text-center text-white/80 font-semibold text-base md:text-xl lg:text-[28px] leading-relaxed md:leading-relaxed lg:leading-[39px] mb-6 md:mb-8 max-w-3xl mx-auto">
           Share your alpha. When your followers ape in, you get paid. Built for KOLs, made for crypto traders.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-16 md:mb-24">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
           {/* View KOLs Button */}
           <Link
             href="/explore"
@@ -106,7 +106,7 @@ export default function LandingPage() {
       </div>
 
       {/* Platform Logos Grid */}
-      <div className="relative max-w-[1060px] mx-auto mt-12 md:mt-20 lg:mt-[126px] px-4 pb-16 md:pb-24">
+      <div className="relative max-w-[1060px] mx-auto mt-0 px-4 pb-12 md:pb-16">
         <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6 max-w-2xl md:max-w-none mx-auto justify-items-center">
           {/* Platform Logo Cards */}
           <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
