@@ -21,10 +21,10 @@ export function Header() {
           {/* Logo on the left */}
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <Image
-              src="/callor-logo.png"
-              alt="Callor"
+              src="/broadCall-logo.png"
+              alt="BroadCall"
               width={180}
-              height={57}
+              height={180}
               className="h-9 w-auto"
               priority
             />

@@ -25,8 +25,8 @@ export default function LandingPage() {
           <div className="flex items-center">
             <div className="w-[60px] h-[60px] md:w-[86px] md:h-[86px] relative">
               <Image
-                src="/callor-logo.png"
-                alt="Callor"
+                src="/broadCall-logo.png"
+                alt="BroadCall"
                 width={86}
                 height={86}
                 className="object-contain"

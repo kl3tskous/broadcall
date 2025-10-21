@@ -468,7 +468,7 @@ export default function CallPage() {
               <button 
                 onClick={() => {
                   const shareUrl = `${window.location.origin}/call/${call.id}`
-                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on Callor`
+                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on BroadCall`
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
                 }}
                 className="flex items-center gap-2 hover:text-orange-400 transition-colors"

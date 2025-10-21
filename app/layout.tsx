@@ -4,7 +4,7 @@ import { WalletProvider } from '@/components/WalletProvider'
 import { Header } from '@/components/Header'
 
 export const metadata: Metadata = {
-  title: 'Callor - Solana Influencer Platform',
+  title: 'BroadCall - Solana Influencer Platform',
   description: 'Flex-worthy token call pages for Solana influencers',
 }
 

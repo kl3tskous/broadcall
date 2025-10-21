@@ -1,9 +1,15 @@
-# Callor - Coin Call Referral Platform
+# BroadCall - Coin Call Referral Platform
 
 ## Overview
-Callor is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
+BroadCall is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## Recent Changes
+- ✅ **Rebranding: Callor → BroadCall** (October 21, 2025)
+  - Updated brand identity from "Callor" to "BroadCall" across the entire platform
+  - New logo: Orange "B" with broadcast signal icon representing influence and reach
+  - Updated all references: Header, Landing Page, metadata, share text, and documentation
+  - Seamless transition maintaining all existing functionality
+
 - ✅ **Complete Token Call Page Redesign - Figma-Based Glassmorphic Overhaul** (October 21, 2025)
   - **Major visual transformation** inspired by user's Figma design for maximum social media impact
   - **Atmospheric layered background**: Pure black with gradient blur orbs for depth
