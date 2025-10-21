@@ -94,65 +94,15 @@ export default function SettingsPage() {
 
   if (!publicKey) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-black">
-        {/* Atmospheric Background */}
-        <div className="fixed inset-0 pointer-events-none">
-          {/* Orange/Red gradient orb */}
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-0"
-            style={{
-              width: '767px',
-              height: '767px',
-              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-              filter: 'blur(250px)',
-            }}
-          />
-          
-          {/* Green orb */}
-          <div 
-            className="absolute left-0 top-0"
-            style={{
-              width: '901px',
-              height: '720px',
-              background: '#52FF00',
-              filter: 'blur(350px)',
-            }}
-          />
-          
-          {/* Purple orb */}
-          <div 
-            className="absolute right-12 bottom-24"
-            style={{
-              width: '269px',
-              height: '269px',
-              background: '#9747FF',
-              filter: 'blur(200px)',
-            }}
-          />
-          
-          {/* Gray center blur */}
-          <div 
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: '575px',
-              height: '575px',
-              background: '#D9D9D9',
-              filter: 'blur(250px)',
-            }}
-          />
-          
-          {/* Additional gradient for depth */}
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-            style={{
-              width: '741px',
-              height: '300px',
-              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-              filter: 'blur(300px)',
-            }}
-          />
-        </div>
-
+      <div 
+        className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+        style={{
+          backgroundImage: 'url(/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center max-w-md w-full relative z-10">
           <h2 className="text-2xl font-bold mb-4 text-white">Connect Your Wallet</h2>
           <p className="text-gray-300 mb-6">
@@ -166,119 +116,31 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
-        {/* Atmospheric Background */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-0"
-            style={{
-              width: '767px',
-              height: '767px',
-              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-0 top-0"
-            style={{
-              width: '901px',
-              height: '720px',
-              background: '#52FF00',
-              filter: 'blur(350px)',
-            }}
-          />
-          <div 
-            className="absolute right-12 bottom-24"
-            style={{
-              width: '269px',
-              height: '269px',
-              background: '#9747FF',
-              filter: 'blur(200px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: '575px',
-              height: '575px',
-              background: '#D9D9D9',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-            style={{
-              width: '741px',
-              height: '300px',
-              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-              filter: 'blur(300px)',
-            }}
-          />
-        </div>
+      <div 
+        className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        style={{
+          backgroundImage: 'url(/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="text-xl text-gray-300 relative z-10">Loading settings...</div>
       </div>
     )
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-black">
-      {/* Atmospheric Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Orange/Red gradient orb */}
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-0"
-          style={{
-            width: '767px',
-            height: '767px',
-            background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-            filter: 'blur(250px)',
-          }}
-        />
-        
-        {/* Green orb */}
-        <div 
-          className="absolute left-0 top-0"
-          style={{
-            width: '901px',
-            height: '720px',
-            background: '#52FF00',
-            filter: 'blur(350px)',
-          }}
-        />
-        
-        {/* Purple orb */}
-        <div 
-          className="absolute right-12 bottom-24"
-          style={{
-            width: '269px',
-            height: '269px',
-            background: '#9747FF',
-            filter: 'blur(200px)',
-          }}
-        />
-        
-        {/* Gray center blur */}
-        <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: '575px',
-            height: '575px',
-            background: '#D9D9D9',
-            filter: 'blur(250px)',
-          }}
-        />
-        
-        {/* Additional gradient for depth */}
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-          style={{
-            width: '741px',
-            height: '300px',
-            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-            filter: 'blur(300px)',
-          }}
-        />
-      </div>
+    <main 
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="flex items-center justify-between mb-8">
