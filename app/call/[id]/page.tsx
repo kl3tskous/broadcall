@@ -247,18 +247,114 @@ export default function CallPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+        <div className="text-xl text-gray-300 relative z-10">Loading...</div>
       </div>
     )
   }
 
   if (!call) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="card text-center">
-          <h2 className="text-2xl font-bold mb-2">Call Not Found</h2>
-          <p className="text-gray-400">This call doesn't exist or has been removed.</p>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center relative z-10">
+          <h2 className="text-2xl font-bold mb-2 text-white">Call Not Found</h2>
+          <p className="text-gray-300">This call doesn't exist or has been removed.</p>
         </div>
       </div>
     )
@@ -322,7 +418,7 @@ export default function CallPage() {
           style={{
             width: '575px',
             height: '575px',
-            background: 'linear-gradient(0deg, rgba(217, 217, 217, 0), rgba(217, 217, 217, 0))',
+            background: '#D9D9D9',
             filter: 'blur(250px)',
           }}
         />

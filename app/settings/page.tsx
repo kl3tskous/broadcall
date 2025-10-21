@@ -6,7 +6,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
-import { GmgnLogo, AxiomLogo } from '@/components/PlatformLogos'
+import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/components/PlatformLogos'
 
 export default function SettingsPage() {
   const { publicKey } = useWallet()
@@ -94,10 +94,68 @@ export default function SettingsPage() {
 
   if (!publicKey) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="card text-center max-w-md w-full">
-          <h2 className="text-2xl font-bold mb-4">Connect Your Wallet</h2>
-          <p className="text-gray-400 mb-6">
+      <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          {/* Orange/Red gradient orb */}
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          
+          {/* Green orb */}
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          
+          {/* Purple orb */}
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          
+          {/* Gray center blur */}
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          
+          {/* Additional gradient for depth */}
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center max-w-md w-full relative z-10">
+          <h2 className="text-2xl font-bold mb-4 text-white">Connect Your Wallet</h2>
+          <p className="text-gray-300 mb-6">
             Please connect your wallet to access settings
           </p>
           {mounted && <WalletMultiButton className="btn-primary mx-auto" />}
@@ -108,41 +166,147 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-400">Loading settings...</div>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+        <div className="text-xl text-gray-300 relative z-10">Loading settings...</div>
       </div>
     )
   }
 
   return (
-    <main className="min-h-screen py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <main className="min-h-screen relative overflow-hidden bg-black">
+      {/* Atmospheric Background */}
+      <div className="fixed inset-0 pointer-events-none">
+        {/* Orange/Red gradient orb */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-0"
+          style={{
+            width: '767px',
+            height: '767px',
+            background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+            filter: 'blur(250px)',
+          }}
+        />
+        
+        {/* Green orb */}
+        <div 
+          className="absolute left-0 top-0"
+          style={{
+            width: '901px',
+            height: '720px',
+            background: '#52FF00',
+            filter: 'blur(350px)',
+          }}
+        />
+        
+        {/* Purple orb */}
+        <div 
+          className="absolute right-12 bottom-24"
+          style={{
+            width: '269px',
+            height: '269px',
+            background: '#9747FF',
+            filter: 'blur(200px)',
+          }}
+        />
+        
+        {/* Gray center blur */}
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '575px',
+            height: '575px',
+            background: '#D9D9D9',
+            filter: 'blur(250px)',
+          }}
+        />
+        
+        {/* Additional gradient for depth */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+          style={{
+            width: '741px',
+            height: '300px',
+            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+            filter: 'blur(300px)',
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
               Settings
             </h1>
-            <p className="text-gray-400">Manage your referral codes and preferences</p>
+            <p className="text-gray-300">Manage your referral codes and preferences</p>
           </div>
           <button
             onClick={() => router.push('/')}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-300 hover:text-white transition-colors"
           >
-            ← Back to Home
+            ← Back
           </button>
         </div>
 
         <UserProfile walletAddress={publicKey.toString()} />
 
-        <div className="card mt-6">
-          <h2 className="text-xl font-bold mb-4">Your Referral Codes</h2>
-          <p className="text-gray-400 mb-6 text-sm">
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Your Referral Codes</h2>
+          <p className="text-gray-300 mb-6 text-sm">
             These codes will be automatically attached to all your token calls. Update them anytime.
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
-              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2 text-white">
                 <GmgnLogo className="w-5 h-5" />
                 <span>GMGN Referral Code</span>
               </label>
@@ -151,15 +315,15 @@ export default function SettingsPage() {
                 value={refCodes.gmgn_ref}
                 onChange={(e) => setRefCodes({ ...refCodes, gmgn_ref: e.target.value })}
                 placeholder="Your GMGN ref code (e.g., 7rpqjHdf)"
-                className="input-field"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Used for GMGN Telegram bot referrals
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2 text-white">
                 <AxiomLogo className="w-5 h-5" />
                 <span>Axiom Referral Code</span>
               </label>
@@ -168,57 +332,60 @@ export default function SettingsPage() {
                 value={refCodes.axiom_ref}
                 onChange={(e) => setRefCodes({ ...refCodes, axiom_ref: e.target.value })}
                 placeholder="Your Axiom ref code"
-                className="input-field"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Used for Axiom.trade referrals
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
-                <span className="text-orange-400">●</span> Photon Referral Code
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2 text-white">
+                <PhotonLogo className="w-5 h-5" />
+                <span>Photon Referral Code</span>
               </label>
               <input
                 type="text"
                 value={refCodes.photon_ref}
                 onChange={(e) => setRefCodes({ ...refCodes, photon_ref: e.target.value })}
                 placeholder="Your Photon ref code"
-                className="input-field"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Used for Photon Sol referrals
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
-                <span className="text-orange-400">●</span> BullX Referral Code
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2 text-white">
+                <BullxLogo className="w-5 h-5" />
+                <span>BullX Referral Code</span>
               </label>
               <input
                 type="text"
                 value={refCodes.bullx_ref}
                 onChange={(e) => setRefCodes({ ...refCodes, bullx_ref: e.target.value })}
                 placeholder="Your BullX ref code"
-                className="input-field"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Used for BullX terminal referrals
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
-                <span className="text-orange-400">●</span> Trojan Referral Code
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2 text-white">
+                <TrojanLogo className="w-5 h-5" />
+                <span>Trojan Referral Code</span>
               </label>
               <input
                 type="text"
                 value={refCodes.trojan_ref}
                 onChange={(e) => setRefCodes({ ...refCodes, trojan_ref: e.target.value })}
                 placeholder="Your Trojan ref code"
-                className="input-field"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Used for Trojan bot referrals
               </p>
             </div>
@@ -228,18 +395,20 @@ export default function SettingsPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 btn-primary"
+              className="flex-1 bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              <span className="text-black text-base md:text-lg font-bold">
+                {saving ? 'Saving...' : 'Save Changes'}
+              </span>
             </button>
           </div>
         </div>
 
-        <div className="card mt-6">
-          <h2 className="text-xl font-bold mb-4">Connected Wallet</h2>
-          <div className="bg-dark-bg p-4 rounded-lg">
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Connected Wallet</h2>
+          <div className="bg-white/[0.08] backdrop-blur-[10px] p-4 rounded-2xl border border-white/10">
             <p className="text-sm text-gray-400 mb-1">Wallet Address</p>
-            <p className="font-mono text-sm break-all">{publicKey.toString()}</p>
+            <p className="font-mono text-sm text-white break-all">{publicKey.toString()}</p>
           </div>
         </div>
       </div>

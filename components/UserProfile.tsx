@@ -25,7 +25,6 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Fetch via API route to bypass schema cache
         const response = await fetch(`/api/profile/get?wallet_address=${walletAddress}`)
         const result = await response.json()
 
@@ -56,7 +55,6 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
     setMessage('')
 
     try {
-      // Save all profile data via API route (bypasses schema cache)
       const response = await fetch('/api/profile/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,20 +97,20 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
 
   if (loading) {
     return (
-      <div className="card">
-        <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
-        <div className="text-center py-8 text-gray-400">Loading...</div>
+      <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+        <h2 className="text-xl md:text-2xl font-bold mb-6 text-white">Profile Settings</h2>
+        <div className="text-center py-8 text-gray-300">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="card">
-      <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
+    <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-white">Profile Settings</h2>
       
       <form onSubmit={handleSave} className="space-y-6">
         <div>
-          <label htmlFor="alias" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="alias" className="block text-sm font-medium text-white mb-2">
             Display Name / Alias
           </label>
           <input
@@ -121,7 +119,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             value={alias}
             onChange={(e) => setAlias(e.target.value)}
             placeholder="e.g., SolTrader, CryptoKing, etc."
-            className="input-field"
+            className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
           />
           <p className="text-xs text-gray-400 mt-1">
             This will appear on your calls as "Called by @{alias || 'yourname'}"
@@ -129,13 +127,13 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
         </div>
 
         {/* Image Previews Section */}
-        <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700">
-          <h3 className="text-sm font-medium text-gray-300 mb-4">Image Previews</h3>
-          <div className="flex gap-6">
+        <div className="bg-white/[0.08] backdrop-blur-[10px] rounded-2xl p-4 border border-white/10">
+          <h3 className="text-sm font-medium text-white mb-4">Image Previews</h3>
+          <div className="flex gap-6 flex-col md:flex-row">
             {/* Profile Picture Preview */}
             <div className="flex-shrink-0">
               <p className="text-xs text-gray-400 mb-2">Profile Picture</p>
-              <div className="w-24 h-24 rounded-full border-2 border-orange-500/50 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+              <div className="w-24 h-24 rounded-full border-2 border-orange-500/50 bg-black/50 flex items-center justify-center overflow-hidden">
                 {avatarUrl ? (
                   <img 
                     src={avatarUrl} 
@@ -154,7 +152,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             {/* Banner Preview */}
             <div className="flex-1">
               <p className="text-xs text-gray-400 mb-2">Banner (Flex Card Background)</p>
-              <div className="w-full h-24 rounded-lg border-2 border-orange-500/50 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+              <div className="w-full h-24 rounded-lg border-2 border-orange-500/50 bg-black/50 flex items-center justify-center overflow-hidden">
                 {bannerUrl ? (
                   <img 
                     src={bannerUrl} 
@@ -174,7 +172,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
 
         {/* Profile Picture Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-white mb-2">
             Profile Picture
           </label>
           <div className="flex gap-2 mb-2">
@@ -183,7 +181,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="Paste image URL or upload file"
-              className="input-field flex-1"
+              className="flex-1 px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
             />
             <FileUploader
               id="avatar-upload"
@@ -191,7 +189,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               accept="image/*"
               maxSizeMB={5}
               buttonText="Upload"
-              buttonClassName="btn-primary whitespace-nowrap"
+              buttonClassName="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-4 py-3 hover:opacity-90 transition-opacity whitespace-nowrap text-black font-bold"
             />
           </div>
           <p className="text-xs text-gray-400">
@@ -201,7 +199,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
 
         {/* Banner Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-white mb-2">
             Banner Image (Flex Card Background)
           </label>
           <div className="flex gap-2 mb-2">
@@ -210,7 +208,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               value={bannerUrl}
               onChange={(e) => setBannerUrl(e.target.value)}
               placeholder="Paste image URL or upload file"
-              className="input-field flex-1"
+              className="flex-1 px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
             />
             <FileUploader
               id="banner-upload"
@@ -218,7 +216,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               accept="image/*"
               maxSizeMB={10}
               buttonText="Upload"
-              buttonClassName="btn-primary whitespace-nowrap"
+              buttonClassName="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-4 py-3 hover:opacity-90 transition-opacity whitespace-nowrap text-black font-bold"
             />
           </div>
           <p className="text-xs text-gray-400">
@@ -227,7 +225,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
         </div>
 
         <div>
-          <label htmlFor="bio" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="bio" className="block text-sm font-medium text-white mb-2">
             Bio
           </label>
           <textarea
@@ -237,7 +235,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
             placeholder="Tell people about yourself..."
             maxLength={160}
             rows={3}
-            className="input-field resize-none"
+            className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors resize-none"
           />
           <p className="text-xs text-gray-400 mt-1">
             {bio.length}/160 characters
@@ -246,7 +244,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="twitterHandle" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="twitterHandle" className="block text-sm font-medium text-white mb-2">
               Twitter/X
             </label>
             <div className="relative">
@@ -257,13 +255,13 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
                 value={twitterHandle}
                 onChange={(e) => setTwitterHandle(e.target.value.replace('@', ''))}
                 placeholder="username"
-                className="input-field pl-8"
+                className="w-full pl-8 pr-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="telegram" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="telegram" className="block text-sm font-medium text-white mb-2">
               Telegram
             </label>
             <div className="relative">
@@ -274,13 +272,13 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
                 value={telegram}
                 onChange={(e) => setTelegram(e.target.value.replace('@', ''))}
                 placeholder="username"
-                className="input-field pl-8"
+                className="w-full pl-8 pr-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="website" className="block text-sm font-medium text-white mb-2">
               Website
             </label>
             <input
@@ -289,7 +287,7 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
               placeholder="https://..."
-              className="input-field"
+              className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
             />
           </div>
         </div>
@@ -297,13 +295,15 @@ export function UserProfile({ walletAddress }: UserProfileProps) {
         <button
           type="submit"
           disabled={saving}
-          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 w-full"
         >
-          {saving ? 'Saving...' : 'Save Profile'}
+          <span className="text-black text-base md:text-lg font-bold">
+            {saving ? 'Saving...' : 'Save Profile'}
+          </span>
         </button>
 
         {message && (
-          <div className={`p-3 rounded-lg text-sm text-center ${
+          <div className={`p-3 rounded-2xl text-sm text-center ${
             message.startsWith('Error') 
               ? 'bg-red-900/20 border border-red-500/50 text-red-400' 
               : 'bg-green-900/20 border border-green-500/50 text-green-400'

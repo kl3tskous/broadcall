@@ -44,7 +44,6 @@ export default function ProfilePage() {
       if (!address) return
 
       try {
-        // Fetch profile
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
@@ -55,7 +54,6 @@ export default function ProfilePage() {
           setProfile(profileData)
         }
 
-        // Fetch user settings for referral codes
         const { data: settingsData } = await supabase
           .from('user_settings')
           .select('gmgn_ref, axiom_ref, photon_ref, bullx_ref, trojan_ref')
@@ -66,7 +64,6 @@ export default function ProfilePage() {
           setUserSettings(settingsData)
         }
 
-        // Fetch user's calls
         const { data: callsData } = await supabase
           .from('calls')
           .select('*')
@@ -76,7 +73,6 @@ export default function ProfilePage() {
         if (callsData) {
           setCalls(callsData)
           
-          // Calculate stats
           const totalCalls = callsData.length
           let totalROI = 0
           let validCallsCount = 0
@@ -84,7 +80,6 @@ export default function ProfilePage() {
 
           callsData.forEach(call => {
             if (call.initial_price) {
-              // Use ATH price as fallback if current_price is not available
               const priceToUse = call.ath_price || call.current_price
               if (priceToUse) {
                 const roi = ((priceToUse - call.initial_price) / call.initial_price) * 100
@@ -112,7 +107,6 @@ export default function ProfilePage() {
   }, [address])
 
   const formatROI = (initial: number, current: number | null | undefined, ath: number | null | undefined) => {
-    // Use ATH as fallback if current price is not available
     const priceToUse = ath || current
     if (!priceToUse) return 'N/A'
     const roi = ((priceToUse - initial) / initial) * 100
@@ -164,9 +158,57 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen py-8 px-4">
-        <div className="max-w-5xl mx-auto text-center py-20">
-          <div className="text-gray-400">Loading profile...</div>
+      <main className="min-h-screen relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+        <div className="max-w-5xl mx-auto text-center py-20 relative z-10">
+          <div className="text-gray-300">Loading profile...</div>
         </div>
       </main>
     )
@@ -174,12 +216,60 @@ export default function ProfilePage() {
 
   if (!profile) {
     return (
-      <main className="min-h-screen py-8 px-4">
-        <div className="max-w-5xl mx-auto text-center py-20">
+      <main className="min-h-screen relative overflow-hidden bg-black">
+        {/* Atmospheric Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-0"
+            style={{
+              width: '767px',
+              height: '767px',
+              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-0 top-0"
+            style={{
+              width: '901px',
+              height: '720px',
+              background: '#52FF00',
+              filter: 'blur(350px)',
+            }}
+          />
+          <div 
+            className="absolute right-12 bottom-24"
+            style={{
+              width: '269px',
+              height: '269px',
+              background: '#9747FF',
+              filter: 'blur(200px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '575px',
+              height: '575px',
+              background: '#D9D9D9',
+              filter: 'blur(250px)',
+            }}
+          />
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+            style={{
+              width: '741px',
+              height: '300px',
+              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+              filter: 'blur(300px)',
+            }}
+          />
+        </div>
+        <div className="max-w-5xl mx-auto text-center py-20 relative z-10">
           <h1 className="text-2xl font-bold text-white mb-4">Profile Not Found</h1>
-          <p className="text-gray-400 mb-6">This user hasn't set up their profile yet.</p>
-          <Link href="/" className="btn-primary">
-            Back to Home
+          <p className="text-gray-300 mb-6">This user hasn't set up their profile yet.</p>
+          <Link href="/" className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 inline-block hover:opacity-90 transition-opacity">
+            <span className="text-black font-bold">Back to Home</span>
           </Link>
         </div>
       </main>
@@ -187,9 +277,58 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen relative overflow-hidden bg-black">
+      {/* Atmospheric Background */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-0"
+          style={{
+            width: '767px',
+            height: '767px',
+            background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
+            filter: 'blur(250px)',
+          }}
+        />
+        <div 
+          className="absolute left-0 top-0"
+          style={{
+            width: '901px',
+            height: '720px',
+            background: '#52FF00',
+            filter: 'blur(350px)',
+          }}
+        />
+        <div 
+          className="absolute right-12 bottom-24"
+          style={{
+            width: '269px',
+            height: '269px',
+            background: '#9747FF',
+            filter: 'blur(200px)',
+          }}
+        />
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '575px',
+            height: '575px',
+            background: '#D9D9D9',
+            filter: 'blur(250px)',
+          }}
+        />
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+          style={{
+            width: '741px',
+            height: '300px',
+            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+            filter: 'blur(300px)',
+          }}
+        />
+      </div>
+
       {/* Profile Header with Banner */}
-      <div className="profile-header relative">
+      <div className="profile-header relative z-10">
         {/* Banner Image */}
         <div className="w-full h-[300px] bg-gradient-to-br from-orange-900/50 to-red-900/50 overflow-hidden">
           {profile.banner_url ? (
@@ -231,7 +370,7 @@ export default function ProfilePage() {
           <h1 className="text-3xl font-bold text-white">
             {profile.alias || 'Anonymous User'}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-300">
             @{profile.alias || address.slice(0, 8)}
           </p>
 
@@ -275,16 +414,16 @@ export default function ProfilePage() {
 
           {/* Stats */}
           <div className="mt-4 flex space-x-6 text-sm">
-            <span className="text-gray-400">
+            <span className="text-gray-300">
               <strong className="text-white">{stats.total_calls}</strong> Calls
             </span>
-            <span className="text-gray-400">
+            <span className="text-gray-300">
               <strong className={`${stats.avg_roi >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {stats.avg_roi >= 0 ? '+' : ''}{stats.avg_roi.toFixed(1)}%
               </strong> Avg ROI
             </span>
             {stats.best_call_roi !== 0 && (
-              <span className="text-gray-400">
+              <span className="text-gray-300">
                 <strong className={`${stats.best_call_roi > 0 ? 'text-yellow-400' : 'text-red-400'}`}>
                   {stats.best_call_roi > 0 ? '+' : ''}{stats.best_call_roi.toFixed(1)}%
                 </strong> Best Call
@@ -292,40 +431,38 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Tabs */}
-          <div className="mt-6 border-b border-gray-700">
-            <div className="flex space-x-8">
-              <button
-                onClick={() => setActiveTab('calls')}
-                className={`pb-3 px-1 border-b-2 transition-colors ${
-                  activeTab === 'calls' 
-                    ? 'border-orange-500 text-white' 
-                    : 'border-transparent text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                Calls
-              </button>
-              <button
-                onClick={() => setActiveTab('stats')}
-                className={`pb-3 px-1 border-b-2 transition-colors ${
-                  activeTab === 'stats' 
-                    ? 'border-orange-500 text-white' 
-                    : 'border-transparent text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                Stats
-              </button>
-            </div>
+          {/* Glassmorphic Tabs */}
+          <div className="mt-6 flex space-x-4">
+            <button
+              onClick={() => setActiveTab('calls')}
+              className={`px-6 py-3 rounded-2xl transition-all font-bold ${
+                activeTab === 'calls' 
+                  ? 'bg-white/[0.12] backdrop-blur-[20px] border border-white/20 text-white shadow-[0px_4px_6px_rgba(0,0,0,0.38)]' 
+                  : 'bg-white/[0.06] backdrop-blur-[10px] border border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.08]'
+              }`}
+            >
+              Calls
+            </button>
+            <button
+              onClick={() => setActiveTab('stats')}
+              className={`px-6 py-3 rounded-2xl transition-all font-bold ${
+                activeTab === 'stats' 
+                  ? 'bg-white/[0.12] backdrop-blur-[20px] border border-white/20 text-white shadow-[0px_4px_6px_rgba(0,0,0,0.38)]' 
+                  : 'bg-white/[0.06] backdrop-blur-[10px] border border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.08]'
+              }`}
+            >
+              Stats
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Content Area - Twitter/X Style Feed */}
-      <div className="max-w-5xl mx-auto px-8 py-6">
+      {/* Content Area */}
+      <div className="max-w-5xl mx-auto px-8 py-6 relative z-10">
         {activeTab === 'calls' && (
-          <div className="space-y-0 border-t border-gray-800">
+          <div className="space-y-6">
             {calls.length === 0 ? (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-gray-300">
                 No calls yet
               </div>
             ) : (
@@ -335,11 +472,10 @@ export default function ProfilePage() {
                 return (
                   <div 
                     key={call.id}
-                    className="border-b border-gray-800 hover:bg-gray-900/40 transition-colors"
+                    className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:bg-white/[0.14] transition-all"
                   >
-                    {/* User Info Header - clickable to call detail */}
-                    <Link href={`/call/${call.id}`} className="block p-4 pb-0">
-                      <div className="flex items-center gap-3">
+                    <Link href={`/call/${call.id}`} className="block">
+                      <div className="flex items-center gap-3 mb-4">
                         {profile.avatar_url ? (
                           <img 
                             src={profile.avatar_url} 
@@ -361,77 +497,68 @@ export default function ProfilePage() {
                           </p>
                         </div>
                       </div>
-                    </Link>
 
-                    {/* Token Information with "shared @ X mcap" */}
-                    <div className="px-4 pt-3">
-                      <Link href={`/call/${call.id}`} className="block">
-                        <div className="flex items-center gap-3 mb-2">
-                          {call.token_logo ? (
-                            <img 
-                              src={call.token_logo} 
-                              alt={call.token_name || ''} 
-                              className="w-12 h-12 rounded-full"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-base font-bold">
-                              {call.token_symbol?.charAt(0) || '?'}
-                            </div>
-                          )}
-                          <div>
-                            <h3 className="text-lg font-bold text-white">
-                              {call.token_name || call.token_symbol || 'Unknown Token'}
-                            </h3>
-                            <p className="text-sm text-gray-400">
-                              {call.initial_mcap ? `shared @ ${formatMarketCap(call.initial_mcap)} mcap` : 'Token call'}
-                            </p>
+                      <div className="flex items-center gap-3 mb-4">
+                        {call.token_logo ? (
+                          <img 
+                            src={call.token_logo} 
+                            alt={call.token_name || ''} 
+                            className="w-12 h-12 rounded-full"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-base font-bold">
+                            {call.token_symbol?.charAt(0) || '?'}
                           </div>
-                        </div>
-
-                        {/* Thesis */}
-                        {call.thesis && (
-                          <p className="text-sm text-gray-300 mb-3 mt-2">
-                            {call.thesis}
-                          </p>
                         )}
-                      </Link>
-
-                      {/* Embedded Chart */}
-                      <div className="my-3">
-                        <EmbeddedChart tokenAddress={call.token_address} />
+                        <div>
+                          <h3 className="text-lg font-bold text-white">
+                            {call.token_name || call.token_symbol || 'Unknown Token'}
+                          </h3>
+                          <p className="text-sm text-gray-300">
+                            {call.initial_mcap ? `shared @ ${formatMarketCap(call.initial_mcap)} mcap` : 'Token call'}
+                          </p>
+                        </div>
                       </div>
 
-                      {/* Platform Buy Buttons - direct links to platforms */}
-                      <div className="mb-4">
-                        <h3 className="text-2xl md:text-3xl font-bold text-center mb-6">
-                          Buy with{' '}
-                          <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                            @{profile?.alias || 'user'}
-                          </span>{' '}
-                          on your preferred platform
-                        </h3>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                          {platforms.map((platform) => {
-                            const Logo = platform.Logo
-                            const platformUrl = getPlatformUrl(platform.id, call)
-                            return (
-                              <button
-                                key={platform.id}
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  e.stopPropagation()
-                                  if (platformUrl) {
-                                    window.open(platformUrl, '_blank', 'noopener,noreferrer')
-                                  }
-                                }}
-                                className="flex flex-col items-center justify-center gap-2 px-3 py-4 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-xl transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
-                              >
-                                <Logo className="w-16 h-16" />
-                                <span className="text-white font-extrabold text-sm">{platform.name}</span>
-                              </button>
-                            )
-                          })}
-                        </div>
+                      {call.thesis && (
+                        <p className="text-sm text-gray-200 mb-4 italic">
+                          &ldquo;{call.thesis}&rdquo;
+                        </p>
+                      )}
+                    </Link>
+
+                    <div className="my-4 rounded-2xl overflow-hidden">
+                      <EmbeddedChart tokenAddress={call.token_address} />
+                    </div>
+
+                    <div className="mb-2">
+                      <h3 className="text-xl md:text-2xl font-bold text-center mb-4 text-white">
+                        Buy with{' '}
+                        <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                          @{profile?.alias || 'user'}
+                        </span>
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        {platforms.map((platform) => {
+                          const Logo = platform.Logo
+                          const platformUrl = getPlatformUrl(platform.id, call)
+                          return (
+                            <button
+                              key={platform.id}
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                if (platformUrl) {
+                                  window.open(platformUrl, '_blank', 'noopener,noreferrer')
+                                }
+                              }}
+                              className="flex flex-col items-center justify-center gap-2 px-3 py-4 bg-white/[0.08] border border-white/10 backdrop-blur-[10px] hover:bg-white/[0.12] rounded-2xl transition-all"
+                            >
+                              <Logo className="w-14 h-14" />
+                              <span className="text-white font-bold text-xs">{platform.name}</span>
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
                   </div>
@@ -442,19 +569,19 @@ export default function ProfilePage() {
         )}
 
         {activeTab === 'stats' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
-              <h3 className="text-sm text-gray-400 mb-2">Total Calls</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <h3 className="text-sm text-gray-300 mb-2">Total Calls</h3>
               <p className="text-3xl font-bold text-white">{stats.total_calls}</p>
             </div>
-            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
-              <h3 className="text-sm text-gray-400 mb-2">Average ROI</h3>
+            <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <h3 className="text-sm text-gray-300 mb-2">Average ROI</h3>
               <p className={`text-3xl font-bold ${stats.avg_roi >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {stats.avg_roi >= 0 ? '+' : ''}{stats.avg_roi.toFixed(1)}%
               </p>
             </div>
-            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
-              <h3 className="text-sm text-gray-400 mb-2">Best Call</h3>
+            <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <h3 className="text-sm text-gray-300 mb-2">Best Call</h3>
               <p className={`text-3xl font-bold ${stats.best_call_roi >= 0 ? 'text-yellow-400' : 'text-red-400'}`}>
                 {stats.best_call_roi >= 0 ? '+' : ''}{stats.best_call_roi.toFixed(1)}%
               </p>

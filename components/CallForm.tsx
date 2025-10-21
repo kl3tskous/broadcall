@@ -82,12 +82,12 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
   }
 
   return (
-    <div className="card">
-      <h2 className="text-2xl font-bold mb-6">Create New Call</h2>
+    <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">Create New Call</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="tokenAddress" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="tokenAddress" className="block text-sm font-medium text-white mb-2">
             Token Address *
           </label>
           <input
@@ -96,13 +96,13 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
             value={tokenAddress}
             onChange={(e) => setTokenAddress(e.target.value)}
             placeholder="Enter Solana token address"
-            className="input-field"
+            className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="thesis" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="thesis" className="block text-sm font-medium text-white mb-2">
             Thesis (Optional)
           </label>
           <textarea
@@ -110,13 +110,13 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
             value={thesis}
             onChange={(e) => setThesis(e.target.value)}
             placeholder="Why is this a good call?"
-            className="input-field min-h-[100px]"
+            className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors resize-none min-h-[100px]"
             rows={4}
           />
         </div>
 
         {/* Referral Info */}
-        <div className="bg-orange-900/20 border border-orange-500/30 rounded-lg p-4">
+        <div className="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-4">
           <div className="flex items-start gap-3">
             <div className="text-orange-400 mt-0.5">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -124,7 +124,7 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
               </svg>
             </div>
             <div className="flex-1">
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-gray-200">
                 Your saved referral codes will be automatically attached to this call.
               </p>
               <Link href="/settings" className="text-sm text-orange-400 hover:text-orange-300 inline-flex items-center gap-1 mt-1">
@@ -137,27 +137,29 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 w-full"
         >
-          {fetchingMetadata ? 'Fetching token data...' : loading ? 'Creating call...' : 'Generate Link'}
+          <span className="text-black text-base md:text-lg font-bold">
+            {fetchingMetadata ? 'Fetching token data...' : loading ? 'Creating call...' : 'Generate Link'}
+          </span>
         </button>
       </form>
 
       {generatedLink && (
-        <div className="mt-6 p-4 bg-dark-bg border border-accent-primary rounded-lg">
-          <p className="text-sm text-gray-400 mb-2">Your call link:</p>
-          <div className="flex items-center gap-2">
+        <div className="mt-6 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl p-4">
+          <p className="text-sm text-gray-300 mb-2">Your call link:</p>
+          <div className="flex flex-col sm:flex-row items-stretch gap-2">
             <input
               type="text"
               value={generatedLink}
               readOnly
-              className="input-field flex-1 text-sm"
+              className="flex-1 px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white text-sm focus:outline-none"
             />
             <button
               onClick={copyToClipboard}
-              className="btn-primary whitespace-nowrap"
+              className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity whitespace-nowrap"
             >
-              Copy
+              <span className="text-black font-bold">Copy</span>
             </button>
           </div>
         </div>
