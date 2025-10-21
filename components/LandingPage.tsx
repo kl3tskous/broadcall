@@ -3,8 +3,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { UserPlus } from 'lucide-react'
+import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 
 export default function LandingPage() {
+  const { setVisible } = useWalletModal()
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Gradient Blur Orbs */}
@@ -48,12 +50,12 @@ export default function LandingPage() {
           </nav>
 
           {/* Launch App Button */}
-          <Link
-            href="/"
+          <button
+            onClick={() => setVisible(true)}
             className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-[20px] md:rounded-[30px] px-4 md:px-8 py-2 md:py-4 hover:opacity-90 transition-opacity"
           >
             <span className="text-black text-sm md:text-xl font-bold">Launch App</span>
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -80,8 +82,8 @@ export default function LandingPage() {
           </Link>
 
           {/* Create Profile Button */}
-          <Link
-            href="/"
+          <button
+            onClick={() => setVisible(true)}
             className="w-full sm:w-[234px] h-[56px] md:h-[66px] bg-[rgba(126,126,126,0.29)] border border-white/20 backdrop-blur-[10px] rounded-xl flex items-center justify-center gap-2 md:gap-3 hover:bg-[rgba(126,126,126,0.4)] transition-all group"
           >
             <UserPlus className="w-6 h-6 md:w-8 md:h-8" strokeWidth={2.5} style={{ 
@@ -99,7 +101,7 @@ export default function LandingPage() {
             <span className="text-lg md:text-[22px] font-bold bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] bg-clip-text text-transparent">
               Create Profile
             </span>
-          </Link>
+          </button>
         </div>
       </div>
 

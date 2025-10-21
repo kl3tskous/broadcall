@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { WalletProvider } from '@/components/WalletProvider'
-import { Header } from '@/components/Header'
+import { ConditionalHeader } from '@/components/ConditionalHeader'
 
 export const metadata: Metadata = {
   title: 'BroadCall - Solana Influencer Platform',
@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <WalletProvider>
-          <Header />
+          <ConditionalHeader />
           {children}
         </WalletProvider>
       </body>
