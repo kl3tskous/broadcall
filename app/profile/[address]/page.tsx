@@ -6,6 +6,7 @@ import { supabase, Profile } from '@/utils/supabaseClient'
 import Link from 'next/link'
 import EmbeddedChart from '@/components/EmbeddedChart'
 import { platforms } from '@/components/PlatformLogos'
+import { CallPageHeader } from '@/components/CallPageHeader'
 
 interface CallStats {
   total_calls: number
@@ -207,6 +208,8 @@ export default function ProfilePage() {
         backgroundAttachment: 'fixed',
       }}
     >
+      {/* Glassmorphic Header */}
+      <CallPageHeader />
 
       {/* Profile Header with Banner */}
       <div className="profile-header relative z-10">

@@ -7,6 +7,7 @@ import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
 import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/components/PlatformLogos'
+import { CallPageHeader } from '@/components/CallPageHeader'
 
 export default function SettingsPage() {
   const { publicKey } = useWallet()
@@ -141,6 +142,8 @@ export default function SettingsPage() {
         backgroundAttachment: 'fixed',
       }}
     >
+      {/* Glassmorphic Header */}
+      <CallPageHeader />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="flex items-center justify-between mb-8">
@@ -150,12 +153,6 @@ export default function SettingsPage() {
             </h1>
             <p className="text-gray-300">Manage your referral codes and preferences</p>
           </div>
-          <button
-            onClick={() => router.push('/')}
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            ← Back
-          </button>
         </div>
 
         <UserProfile walletAddress={publicKey.toString()} />
