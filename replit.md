@@ -3,6 +3,27 @@
 ## Overview
 Callor is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
+## Recent Changes
+- ✅ **Complete Token Call Page Redesign - Figma-Based Glassmorphic Overhaul** (October 21, 2025)
+  - **Major visual transformation** inspired by user's Figma design for maximum social media impact
+  - **Atmospheric layered background**: Pure black with gradient blur orbs for depth
+    - Orange/red gradient (767px) at bottom center • Green (901×720px) at top-left • Purple (269px) at bottom-right • Gray center blur • Red/brown gradient for warmth
+  - **Decorative corner accents**: White/12% diagonal lines in all corners (38.66° rotation)
+  - **Hero glassmorphic card**: Large centered card (white/12% bg, 20px backdrop blur, white/20% border, 34px rounded corners)
+    - Token name: Massive 5xl-7xl typography with "$" prefix (e.g., "$Futardio")
+    - ROI display: Matching large orange gradient text showing performance (+400% style)
+    - Token logo: Positioned in top-right corner (80-96px rounded square with shadow)
+    - "Since called by" section: Profile avatar (48px) + @username + orange verification badge (circular with checkmark)
+    - Inline chart: DexScreener embed (250-350px) integrated within hero card
+  - **"APE on your favorite platform below"**: Bold centered headline with "APE" in orange gradient
+    - Horizontal scrollable platform buttons (160×160px, rounded-[34px], hidden scrollbar)
+    - Larger, more prominent glassmorphic design matching landing page aesthetic
+  - **Streamlined single-page layout**: Removed tabs/profile sections for focused call presentation
+  - **Consistent glassmorphic styling**: Thesis quote, stats/social sharing, "More calls" sections all use unified design language
+  - **Fully responsive**: Mobile-first with Tailwind md: breakpoints for desktop optimization
+  - **Functionality preserved**: All tracking, referral links, social sharing, and price updates work perfectly
+  - **Architect-approved**: Clean implementation maintaining all existing features with improved UX
+
 ## User Preferences
 I prefer detailed explanations.
 Ask before making major changes.
