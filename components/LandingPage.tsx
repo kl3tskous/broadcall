@@ -60,7 +60,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <div className="relative max-w-[1019px] mx-auto mt-16 md:mt-32 lg:mt-[251px] px-4">
+      <div className="relative max-w-[1019px] mx-auto mt-8 md:mt-16 lg:mt-[120px] px-4">
         {/* Main Headline */}
         <h1 className="text-center font-extrabold text-4xl md:text-6xl lg:text-[80px] leading-tight md:leading-tight lg:leading-[97px] bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] bg-clip-text text-transparent mb-4 md:mb-6">
           Turn Calls Into Income.
