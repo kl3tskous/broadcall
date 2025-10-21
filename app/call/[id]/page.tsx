@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
+import { CallPageHeader } from '@/components/CallPageHeader'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
 
@@ -277,6 +278,9 @@ export default function CallPage() {
 
   return (
     <main className="relative min-h-screen bg-black overflow-hidden">
+      {/* Glassmorphic Header */}
+      <CallPageHeader />
+
       {/* Gradient Blur Orbs - Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Orange/Red Gradient Blur - Bottom Center */}
