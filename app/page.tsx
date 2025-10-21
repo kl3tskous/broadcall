@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { CallForm } from '@/components/CallForm'
 import OnboardingFlow from '@/components/OnboardingFlow'
+import LandingPage from '@/components/LandingPage'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
 
 export default function Home() {
@@ -65,6 +66,11 @@ export default function Home() {
   const handleOnboardingComplete = () => {
     setShowOnboarding(false)
     window.location.reload()
+  }
+
+  // Show landing page when no wallet is connected
+  if (!publicKey) {
+    return <LandingPage />
   }
 
   if (publicKey && showOnboarding) {

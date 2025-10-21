@@ -34,6 +34,22 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
 
 ## Recent Changes
+- ✅ **Beautiful Glassmorphic Landing Page** (October 2025)
+  - Designed and implemented stunning pre-signup landing page based on Figma design
+  - **Dark atmospheric background**: Black background with three gradient blur orbs (orange, green, purple) for depth
+  - **Glassmorphic header**: Semi-transparent navigation bar (white/6% opacity) with backdrop blur
+    - Callor logo on left (86px desktop, 60px mobile)
+    - Navigation links (Home, Features, Career) centered on desktop, hidden on mobile
+    - Orange gradient "Launch App" button on right
+  - **Hero section**: Giant orange gradient headline "Turn Calls Into Income." (80px desktop, responsive mobile)
+    - Engaging subtitle about sharing alpha and earning from followers
+    - Two glassmorphic CTA buttons: "View KOLs" and "Create Profile" with user-add icon
+  - **Platform logos grid**: 5 glassmorphic cards (160x160px) showcasing trading platform logos
+    - 3-column grid on mobile (2 rows), 5-column grid on desktop (1 row)
+    - Features GMGN, Axiom, Photon, BullX, Trojan logos with backdrop blur effects
+  - **Fully responsive**: Mobile-first design with breakpoints for tablet and desktop
+  - **Smart routing**: Landing page shows for non-authenticated users, existing app for connected wallets
+
 - ✅ **Signal Icon Badge on Call Cards** (October 2025)
   - Added distinctive orange "C" signal/broadcast icon to all call cards
   - **Corner sticker design**: Icon positioned with origin-top-left rotation (17deg) and precise negative offsets (-14px for pinned, -10px for recent) to nestle naturally into corner
