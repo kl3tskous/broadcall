@@ -1,0 +1,2211 @@
+/* Cover */
+
+position: relative;
+width: 1920px;
+height: 1290px;
+
+background: #000000;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+width: 767px;
+height: 767px;
+left: calc(50% - 767px/2 - 11.5px);
+top: 907px;
+
+background: linear-gradient(270deg, rgba(255, 86, 5, 0.7) -13.53%, rgba(255, 119, 4, 0.7) 54.06%, rgba(255, 161, 3, 0.7) 116.45%);
+filter: blur(300px);
+
+
+/* Ellipse 68 */
+
+position: absolute;
+width: 901px;
+height: 720px;
+left: calc(50% - 901px/2 - 483.5px);
+top: -548px;
+
+background: rgba(20, 241, 149, 0.5);
+filter: blur(300px);
+
+
+/* Ellipse 3 */
+
+position: absolute;
+width: 269px;
+height: 269px;
+left: calc(50% - 269px/2 + 404.5px);
+top: 1128px;
+
+background: linear-gradient(180deg, #6D31BA 0%, rgba(185, 113, 61, 0) 100%);
+filter: blur(300px);
+
+
+/* Group 181 */
+
+position: absolute;
+width: 1019px;
+height: 321px;
+left: calc(50% - 1019px/2 + 0.5px);
+top: 311px;
+
+
+
+/* Group 4 */
+
+position: absolute;
+width: 216px;
+height: 66px;
+left: calc(50% - 216px/2 - 118px);
+top: 566px;
+
+
+
+/* PlayStore */
+
+position: absolute;
+width: 216px;
+height: 66px;
+left: 734px;
+top: 566px;
+
+
+
+/* Rectangle 2 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 216px;
+height: 66px;
+left: 734px;
+top: 566px;
+
+background: rgba(126, 126, 126, 0.29);
+border: 1px solid rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 12px;
+
+
+/* Group 1 */
+
+position: absolute;
+width: 127px;
+height: 27px;
+left: 795px;
+top: 583px;
+
+
+
+/* View KOLs */
+
+position: absolute;
+width: 127px;
+height: 27px;
+left: 795px;
+top: 583px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 22px;
+line-height: 27px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Group 5 */
+
+position: absolute;
+width: 234px;
+height: 66px;
+left: calc(50% - 234px/2 + 127px);
+top: 566px;
+
+
+
+/* PlayStore */
+
+position: absolute;
+width: 234px;
+height: 66px;
+left: 970px;
+top: 566px;
+
+
+
+/* Rectangle 2 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 234px;
+height: 66px;
+left: 970px;
+top: 566px;
+
+background: rgba(126, 126, 126, 0.29);
+border: 1px solid rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 12px;
+
+
+/* Group 1 */
+
+position: absolute;
+width: 151.12px;
+height: 30px;
+left: 1030.48px;
+top: calc(50% - 30px/2 - 46px);
+
+
+
+/* Create Profile */
+
+position: absolute;
+width: 151.12px;
+height: 30px;
+left: calc(50% - 151.12px/2 + 146.04px);
+top: calc(50% - 30px/2 - 46px);
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 22px;
+line-height: 27px;
+text-align: center;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+
+/* user-add */
+
+position: absolute;
+width: 46.43px;
+height: 50px;
+left: 980.91px;
+top: calc(50% - 50px/2 - 46px);
+
+
+
+/* union-1 */
+
+position: absolute;
+left: 7.5%;
+right: 8.33%;
+top: 16.67%;
+bottom: 16.67%;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+
+
+/* Turn Calls Into Income.  */
+
+position: absolute;
+width: 1000.25px;
+height: 194px;
+left: calc(50% - 1000.25px/2 + 1.05px);
+top: 311px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 800;
+font-size: 80px;
+line-height: 97px;
+text-align: center;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+
+/* Share your alpha. When your followers ape in, you get paid.  Built for KOLs, made for crypto traders. */
+
+position: absolute;
+width: 1019px;
+height: 78px;
+left: calc(50% - 1019px/2 + 0.5px);
+top: 433px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 39px;
+text-align: center;
+
+color: #FFFFFF;
+
+opacity: 0.8;
+
+
+/* Ellipse 1 */
+
+position: absolute;
+width: 575px;
+height: 575px;
+left: 702px;
+top: 540px;
+
+background: linear-gradient(0deg, rgba(217, 217, 217, 0), rgba(217, 217, 217, 0));
+filter: blur(250px);
+
+
+/* compass-fill 1 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 1563px;
+top: 1744px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 3.12%;
+right: 3.12%;
+top: 0%;
+bottom: -0.09%;
+
+background: #000000;
+
+
+/* Ellipse 16 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 730px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 28 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 730px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 40 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 730px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 52 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 730px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 17 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 746px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 29 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 746px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 41 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 746px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 53 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 746px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 18 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 762px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 30 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 762px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 42 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 762px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 762px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 19 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 778px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 31 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 778px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 43 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 778px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 55 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 778px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 20 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 794px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 32 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 794px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 44 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 794px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 56 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 794px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 21 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 810px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 33 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 810px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 45 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 810px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 57 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 810px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 22 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 826px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 34 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 826px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 46 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 826px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 58 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 826px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 23 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 842px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 35 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 842px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 47 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 842px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 59 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 842px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 24 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 858px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 36 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 858px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 48 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 858px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 60 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 858px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 25 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 874px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 37 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 874px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 49 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 874px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 61 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 874px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 26 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 890px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 38 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 890px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 50 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 890px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 62 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 890px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 27 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 906px;
+top: 638px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 64 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 914px;
+top: 637px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 39 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 906px;
+top: 654px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 65 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 914px;
+top: 653px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 51 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 906px;
+top: 670px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 66 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 914px;
+top: 669px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 63 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 906px;
+top: 686px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Ellipse 67 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 914px;
+top: 685px;
+
+
+
+/* Ellipse 16 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group 182 */
+
+position: absolute;
+width: 1060px;
+height: 623px;
+left: calc(50% - 1060px/2);
+top: 757px;
+
+
+
+/* Ellipse 9 */
+
+position: absolute;
+width: 741px;
+height: 300px;
+left: calc(50% - 741px/2 + 22.5px);
+top: 1080px;
+
+background: linear-gradient(180deg, #671834 0%, #512D13 100%);
+filter: blur(300px);
+
+
+/* Group 72 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 610px;
+top: 760px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 270px);
+top: 760px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Axiom Expressive-1 1 */
+
+position: absolute;
+width: 134px;
+height: 134px;
+left: 623px;
+top: 770px;
+
+background: url(Axiom Expressive-1.png);
+
+
+/* Group 88 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 430px;
+top: 757px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 450px);
+top: 757px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 23 */
+
+position: absolute;
+width: 72px;
+height: 72px;
+left: 474px;
+top: 804px;
+
+
+
+/* Untitled design (23) 1 */
+
+position: absolute;
+width: 72px;
+height: 72px;
+left: 474px;
+top: 804px;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(.png);
+
+
+/* Group 74 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 790px;
+top: 757px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 90px);
+top: 757px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Untitled design (24) 1 */
+
+position: absolute;
+width: 140px;
+height: 140px;
+left: calc(50% - 140px/2 - 90px);
+top: 767px;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+background: url(.png);
+
+
+/* Group 82 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 970px;
+top: 760px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 90px);
+top: 760px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 77 */
+
+position: absolute;
+width: 85px;
+height: 85px;
+left: calc(50% - 85px/2 + 86.5px);
+top: calc(50% - 85px/2 + 191.5px);
+
+
+
+/* Untitled design (25) 1 */
+
+position: absolute;
+width: 85px;
+height: 85px;
+left: calc(50% - 85px/2 + 86.5px);
+top: calc(50% - 85px/2 + 191.5px);
+
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 34.98%;
+bottom: 34.7%;
+
+background: #FF7324;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 9.18%;
+bottom: 74.56%;
+
+background: #FF7324;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 74.84%;
+bottom: 8.9%;
+
+background: #FF7324;
+
+
+/* Group 83 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 1330px;
+top: 760px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.38));
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 450px);
+top: 760px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 80 */
+
+position: absolute;
+width: 72px;
+height: 81.43px;
+left: 1374px;
+top: 800px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 72.27%;
+right: 25.4%;
+top: 62.75%;
+bottom: 32.78%;
+
+background: linear-gradient(0deg, #05AAC5 0.01%, #71E0EC 100.01%);
+
+
+/* Vector */
+
+position: absolute;
+left: 71.9%;
+right: 25.02%;
+top: 62.38%;
+bottom: 32.23%;
+
+background: linear-gradient(0deg, #05AAC5 0.01%, #71E0EC 100.01%);
+
+
+/* Vector */
+
+position: absolute;
+left: 71.56%;
+right: 24.69%;
+top: 62.02%;
+bottom: 31.67%;
+
+background: linear-gradient(0deg, #05AAC5 0%, #71E0EC 100%);
+
+
+/* Group 81 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 1150px;
+top: 757px;
+
+filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.38));
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 270px);
+top: 757px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Vector */
+
+position: absolute;
+left: 62.19%;
+right: 34.06%;
+top: 61.78%;
+bottom: 31.97%;
+
+background: linear-gradient(92.81deg, #FFFFFF 10.81%, #FFFFFF 94.77%);
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 360px);
+top: 944px;
+
+background: rgba(255, 255, 255, 0.12);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.38);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Rectangle 5 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 180px);
+top: 944px;
+
+background: rgba(255, 255, 255, 0.12);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.38);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2);
+top: 942px;
+
+background: rgba(255, 255, 255, 0.12);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.38);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 180px);
+top: 942px;
+
+background: rgba(255, 255, 255, 0.12);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.38);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Rectangle 8 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 360px);
+top: 942px;
+
+background: rgba(255, 255, 255, 0.12);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.38);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* harmony-one-logo 1 */
+
+position: absolute;
+width: 66px;
+height: 65.82px;
+left: 1287px;
+top: 991px;
+
+
+
+/* Shape */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: linear-gradient(45deg, #00AEE9 6.89%, #69FABD 93.89%);
+
+
+/* Group */
+
+position: absolute;
+left: 38.85%;
+right: 59.48%;
+top: 45.27%;
+bottom: 52.25%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 38.85%;
+right: 59.48%;
+top: 45.27%;
+bottom: 52.25%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 38.85%;
+right: 59.48%;
+top: 45.27%;
+bottom: 52.25%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 39.43%;
+right: 59.66%;
+top: 45.83%;
+bottom: 53.3%;
+
+background: #FFFFFF;
+
+
+/* Header */
+
+position: absolute;
+width: 1480px;
+height: 100px;
+left: calc(50% - 1480px/2);
+top: 60px;
+
+
+
+/* Header */
+
+position: absolute;
+width: 1480px;
+height: 100px;
+left: 220px;
+top: 60px;
+
+background: rgba(255, 255, 255, 0.06);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 50px;
+
+
+/* Home */
+
+position: absolute;
+width: 67px;
+height: 29px;
+left: 778px;
+top: 96px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Career */
+
+position: absolute;
+width: 77px;
+height: 29px;
+left: 1064px;
+top: 96px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Features */
+
+position: absolute;
+width: 99px;
+height: 29px;
+left: 905px;
+top: 96px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* LaunchApp */
+
+position: absolute;
+width: 189px;
+height: 53px;
+left: 1481px;
+top: 83px;
+
+
+
+/* Rectangle 1 */
+
+position: absolute;
+width: 189px;
+height: 53px;
+left: 1481px;
+top: 83px;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+border-radius: 30px;
+
+
+/* Launch App */
+
+position: absolute;
+width: 117px;
+height: 24px;
+left: 1517px;
+top: 98px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 20px;
+line-height: 24px;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Untitled design (21) 1 */
+
+position: absolute;
+width: 86px;
+height: 86px;
+left: 255px;
+top: 67px;
+
+
+
+/* Clip path group */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* ce1cce913d */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+background: #000000;
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+background: url(.png);
