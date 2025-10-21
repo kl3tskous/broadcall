@@ -4,19 +4,26 @@
 BroadCall is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## Recent Changes
+- ✅ **Custom Background Image Implementation** (October 21, 2025)
+  - **ALL pages now use custom background image** (`/background.png`) for consistent visual identity
+  - Replaced programmatic CSS gradient blur orbs with static background image
+  - **Background styling**: cover, center position, no-repeat, fixed attachment on main pages
+  - **Applied across all pages and states**:
+    - Token Call Page (loading, not-found, authenticated)
+    - Settings Page (no-wallet, loading, authenticated)
+    - Profile Page (loading, not-found, authenticated)
+    - Homepage (authenticated)
+    - Landing Page
+  - **Glassmorphic UI preserved**: All cards, inputs, and buttons maintain their frosted glass aesthetic
+  - **Architect-approved**: Clean implementation with no functional regressions
+
 - ✅ **Universal Glassmorphic UI Redesign - Complete Platform Overhaul** (October 21, 2025)
-  - **ALL pages now feature atmospheric 5-orb background system** for visual consistency
-    - Orange/Red gradient orb (767px) at bottom center
-    - Green orb (901×720px) at top-left
-    - Purple orb (269px) at bottom-right
-    - Gray center orb (575px) for depth
-    - Red/Brown gradient orb (741×300px) at bottom third
   - **Settings Page**: Glassmorphic profile editor, referral code section, semi-transparent form fields
   - **Profile Page**: Glassmorphic tabs, call cards, and stats sections (maintains Twitter-style banner/avatar header)
   - **Homepage**: Glassmorphic "Create New Call" form card with atmospheric background
-  - **All page states**: Loading, error, not-found, and authenticated views all use consistent atmospheric backgrounds
+  - **All page states**: Loading, error, not-found, and authenticated views use consistent styling
   - **Unified glassmorphic styling**: Cards (white/12%, 20px blur, white/20% borders, 34px corners), Inputs (white/8%, 10px blur, white/10% borders, 2xl corners)
-  - **Architect-approved**: Complete visual consistency across entire platform without functional regressions
+  - **Complete visual consistency across entire platform**
 
 - ✅ **Token Call Page Glassmorphic Header** (October 21, 2025)
   - Replaced black header on token call pages with glassmorphic design matching landing page
