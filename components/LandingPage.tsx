@@ -106,7 +106,11 @@ export default function LandingPage() {
       </div>
 
       {/* Platform Logos Infinite Scroll */}
-      <div className="relative w-full overflow-hidden pb-12 md:pb-16">
+      <div className="relative max-w-[1060px] mx-auto overflow-hidden pb-12 md:pb-16">
+        {/* Fade overlays */}
+        <div className="absolute left-0 top-0 bottom-12 md:bottom-16 w-32 md:w-48 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-12 md:bottom-16 w-32 md:w-48 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+        
         <div className="flex animate-scroll">
           {/* First set of logos */}
           <div className="flex gap-4 md:gap-6 shrink-0">
