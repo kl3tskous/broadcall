@@ -76,64 +76,16 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-black">
-      {/* Atmospheric Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Orange/Red gradient orb */}
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-0"
-          style={{
-            width: '767px',
-            height: '767px',
-            background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-            filter: 'blur(250px)',
-          }}
-        />
-        
-        {/* Green orb */}
-        <div 
-          className="absolute left-0 top-0"
-          style={{
-            width: '901px',
-            height: '720px',
-            background: '#52FF00',
-            filter: 'blur(350px)',
-          }}
-        />
-        
-        {/* Purple orb */}
-        <div 
-          className="absolute right-12 bottom-24"
-          style={{
-            width: '269px',
-            height: '269px',
-            background: '#9747FF',
-            filter: 'blur(200px)',
-          }}
-        />
-        
-        {/* Gray center blur */}
-        <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: '575px',
-            height: '575px',
-            background: '#D9D9D9',
-            filter: 'blur(250px)',
-          }}
-        />
-        
-        {/* Additional gradient for depth */}
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-          style={{
-            width: '741px',
-            height: '300px',
-            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-            filter: 'blur(300px)',
-          }}
-        />
-      </div>
+    <main 
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
         <div className="text-center mb-8">

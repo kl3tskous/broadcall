@@ -8,17 +8,16 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 export default function LandingPage() {
   const { setVisible } = useWalletModal()
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Gradient Blur Orbs */}
-      <div className="absolute w-[767px] h-[767px] left-1/2 -translate-x-1/2 top-[907px] opacity-70">
-        <div className="w-full h-full bg-gradient-to-r from-[#FF5605]/70 via-[#FF7704]/70 to-[#FFA103]/70 blur-[300px]" />
-      </div>
-      <div className="absolute w-[901px] h-[720px] left-1/4 -translate-x-1/2 -top-[548px] opacity-50">
-        <div className="w-full h-full bg-[rgba(20,241,149,0.5)] blur-[300px]" />
-      </div>
-      <div className="absolute w-[269px] h-[269px] right-1/4 top-[1128px]">
-        <div className="w-full h-full bg-gradient-to-b from-[#6D31BA] to-transparent blur-[300px]" />
-      </div>
+    <div 
+      className="relative min-h-screen overflow-hidden"
+      style={{
+        backgroundImage: 'url(/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
 
       {/* Header */}
       <header className="relative max-w-[1480px] mx-auto mt-8 md:mt-[60px] px-4">
