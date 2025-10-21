@@ -429,13 +429,26 @@ export default function CallPage() {
           </div>
         </div>
 
-        {/* APE on your favorite platform below */}
+        {/* Every buy powers call */}
         <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-white">
-            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-              APE
-            </span>{' '}
-            on your favorite platform below
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-white flex items-center justify-center gap-4">
+            {/* Left Arrow */}
+            <svg className="w-8 h-8 md:w-10 md:h-10 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 16L6 10h12z"/>
+            </svg>
+            
+            <span>
+              Every buy powers{' '}
+              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                @{creatorAlias || 'Anonymous'}
+              </span>
+              's call
+            </span>
+            
+            {/* Right Arrow */}
+            <svg className="w-8 h-8 md:w-10 md:h-10 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 16L6 10h12z"/>
+            </svg>
           </h2>
           
           {/* Horizontal Scrollable Platform Buttons */}
