@@ -351,34 +351,34 @@ export default function CallPage() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-8 md:py-16">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 py-4 md:py-6">
         
         {/* Hero Token Card */}
-        <div className="mb-12 relative">
-          <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-10 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+        <div className="mb-6 relative">
+          <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-4 md:p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
             
             {/* Token Logo - Top Right */}
-            <div className="absolute top-6 right-6 md:top-10 md:right-10">
+            <div className="absolute top-4 right-4 md:top-6 md:right-6">
               {call.token_logo ? (
                 <img 
                   src={call.token_logo} 
                   alt={call.token_symbol || 'Token'} 
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-lg"
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-xl shadow-lg"
                 />
               ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl font-bold shadow-lg">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl font-bold shadow-lg">
                   {call.token_symbol?.charAt(0) || '?'}
                 </div>
               )}
             </div>
 
             {/* Token Name & ROI */}
-            <div className="mb-6">
-              <h1 className="text-5xl md:text-7xl font-black text-white mb-4">
+            <div className="mb-4">
+              <h1 className="text-4xl md:text-6xl font-black text-white mb-3">
                 ${call.token_symbol || 'TOKEN'}
               </h1>
               {call.initial_price && call.current_price && (
-                <div className={`text-5xl md:text-7xl font-black ${
+                <div className={`text-4xl md:text-6xl font-black ${
                   roi >= 0 ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 'text-red-500'
                 } bg-clip-text text-transparent`}>
                   {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
@@ -387,7 +387,7 @@ export default function CallPage() {
             </div>
 
             {/* Since called by */}
-            <div className="mb-6">
+            <div className="mb-4">
               <p className="text-gray-400 text-lg mb-3">Since called by:</p>
               <Link href={`/profile/${call.creator_wallet}`} className="flex items-center gap-3 group">
                 <div className="flex-shrink-0">
@@ -421,7 +421,7 @@ export default function CallPage() {
               <div className="rounded-2xl overflow-hidden shadow-lg">
                 <iframe
                   src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                  className="w-full h-[250px] md:h-[350px] border-0"
+                  className="w-full h-[200px] md:h-[280px] border-0"
                   style={{ background: 'transparent' }}
                 />
               </div>
@@ -430,8 +430,8 @@ export default function CallPage() {
         </div>
 
         {/* APE on your favorite platform below */}
-        <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-white">
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-white">
             <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
               APE
             </span>{' '}
@@ -439,18 +439,18 @@ export default function CallPage() {
           </h2>
           
           {/* Horizontal Scrollable Platform Buttons */}
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-4 mx-auto">
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-3 mx-auto">
               {platforms.map((platform) => {
                 const Logo = platform.Logo
                 return (
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex-shrink-0 flex flex-col items-center justify-center gap-2 w-40 h-40 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[34px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
+                    className="flex-shrink-0 flex flex-col items-center justify-center gap-2 w-32 h-32 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[28px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
                   >
-                    <Logo className="w-16 h-16" />
-                    <span className="text-white font-extrabold text-sm">{platform.name}</span>
+                    <Logo className="w-12 h-12" />
+                    <span className="text-white font-extrabold text-xs">{platform.name}</span>
                   </button>
                 )
               })}
