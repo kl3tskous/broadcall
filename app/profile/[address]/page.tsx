@@ -158,55 +158,15 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen relative overflow-hidden bg-black">
-        {/* Atmospheric Background */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-0"
-            style={{
-              width: '767px',
-              height: '767px',
-              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-0 top-0"
-            style={{
-              width: '901px',
-              height: '720px',
-              background: '#52FF00',
-              filter: 'blur(350px)',
-            }}
-          />
-          <div 
-            className="absolute right-12 bottom-24"
-            style={{
-              width: '269px',
-              height: '269px',
-              background: '#9747FF',
-              filter: 'blur(200px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: '575px',
-              height: '575px',
-              background: '#D9D9D9',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-            style={{
-              width: '741px',
-              height: '300px',
-              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-              filter: 'blur(300px)',
-            }}
-          />
-        </div>
+      <main 
+        className="min-h-screen relative overflow-hidden"
+        style={{
+          backgroundImage: 'url(/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="max-w-5xl mx-auto text-center py-20 relative z-10">
           <div className="text-gray-300">Loading profile...</div>
         </div>
@@ -216,55 +176,15 @@ export default function ProfilePage() {
 
   if (!profile) {
     return (
-      <main className="min-h-screen relative overflow-hidden bg-black">
-        {/* Atmospheric Background */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-0"
-            style={{
-              width: '767px',
-              height: '767px',
-              background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-0 top-0"
-            style={{
-              width: '901px',
-              height: '720px',
-              background: '#52FF00',
-              filter: 'blur(350px)',
-            }}
-          />
-          <div 
-            className="absolute right-12 bottom-24"
-            style={{
-              width: '269px',
-              height: '269px',
-              background: '#9747FF',
-              filter: 'blur(200px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: '575px',
-              height: '575px',
-              background: '#D9D9D9',
-              filter: 'blur(250px)',
-            }}
-          />
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-            style={{
-              width: '741px',
-              height: '300px',
-              background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-              filter: 'blur(300px)',
-            }}
-          />
-        </div>
+      <main 
+        className="min-h-screen relative overflow-hidden"
+        style={{
+          backgroundImage: 'url(/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="max-w-5xl mx-auto text-center py-20 relative z-10">
           <h1 className="text-2xl font-bold text-white mb-4">Profile Not Found</h1>
           <p className="text-gray-300 mb-6">This user hasn't set up their profile yet.</p>
@@ -277,55 +197,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-black">
-      {/* Atmospheric Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-0"
-          style={{
-            width: '767px',
-            height: '767px',
-            background: 'linear-gradient(180deg, #FF5605 0%, #FFA103 100%)',
-            filter: 'blur(250px)',
-          }}
-        />
-        <div 
-          className="absolute left-0 top-0"
-          style={{
-            width: '901px',
-            height: '720px',
-            background: '#52FF00',
-            filter: 'blur(350px)',
-          }}
-        />
-        <div 
-          className="absolute right-12 bottom-24"
-          style={{
-            width: '269px',
-            height: '269px',
-            background: '#9747FF',
-            filter: 'blur(200px)',
-          }}
-        />
-        <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: '575px',
-            height: '575px',
-            background: '#D9D9D9',
-            filter: 'blur(250px)',
-          }}
-        />
-        <div 
-          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
-          style={{
-            width: '741px',
-            height: '300px',
-            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
-            filter: 'blur(300px)',
-          }}
-        />
-      </div>
+    <main 
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
 
       {/* Profile Header with Banner */}
       <div className="profile-header relative z-10">
