@@ -32,3 +32,13 @@ body {
 .wallet-adapter-button:hover {
   background: linear-gradient(to right, #ea580c, #b91c1c) !important;
 }
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

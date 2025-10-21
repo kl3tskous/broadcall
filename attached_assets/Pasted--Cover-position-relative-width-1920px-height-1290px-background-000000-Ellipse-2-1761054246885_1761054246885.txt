@@ -1,0 +1,1151 @@
+/* Cover */
+
+position: relative;
+width: 1920px;
+height: 1290px;
+
+background: #000000;
+
+
+/* Ellipse 2 */
+
+position: absolute;
+width: 767px;
+height: 767px;
+left: calc(50% - 767px/2 - 11.5px);
+top: 907px;
+
+background: linear-gradient(270deg, rgba(255, 86, 5, 0.7) -13.53%, rgba(255, 119, 4, 0.7) 54.06%, rgba(255, 161, 3, 0.7) 116.45%);
+filter: blur(300px);
+
+
+/* Ellipse 68 */
+
+position: absolute;
+width: 901px;
+height: 720px;
+left: calc(50% - 901px/2 - 483.5px);
+top: -548px;
+
+background: rgba(20, 241, 149, 0.5);
+filter: blur(300px);
+
+
+/* Ellipse 3 */
+
+position: absolute;
+width: 269px;
+height: 269px;
+left: calc(50% - 269px/2 + 404.5px);
+top: 1128px;
+
+background: linear-gradient(180deg, #6D31BA 0%, rgba(185, 113, 61, 0) 100%);
+filter: blur(300px);
+
+
+/* Ellipse 1 */
+
+position: absolute;
+width: 575px;
+height: 575px;
+left: 702px;
+top: 540px;
+
+background: linear-gradient(0deg, rgba(217, 217, 217, 0), rgba(217, 217, 217, 0));
+filter: blur(250px);
+
+
+/* compass-fill 1 */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 1563px;
+top: 1744px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 3.12%;
+right: 3.12%;
+top: 0%;
+bottom: -0.09%;
+
+background: #000000;
+
+
+/* Line 1 */
+
+position: absolute;
+width: 44.82px;
+height: 0px;
+left: 1558px;
+top: 805px;
+
+border: 7px solid rgba(255, 255, 255, 0.12);
+transform: rotate(38.66deg);
+
+
+/* Line 2 */
+
+position: absolute;
+width: 44.82px;
+height: 0px;
+left: 1562px;
+top: 829px;
+
+border: 7px solid rgba(255, 255, 255, 0.12);
+transform: matrix(-0.78, 0.62, 0.62, 0.78, 0, 0);
+
+
+/* Line 3 */
+
+position: absolute;
+width: 44.82px;
+height: 0px;
+left: 348px;
+top: 804px;
+
+border: 7px solid rgba(255, 255, 255, 0.12);
+transform: matrix(-0.78, 0.62, 0.62, 0.78, 0, 0);
+
+
+/* Line 4 */
+
+position: absolute;
+width: 44.82px;
+height: 0px;
+left: 344px;
+top: 828px;
+
+border: 7px solid rgba(255, 255, 255, 0.12);
+transform: rotate(38.66deg);
+
+
+/* Group 183 */
+
+position: absolute;
+width: 1060px;
+height: 623px;
+left: calc(50% - 1060px/2);
+top: 746px;
+
+
+
+/* Ellipse 9 */
+
+position: absolute;
+width: 741px;
+height: 300px;
+left: calc(50% - 741px/2 + 22.5px);
+top: 1069px;
+
+background: linear-gradient(180deg, #671834 0%, #512D13 100%);
+filter: blur(300px);
+
+
+/* Group 72 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 610px;
+top: 749px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 270px);
+top: 749px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Axiom Expressive-1 1 */
+
+position: absolute;
+width: 134px;
+height: 134px;
+left: 623px;
+top: 759px;
+
+background: url(Axiom Expressive-1.png);
+
+
+/* Group 88 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 430px;
+top: 746px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 450px);
+top: 746px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 23 */
+
+position: absolute;
+width: 72px;
+height: 72px;
+left: 474px;
+top: 793px;
+
+
+
+/* Untitled design (23) 1 */
+
+position: absolute;
+width: 72px;
+height: 72px;
+left: 474px;
+top: 793px;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(.png);
+
+
+/* Group 74 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 790px;
+top: 746px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 - 90px);
+top: 746px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Untitled design (24) 1 */
+
+position: absolute;
+width: 140px;
+height: 140px;
+left: calc(50% - 140px/2 - 90px);
+top: 756px;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: -0.94%;
+bottom: 0.94%;
+
+background: url(.png);
+
+
+/* Group 82 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 970px;
+top: 749px;
+
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 90px);
+top: 749px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 77 */
+
+position: absolute;
+width: 85px;
+height: 85px;
+left: calc(50% - 85px/2 + 86.5px);
+top: calc(50% - 85px/2 + 180.5px);
+
+
+
+/* Untitled design (25) 1 */
+
+position: absolute;
+width: 85px;
+height: 85px;
+left: calc(50% - 85px/2 + 86.5px);
+top: calc(50% - 85px/2 + 180.5px);
+
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 34.98%;
+bottom: 34.7%;
+
+background: #FF7324;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 9.18%;
+bottom: 74.56%;
+
+background: #FF7324;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.06%;
+right: 9.01%;
+top: 74.84%;
+bottom: 8.9%;
+
+background: #FF7324;
+
+
+/* Group 83 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 1330px;
+top: 749px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.38));
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 450px);
+top: 749px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Group 80 */
+
+position: absolute;
+width: 72px;
+height: 81.43px;
+left: 1374px;
+top: 789px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 72.27%;
+right: 25.4%;
+top: 61.89%;
+bottom: 33.64%;
+
+background: linear-gradient(0deg, #05AAC5 0.01%, #71E0EC 100.01%);
+
+
+/* Vector */
+
+position: absolute;
+left: 71.9%;
+right: 25.02%;
+top: 61.53%;
+bottom: 33.08%;
+
+background: linear-gradient(0deg, #05AAC5 0.01%, #71E0EC 100.01%);
+
+
+/* Vector */
+
+position: absolute;
+left: 71.56%;
+right: 24.69%;
+top: 61.16%;
+bottom: 32.52%;
+
+background: linear-gradient(0deg, #05AAC5 0%, #71E0EC 100%);
+
+
+/* Group 81 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: 1150px;
+top: 746px;
+
+filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.38));
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 160px;
+height: 160px;
+left: calc(50% - 160px/2 + 270px);
+top: 746px;
+
+background: rgba(255, 255, 255, 0.12);
+backdrop-filter: blur(20px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* Vector */
+
+position: absolute;
+left: 62.19%;
+right: 34.06%;
+top: 60.93%;
+bottom: 32.82%;
+
+background: linear-gradient(92.81deg, #FFFFFF 10.81%, #FFFFFF 94.77%);
+
+
+/* Header */
+
+position: absolute;
+width: 1314px;
+height: 100px;
+left: calc(50% - 1314px/2);
+top: 45px;
+
+
+
+/* Header */
+
+position: absolute;
+width: 1314px;
+height: 100px;
+left: 303px;
+top: 45px;
+
+background: rgba(255, 255, 255, 0.06);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 50px;
+
+
+/* Home */
+
+position: absolute;
+width: 73px;
+height: 29px;
+left: 798px;
+top: 81px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Career */
+
+position: absolute;
+width: 96px;
+height: 29px;
+left: 1051px;
+top: 81px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Features */
+
+position: absolute;
+width: 103px;
+height: 29px;
+left: calc(50% - 103px/2 + 0.5px);
+top: 81px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 29px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* LaunchApp */
+
+position: absolute;
+width: 167.8px;
+height: 53px;
+left: 1422.56px;
+top: 68px;
+
+
+
+/* Rectangle 1 */
+
+position: absolute;
+width: 167.8px;
+height: 53px;
+left: 1422.56px;
+top: 68px;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+border-radius: 30px;
+
+
+/* Launch App */
+
+position: absolute;
+width: 127px;
+height: 24px;
+left: calc(50% - 127px/2 + 546.5px);
+top: 83px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 20px;
+line-height: 24px;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Untitled design (21) 1 */
+
+position: absolute;
+width: 76.35px;
+height: 86px;
+left: 326px;
+top: 52px;
+
+
+
+/* Clip path group */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* ce1cce913d */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 3.1%;
+top: 0%;
+bottom: 0%;
+
+background: #000000;
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Mask group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+background: url(.png);
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Group */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+
+
+/* Rectangle */
+
+position: absolute;
+left: -24.29%;
+right: -21.99%;
+top: -23.13%;
+bottom: -23.15%;
+
+background: url(.png);
+
+
+/* Group 14 */
+
+position: absolute;
+width: 1314px;
+height: 526px;
+left: 303px;
+top: 172px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 1314px;
+height: 415px;
+left: calc(50% - 1314px/2);
+top: 172px;
+
+background: rgba(255, 255, 255, 0.08);
+border: 2px solid rgba(255, 255, 255, 0.12);
+border-radius: 40px;
+
+
+/* $Futardio */
+
+position: absolute;
+width: 730.79px;
+height: 71.17px;
+left: 331px;
+top: 205px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 800;
+font-size: 64px;
+line-height: 77px;
+
+color: #FFFFFF;
+
+
+
+/* APE on your favorite platform below */
+
+position: absolute;
+width: 1097px;
+height: 71px;
+left: calc(50% - 1097px/2 - 3.5px);
+top: 627px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 800;
+font-size: 48px;
+line-height: 58px;
+text-align: center;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+
+/* @jobba */
+
+position: absolute;
+width: 271px;
+height: 44px;
+left: 465px;
+top: 448px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 800;
+font-size: 35px;
+line-height: 42px;
+
+color: #FFFFFF;
+
+
+
+/* Since called by: */
+
+position: absolute;
+width: 209px;
+height: 52px;
+left: 323px;
+top: 385px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 800;
+font-size: 25px;
+line-height: 30px;
+
+color: rgba(255, 255, 255, 0.8);
+
+opacity: 0.6;
+
+
+/* + 400% */
+
+position: absolute;
+width: 404.83px;
+height: 81.34px;
+left: calc(50% - 404.83px/2 - 426.59px);
+top: 284px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 64px;
+line-height: 77px;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+
+/* Group 13 */
+
+position: absolute;
+width: 120px;
+height: 120px;
+left: 1470px;
+top: 183px;
+
+
+
+/* Rectangle 8 */
+
+position: absolute;
+width: 120px;
+height: 120px;
+left: calc(50% - 120px/2 + 570px);
+top: 183px;
+
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 34px;
+
+
+/* OQp2j2yt_400x400 1 */
+
+position: absolute;
+width: 118px;
+height: 118px;
+left: 1471px;
+top: 184px;
+
+background: url(OQp2j2yt_400x400.jpg);
+border-radius: 34px;
+
+
+/* Group 14 */
+
+position: absolute;
+width: 120px;
+height: 120px;
+left: 323px;
+top: 448px;
+
+
+
+/* Rectangle 8 */
+
+position: absolute;
+width: 120px;
+height: 120px;
+left: calc(50% - 120px/2 - 577px);
+top: 448px;
+
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 160px;
+
+
+/* OQp2j2yt_400x400 1 */
+
+position: absolute;
+width: 118px;
+height: 118px;
+left: 324px;
+top: 449px;
+
+background: url(cn88H2dk_400x400.jpg);
+border-radius: 252px;
+
+
+/* twitter-x-logo-black-round-20851 1 */
+
+position: absolute;
+width: 28px;
+height: 28px;
+left: 465px;
+top: 508px;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0.55%;
+right: 0.66%;
+top: 0.55%;
+bottom: 0.66%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 27.87%;
+right: 27.84%;
+top: 25.81%;
+bottom: 25.92%;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+
+
+/* Vector */
+
+position: absolute;
+left: 0.55%;
+right: 0.66%;
+top: 0.55%;
+bottom: 0.66%;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+
+
+/* Component 6 */
+
+position: absolute;
+width: 637px;
+height: 341px;
+left: 728px;
+top: 209px;
+
+
+
+/* Ellipse 69 */
+
+position: absolute;
+left: 24.96%;
+right: 71.11%;
+top: 63.34%;
+bottom: 29.33%;
+
+/* main */
+background: linear-gradient(270deg, #FF5605 -13.53%, #FF7704 45.84%, #FFA103 116.45%);
+
+
+/* Vector 10 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector 11 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: linear-gradient(180deg, rgba(255, 97, 4, 0.25) 0%, rgba(102, 102, 102, 0) 100%);

@@ -32,7 +32,6 @@ export default function CallPage() {
   const [loading, setLoading] = useState(true)
   const [priceData, setPriceData] = useState<TokenPrice | null>(null)
   const [priceLoading, setPriceLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'pinned' | 'recent'>('pinned')
 
   useEffect(() => {
     const fetchCall = async () => {
@@ -277,209 +276,174 @@ export default function CallPage() {
     : 0
 
   return (
-    <main className="min-h-screen bg-gray-900">
-        {/* Modern Profile Section */}
-        {call.creator_wallet && (
-          <div className="border-b border-gray-800">
-            {/* Banner Section */}
-            {creatorBanner ? (
-              <div className="relative w-full h-32 md:h-48 overflow-hidden bg-gray-800">
+    <main className="relative min-h-screen bg-black overflow-hidden">
+      {/* Gradient Blur Orbs - Background Effects */}
+      <div className="fixed inset-0 pointer-events-none">
+        {/* Orange/Red Gradient Blur - Bottom Center */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-0"
+          style={{
+            width: '767px',
+            height: '767px',
+            background: 'linear-gradient(270deg, rgba(255, 86, 5, 0.7) -13.53%, rgba(255, 119, 4, 0.7) 54.06%, rgba(255, 161, 3, 0.7) 116.45%)',
+            filter: 'blur(300px)',
+          }}
+        />
+        
+        {/* Green Blur - Top Left */}
+        <div 
+          className="absolute left-1/4 -top-96"
+          style={{
+            width: '901px',
+            height: '720px',
+            background: 'rgba(20, 241, 149, 0.5)',
+            filter: 'blur(300px)',
+          }}
+        />
+        
+        {/* Purple Blur - Bottom Right */}
+        <div 
+          className="absolute right-1/4 bottom-0"
+          style={{
+            width: '269px',
+            height: '269px',
+            background: 'linear-gradient(180deg, #6D31BA 0%, rgba(185, 113, 61, 0) 100%)',
+            filter: 'blur(300px)',
+          }}
+        />
+        
+        {/* Gray Blur - Center */}
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '575px',
+            height: '575px',
+            background: 'linear-gradient(0deg, rgba(217, 217, 217, 0), rgba(217, 217, 217, 0))',
+            filter: 'blur(250px)',
+          }}
+        />
+        
+        {/* Additional gradient for depth */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 bottom-1/3"
+          style={{
+            width: '741px',
+            height: '300px',
+            background: 'linear-gradient(180deg, #671834 0%, #512D13 100%)',
+            filter: 'blur(300px)',
+          }}
+        />
+      </div>
+
+      {/* Decorative Corner Lines */}
+      <div className="fixed pointer-events-none">
+        {/* Top Right Lines */}
+        <div className="absolute right-96 top-64 w-16 h-1 bg-white/12 origin-left" style={{ transform: 'rotate(38.66deg)' }} />
+        <div className="absolute right-96 top-72 w-16 h-1 bg-white/12 origin-left" style={{ transform: 'rotate(-38.66deg)' }} />
+        
+        {/* Top Left Lines */}
+        <div className="absolute left-96 top-64 w-16 h-1 bg-white/12 origin-right" style={{ transform: 'rotate(-38.66deg)' }} />
+        <div className="absolute left-96 top-72 w-16 h-1 bg-white/12 origin-right" style={{ transform: 'rotate(38.66deg)' }} />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 py-8 md:py-16">
+        
+        {/* Hero Token Card */}
+        <div className="mb-12 relative">
+          <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-10 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+            
+            {/* Token Logo - Top Right */}
+            <div className="absolute top-6 right-6 md:top-10 md:right-10">
+              {call.token_logo ? (
                 <img 
-                  src={creatorBanner} 
-                  alt="Profile banner" 
-                  className="w-full h-full object-cover"
+                  src={call.token_logo} 
+                  alt={call.token_symbol || 'Token'} 
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-lg"
                 />
-              </div>
-            ) : (
-              <div className="relative w-full h-32 md:h-48 bg-gradient-to-br from-gray-800 to-gray-900" />
-            )}
-
-            {/* Profile Info */}
-            <div className="max-w-3xl mx-auto px-4">
-              <div className="relative pb-4">
-                {/* Avatar */}
-                <div className="-mt-12 md:-mt-16 mb-3">
-                  <Link href={`/profile/${call.creator_wallet}`}>
-                    <div className="p-1 rounded-full bg-gray-900 inline-block">
-                      <div className="p-[2px] rounded-full bg-gradient-to-br from-orange-500 to-orange-600">
-                        {creatorAvatar ? (
-                          <img 
-                            src={creatorAvatar} 
-                            alt={creatorAlias || 'User'} 
-                            className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-gray-900"
-                          />
-                        ) : (
-                          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl md:text-3xl font-bold border-4 border-gray-900">
-                            {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-
-                {/* Name and Bio */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Link href={`/profile/${call.creator_wallet}`}>
-                      <h1 className="text-xl md:text-2xl font-bold text-white hover:underline">
-                        {creatorAlias || 'Anonymous'}
-                      </h1>
-                    </Link>
-                    <svg className="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8.5 12.5l2.5 2.5 5-5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </div>
-                  {creatorBio && (
-                    <p className="text-gray-400 text-sm md:text-base mb-3">{creatorBio}</p>
-                  )}
-                </div>
-
-                {/* Tabs */}
-                <div className="border-b border-gray-800">
-                  <div className="flex gap-8">
-                    <button
-                      onClick={() => setActiveTab('pinned')}
-                      className={`pb-3 px-1 border-b-2 transition-colors font-medium ${
-                        activeTab === 'pinned' 
-                          ? 'border-orange-500 text-white' 
-                          : 'border-transparent text-gray-400 hover:text-gray-300'
-                      }`}
-                    >
-                      📌 Pinned Call
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('recent')}
-                      className={`pb-3 px-1 border-b-2 transition-colors font-medium ${
-                        activeTab === 'recent' 
-                          ? 'border-orange-500 text-white' 
-                          : 'border-transparent text-gray-400 hover:text-gray-300'
-                      }`}
-                    >
-                      Recent Calls
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Feed Content - Centered */}
-        <div className="max-w-3xl mx-auto">
-          {activeTab === 'pinned' && (
-            <div className="border-b border-gray-800 p-4">
-              {/* Pinned Call - Custom Dark Card with Gradient Outline */}
-              <div className="mb-4 relative rounded-2xl p-[2px] bg-gradient-to-br from-orange-500/50 to-orange-600/50">
-              {/* Signal Icon Badge - Top left corner with rotation */}
-              <div className="absolute -top-[14px] -left-[14px] z-10 origin-top-left rotate-[17deg]">
-                <img 
-                  src="/signal-icon.png" 
-                  alt="Call Signal" 
-                  className="w-8 h-8 md:w-10 md:h-10 opacity-90 drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]"
-                />
-              </div>
-              
-            <div className="bg-gray-900 rounded-2xl p-6">
-              <div className="flex items-start gap-4">
-                {/* Token Image */}
-                <div className="flex-shrink-0">
-                  {call.token_logo ? (
-                    <img 
-                      src={call.token_logo} 
-                      alt={call.token_name || call.token_symbol || 'Token'} 
-                      className="w-16 h-16 md:w-20 md:h-20 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl md:text-3xl font-bold">
-                      {call.token_symbol?.charAt(0) || '?'}
-                    </div>
-                  )}
-                </div>
-
-                {/* Token Info */}
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-2xl md:text-3xl font-black text-white mb-1">
-                    {call.token_symbol || 'TOKEN'}
-                  </h1>
-                  <p className="text-base md:text-lg text-gray-400 mb-3">
-                    {call.token_name || 'Unknown Token'}
-                  </p>
-                  
-                  {/* Shared at Market Cap */}
-                  {call.initial_mcap && (
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                      <span className="text-sm text-gray-400">
-                        <span className="text-green-500 font-semibold">{formatMarketCap(call.initial_mcap)}</span> MC
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* ROI Badge (Right Side) */}
-                {call.initial_price && call.current_price && (
-                  <div className="flex-shrink-0 text-right">
-                    <div className={`text-3xl md:text-4xl font-black ${
-                      roi >= 0 ? 'text-green-400' : 'text-red-500'
-                    }`}>
-                      {roi >= 0 ? '+' : ''}{roi.toFixed(1)}%
-                    </div>
-                    <div className="text-sm text-gray-400 mt-1">
-                      {multiplier.toFixed(2)}x
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Compact DexScreener Chart */}
-              {priceData?.pairAddress && (
-                <div className="mt-4 rounded-lg overflow-hidden">
-                  <iframe
-                    src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                    className="w-full h-[200px] md:h-[250px] border-0"
-                  />
+              ) : (
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl font-bold shadow-lg">
+                  {call.token_symbol?.charAt(0) || '?'}
                 </div>
               )}
-
-              {/* Stats Row */}
-              <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap gap-4 text-sm">
-                {call.initial_mcap && (
-                  <div className="text-gray-400">
-                    Entry: <span className="text-white font-semibold">{formatMarketCap(call.initial_mcap)}</span>
-                  </div>
-                )}
-                {priceData && (
-                  <div className="text-gray-400">
-                    Current: <span className="text-white font-semibold">{formatMarketCap(priceData.marketCap)}</span>
-                  </div>
-                )}
-                {call.ath_price && (
-                  <div className="text-gray-400">
-                    ATH: <span className="text-yellow-400 font-semibold">+{athROI.toFixed(1)}%</span>
-                  </div>
-                )}
-              </div>
             </div>
-          </div>
 
-          {/* Platform Buttons */}
-          <div className="mb-4">
-            <h3 className="text-2xl md:text-3xl font-bold text-center mb-6">
-              Buy with{' '}
-              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                @{call.user_alias || 'user'}
-              </span>{' '}
-              on your preferred platform
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {/* Token Name & ROI */}
+            <div className="mb-6">
+              <h1 className="text-5xl md:text-7xl font-black text-white mb-4">
+                ${call.token_symbol || 'TOKEN'}
+              </h1>
+              {call.initial_price && call.current_price && (
+                <div className={`text-5xl md:text-7xl font-black ${
+                  roi >= 0 ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 'text-red-500'
+                } bg-clip-text text-transparent`}>
+                  {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
+                </div>
+              )}
+            </div>
+
+            {/* Since called by */}
+            <div className="mb-6">
+              <p className="text-gray-400 text-lg mb-3">Since called by:</p>
+              <Link href={`/profile/${call.creator_wallet}`} className="flex items-center gap-3 group">
+                <div className="flex-shrink-0">
+                  {creatorAvatar ? (
+                    <img 
+                      src={creatorAvatar} 
+                      alt={creatorAlias || 'User'} 
+                      className="w-12 h-12 rounded-full border-2 border-white/20"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold">
+                      {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-white text-xl font-bold group-hover:underline">
+                    @{creatorAlias || 'Anonymous'}
+                  </span>
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Inline Chart */}
+            {priceData?.pairAddress && (
+              <div className="rounded-2xl overflow-hidden shadow-lg">
+                <iframe
+                  src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                  className="w-full h-[250px] md:h-[350px] border-0"
+                  style={{ background: 'transparent' }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* APE on your favorite platform below */}
+        <div className="mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-white">
+            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+              APE
+            </span>{' '}
+            on your favorite platform below
+          </h2>
+          
+          {/* Horizontal Scrollable Platform Buttons */}
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-4 mx-auto">
               {platforms.map((platform) => {
                 const Logo = platform.Logo
                 return (
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex flex-col items-center justify-center gap-2 px-3 py-4 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-xl transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
+                    className="flex-shrink-0 flex flex-col items-center justify-center gap-2 w-40 h-40 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[34px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
                   >
                     <Logo className="w-16 h-16" />
                     <span className="text-white font-extrabold text-sm">{platform.name}</span>
@@ -488,24 +452,26 @@ export default function CallPage() {
               })}
             </div>
           </div>
+        </div>
 
-          {/* Thesis Quote */}
-          {call.thesis && (
-            <div className="mb-4 p-4 bg-gray-800 border-l-4 border-orange-500 rounded-r-lg">
-              <p className="text-gray-300 italic">&ldquo;{call.thesis}&rdquo;</p>
-            </div>
-          )}
+        {/* Thesis Quote */}
+        {call.thesis && (
+          <div className="mb-8 bg-white/[0.08] backdrop-blur-[20px] border border-white/10 rounded-2xl p-6">
+            <p className="text-gray-200 text-lg italic">&ldquo;{call.thesis}&rdquo;</p>
+          </div>
+        )}
 
-          {/* Twitter/X Style Interaction Buttons */}
-          <div className="mt-4 flex items-center justify-between border-t border-b border-gray-800 py-3">
-            <div className="flex space-x-8 text-gray-400">
+        {/* Stats & Social Sharing */}
+        <div className="mb-8 bg-white/[0.08] backdrop-blur-[20px] border border-white/10 rounded-2xl p-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex gap-6 text-gray-300">
               <button 
                 onClick={() => {
                   const shareUrl = `${window.location.origin}/call/${call.id}`
-                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on Coin Call`
+                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on Callor`
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
                 }}
-                className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+                className="flex items-center gap-2 hover:text-orange-400 transition-colors"
               >
                 <span className="text-xl">🔁</span>
                 <span className="text-sm font-medium">Share on X</span>
@@ -516,96 +482,83 @@ export default function CallPage() {
                   navigator.clipboard.writeText(`${window.location.origin}/call/${call.id}`)
                   alert('Link copied to clipboard!')
                 }}
-                className="flex items-center space-x-2 hover:text-orange-400 transition-colors"
+                className="flex items-center gap-2 hover:text-orange-400 transition-colors"
               >
                 <span className="text-xl">🔗</span>
                 <span className="text-sm font-medium">Copy Link</span>
               </button>
-
-              <button className="flex items-center space-x-2 hover:text-orange-400 transition-colors">
-                <span className="text-xl">💬</span>
-                <span className="text-sm font-medium">Comment</span>
-                <span className="text-xs text-gray-500">(soon)</span>
-              </button>
             </div>
 
-            <div className="flex gap-4 text-xs text-gray-500">
-              <span>{call.views} views</span>
-              <span>{call.clicks} clicks</span>
+            <div className="flex gap-6 text-sm text-gray-400">
+              <span className="flex items-center gap-2">
+                <span className="text-orange-400">👁</span> {call.views || 0} views
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-orange-400">🖱</span> {call.clicks || 0} clicks
+              </span>
             </div>
           </div>
+        </div>
 
-            </div>
-          )}
+        {/* More Calls by Creator */}
+        {moreCalls.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold text-white mb-6">
+              More calls by{' '}
+              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                @{creatorAlias || 'Anonymous'}
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {moreCalls.map((otherCall) => {
+                const otherROI = otherCall.initial_price && otherCall.current_price
+                  ? calculateROI(otherCall.initial_price, otherCall.current_price)
+                  : 0
 
-          {/* Recent Calls Tab */}
-          {activeTab === 'recent' && (
-            <div className="divide-y divide-gray-800 p-4">
-              {moreCalls.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {moreCalls.map((otherCall) => {
-                  const otherROI = otherCall.initial_price && otherCall.current_price
-                    ? calculateROI(otherCall.initial_price, otherCall.current_price)
-                    : 0
-
-                  return (
-                    <Link
-                      key={otherCall.id}
-                      href={`/call/${otherCall.id}`}
-                      className="relative bg-gray-800 hover:bg-gray-750 rounded-xl p-4 border border-gray-700/50 hover:border-orange-500/50 transition-all"
-                    >
-                      {/* Signal Icon Badge */}
-                      <div className="absolute -top-[10px] -left-[10px] z-10 origin-top-left rotate-[17deg]">
+                return (
+                  <Link
+                    key={otherCall.id}
+                    href={`/call/${otherCall.id}`}
+                    className="bg-white/[0.08] backdrop-blur-[20px] border border-white/10 hover:bg-white/[0.12] hover:border-white/20 rounded-2xl p-4 transition-all"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      {otherCall.token_logo ? (
                         <img 
-                          src="/signal-icon.png" 
-                          alt="Call Signal" 
-                          className="w-6 h-6 md:w-8 md:h-8 opacity-90 drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]"
+                          src={otherCall.token_logo} 
+                          alt={otherCall.token_name || ''} 
+                          className="w-12 h-12 rounded-full"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none'
+                          }}
                         />
-                      </div>
-                      
-                      <div className="flex items-center gap-3 mb-3">
-                        {otherCall.token_logo ? (
-                          <img 
-                            src={otherCall.token_logo} 
-                            alt={otherCall.token_name || ''} 
-                            className="w-10 h-10 rounded-full"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none'
-                            }}
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm font-bold">
-                            {otherCall.token_symbol?.charAt(0) || '?'}
-                          </div>
-                        )}
-                        <div>
-                          <h3 className="font-bold text-white">
-                            ${otherCall.token_symbol || 'TOKEN'}
-                          </h3>
-                          <p className="text-xs text-gray-400 truncate">
-                            {otherCall.token_name || 'Unknown'}
-                          </p>
-                        </div>
-                      </div>
-                      {otherCall.initial_price && otherCall.current_price && (
-                        <div className={`text-2xl font-bold ${
-                          otherROI >= 0 ? 'text-green-400' : 'text-red-400'
-                        }`}>
-                          {otherROI >= 0 ? '+' : ''}{otherROI.toFixed(1)}%
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg font-bold">
+                          {otherCall.token_symbol?.charAt(0) || '?'}
                         </div>
                       )}
-                    </Link>
-                  )
-                })}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-gray-400">
-                  No other calls yet
-                </div>
-              )}
+                      <div>
+                        <h4 className="font-bold text-white">
+                          ${otherCall.token_symbol || 'TOKEN'}
+                        </h4>
+                        <p className="text-xs text-gray-400 truncate">
+                          {otherCall.token_name || 'Unknown'}
+                        </p>
+                      </div>
+                    </div>
+                    {otherCall.initial_price && otherCall.current_price && (
+                      <div className={`text-2xl font-bold ${
+                        otherROI >= 0 ? 'bg-gradient-to-r from-green-400 to-emerald-400' : 'text-red-400'
+                      } ${otherROI >= 0 ? 'bg-clip-text text-transparent' : ''}`}>
+                        {otherROI >= 0 ? '+' : ''}{otherROI.toFixed(1)}%
+                      </div>
+                    )}
+                  </Link>
+                )
+              })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
       </main>
   )
 }
