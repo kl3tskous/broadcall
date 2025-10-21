@@ -105,27 +105,86 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Platform Logos Grid */}
-      <div className="relative max-w-[1060px] mx-auto mt-0 px-4 pb-12 md:pb-16">
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6 max-w-2xl md:max-w-none mx-auto justify-items-center">
-          {/* Platform Logo Cards */}
-          <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            <Image src="/platforms/gmgn.png" alt="GMGN" width={72} height={72} className="object-contain w-12 h-12 md:w-16 md:h-16" />
+      {/* Platform Logos Infinite Scroll */}
+      <div className="relative w-full overflow-hidden pb-12 md:pb-16">
+        <div className="flex animate-scroll">
+          {/* First set of logos */}
+          <div className="flex gap-4 md:gap-6 shrink-0">
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/gmgn.png" alt="GMGN" width={72} height={72} className="object-contain w-12 h-12 md:w-16 md:h-16" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/axiom.png" alt="Axiom" width={134} height={134} className="object-contain w-20 h-20 md:w-28 md:h-28" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/photon.png" alt="Photon" width={140} height={140} className="object-contain w-20 h-20 md:w-32 md:h-32" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/bullx.png" alt="BullX" width={85} height={85} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/trojan.png" alt="Trojan" width={85} height={81} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
           </div>
-          <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            <Image src="/platforms/axiom.png" alt="Axiom" width={134} height={134} className="object-contain w-20 h-20 md:w-28 md:h-28" />
+          
+          {/* Duplicate set for seamless loop */}
+          <div className="flex gap-4 md:gap-6 shrink-0 ml-4 md:ml-6">
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/gmgn.png" alt="GMGN" width={72} height={72} className="object-contain w-12 h-12 md:w-16 md:h-16" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/axiom.png" alt="Axiom" width={134} height={134} className="object-contain w-20 h-20 md:w-28 md:h-28" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/photon.png" alt="Photon" width={140} height={140} className="object-contain w-20 h-20 md:w-32 md:h-32" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/bullx.png" alt="BullX" width={85} height={85} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/trojan.png" alt="Trojan" width={85} height={81} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
           </div>
-          <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            <Image src="/platforms/photon.png" alt="Photon" width={140} height={140} className="object-contain w-20 h-20 md:w-32 md:h-32" />
-          </div>
-          <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            <Image src="/platforms/bullx.png" alt="BullX" width={85} height={85} className="object-contain w-14 h-14 md:w-20 md:h-20" />
-          </div>
-          <div className="w-full aspect-square max-w-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            <Image src="/platforms/trojan.png" alt="Trojan" width={85} height={81} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+
+          {/* Third set for extra smoothness */}
+          <div className="flex gap-4 md:gap-6 shrink-0 ml-4 md:ml-6">
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/gmgn.png" alt="GMGN" width={72} height={72} className="object-contain w-12 h-12 md:w-16 md:h-16" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/axiom.png" alt="Axiom" width={134} height={134} className="object-contain w-20 h-20 md:w-28 md:h-28" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/photon.png" alt="Photon" width={140} height={140} className="object-contain w-20 h-20 md:w-32 md:h-32" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/bullx.png" alt="BullX" width={85} height={85} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white/[0.12] backdrop-blur-[20px] rounded-[24px] md:rounded-[34px] flex items-center justify-center shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+              <Image src="/platforms/trojan.png" alt="Trojan" width={85} height={81} className="object-contain w-14 h-14 md:w-20 md:h-20" />
+            </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(calc(-100% / 3));
+          }
+        }
+
+        .animate-scroll {
+          animation: scroll 20s linear infinite;
+        }
+
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </div>
   )
 }
