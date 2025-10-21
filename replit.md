@@ -1,7 +1,7 @@
 # Callor - Coin Call Referral Platform
 
 ## Overview
-Callor is a Next.js-based application designed for Solana influencers to create and share "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform enables users to publish professional token calls with automatic performance tracking (views, clicks, ROI, ATH stats) and social sharing capabilities. It supports multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan) by automatically attaching custom referral codes, allowing influencers to monetize their calls and track engagement. The business vision is to empower crypto influencers with a powerful tool for showcasing their insights and driving referrals, enhancing their market presence and potential earnings.
+Callor is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -11,164 +11,34 @@ Do not make changes to the folder `Z`.
 Do not make changes to the file `Y`.
 
 ## System Architecture
-The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS for a modern, responsive UI/UX. It features a dark, modern design with an orange-to-red gradient theme.
+The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS, featuring a dark, modern design with an orange-to-red gradient theme.
 
 **UI/UX Decisions:**
-- **Flex-worthy Token Call Pages:** Designed for social sharing, featuring a dynamic header with an ape graphic, prominent ROI display, professional drop shadows, gradient overlays, and backdrop blur effects.
-- **Mobile-Optimized Layouts:** Compact 3-column stats and a streamlined layout ensure an optimal viewing and sharing experience across devices.
-- **Platform Logo Integration:** Official trading platform logos are integrated into buttons and settings fields for brand recognition.
-- **OpenGraph Metadata:** Rich social previews are generated for shared links, displaying token information and performance stats.
+- **Flex-worthy Token Call Pages:** Designed for social sharing with dynamic headers, prominent ROI display, professional drop shadows, gradient overlays, and backdrop blur effects.
+- **Mobile-Optimized Layouts:** Compact, streamlined layouts for optimal viewing and sharing across devices.
+- **Platform Logo Integration:** Official trading platform logos are integrated into buttons and settings.
+- **OpenGraph Metadata:** Generates rich social previews for shared links with token information and performance stats.
+- **Glassmorphic Design:** Features glassmorphic elements for buttons, landing page components, and navigation, with semi-transparent backgrounds, backdrop blur, and enhanced shadow effects.
 
 **Technical Implementations:**
-- **Wallet Integration:** Phantom wallet is integrated using the Solana Wallet Adapter for secure user authentication and interactions.
-- **Database:** Supabase (PostgreSQL) is used for storing user profiles, settings, and call data, including detailed token metadata, views, and clicks.
-- **Real-time Data:** DexScreener API provides automatic token metadata fetching (name, symbol, logo, initial price/mcap) and real-time price data (price, 24h change, liquidity, volume, market cap), which auto-refreshes every 30 seconds.
-- **Tracking System:** Implements optimistic UI updates for view tracking on page load and click tracking on platform buttons with error rollback for robustness.
-- **Referral System:** Supports multi-platform referral codes with smart priority (call-specific > user settings > default) and auto-fills saved referral codes during call creation.
-- **File Upload System:** Integrated Replit App Storage for secure profile picture and banner uploads, with automatic path normalization.
+- **Wallet Integration:** Phantom wallet integration using Solana Wallet Adapter for secure authentication.
+- **Database:** Supabase (PostgreSQL) stores user profiles, settings, and call data, including detailed token metadata, views, and clicks.
+- **Real-time Data:** DexScreener API provides automatic token metadata and real-time price data (auto-refreshes every 30 seconds).
+- **Tracking System:** Implements optimistic UI updates for view tracking on page load and click tracking on platform buttons, with error rollback.
+- **Referral System:** Supports multi-platform referral codes with smart priority (call-specific > user settings > default) and auto-fills saved codes.
+- **File Upload System:** Replit App Storage for secure profile picture and banner uploads.
+- **KOL Profile System:** Public profile pages (`/profile/[address]`) with Twitter-style layouts, including user bio, social links, performance stats, and tabbed views for "Calls" and "Stats."
+- **Embedded Charts:** Integrates compact DexScreener embedded iframes for live charts within call cards and profile feed.
 
 **Feature Specifications:**
-- **User Onboarding & Profile Management:** A welcome flow for new users, guiding them to set up referral codes and manage their profile (alias, avatar, Twitter handle).
-- **Call Creation:** Users can create calls by entering a Solana token address and an optional thesis, with automatic metadata fetching and referral code attachment.
-- **Performance Tracking:** Each call page displays ROI, multiplier, and ATH (All-Time High) price/market cap, which auto-updates.
-- **Social Sharing:** "Share on X" buttons with pre-filled flex tweets and a copy link button with success feedback.
-
-## Recent Changes
-- ✅ **Beautiful Glassmorphic Landing Page** (October 2025)
-  - Designed and implemented stunning pre-signup landing page based on Figma design
-  - **Dark atmospheric background**: Black background with three gradient blur orbs (orange, green, purple) for depth
-  - **Glassmorphic header**: Semi-transparent navigation bar (white/6% opacity) with backdrop blur
-    - Callor logo on left (86px desktop, 60px mobile)
-    - Navigation links (Home, Features, Career) centered on desktop, hidden on mobile
-    - Orange gradient "Launch App" button on right
-  - **Hero section**: Giant orange gradient headline "Turn Calls Into Income." (80px desktop, responsive mobile)
-    - Engaging subtitle about sharing alpha and earning from followers
-    - Two glassmorphic CTA buttons: "View KOLs" and "Create Profile" with user-add icon
-  - **Platform logos grid**: 5 glassmorphic cards (160x160px) showcasing trading platform logos
-    - 3-column grid on mobile (2 rows), 5-column grid on desktop (1 row)
-    - Features GMGN, Axiom, Photon, BullX, Trojan logos with backdrop blur effects
-  - **Fully responsive**: Mobile-first design with breakpoints for tablet and desktop
-  - **Smart routing**: Landing page shows for non-authenticated users, existing app for connected wallets
-
-- ✅ **Signal Icon Badge on Call Cards** (October 2025)
-  - Added distinctive orange "C" signal/broadcast icon to all call cards
-  - **Corner sticker design**: Icon positioned with origin-top-left rotation (17deg) and precise negative offsets (-14px for pinned, -10px for recent) to nestle naturally into corner
-  - **Professional placement**: Badge straddles the card border (~45% outside, 55% inside) for authentic sticker appearance
-  - **Responsive sizing**: 40px on desktop, 32px on mobile for pinned calls; 32px desktop, 24px mobile for recent calls
-  - **Enhanced depth**: Subtle drop shadow added to reinforce the sticker effect
-
-- ✅ **Callor Branding & Navigation Header** (October 2025)
-  - Added official Callor logo to the website (transparent background version)
-  - **Clean minimal design**: Inspired by modern portfolio sites with 64px height header
-  - **Three-column layout**: Logo left, centered navigation, wallet button right
-  - **Professional branding**: Orange-themed Callor wordmark with broadcast icon (36px height)
-  - **Outlined wallet button**: Transparent background with white border (similar to "Contact Creator" style)
-  - **Center navigation**: Create Call, Profile, and Settings links centered between logo and wallet button
-  - **Enhanced backdrop**: Deeper blur (backdrop-blur-md) with semi-transparent dark background
-  - **Smooth transitions**: Hover effects on all interactive elements
-  - **Mobile responsive**: Navigation items hidden on mobile, wallet button always visible
-  - **Create Call flow**: "Create Call" button links to home page where users can input token CA and thesis
-  - Updated site metadata to reflect Callor brand identity
-
-- ✅ **Embedded DexScreener Chart in Call Card** (October 2025)
-  - Replaced custom chart with compact DexScreener embedded iframe
-  - **Positioned within call card**: Chart displays inside the orange bordered token card for a cleaner layout
-  - **Compact design**: 200px height on mobile, 250px on desktop for optimal viewing
-  - **Dark theme**: Matches site aesthetic with dark mode enabled
-  - **Clean UI**: Trades and info panels hidden for minimal, focused chart view
-  - **Live data**: Real-time price action powered by DexScreener's reliable API
-
-- ✅ **Modern Social Media Profile Layout** (October 2025)
-  - Redesigned token call pages with clean, centered social media profile aesthetic
-  - **Twitter/X-style banner**: Compact banner section (128px mobile, 192px desktop) at top of page, not as background
-  - **Classic profile layout**: Avatar overlaps bottom of banner (-mt-12/-mt-16) with proper border and gradient ring
-  - **Centered content**: Max-width 768px (max-w-3xl) for optimal reading and mobile-first design
-  - **Clean profile section**: Name, verified badge, bio, and tabs all in organized layout
-  - **No background overlays**: Removed fixed background system for cleaner, more focused content
-  - **Solid cards**: Token cards use solid `bg-gray-900` background instead of transparent overlay
-  - **Modern spacing**: Improved padding and margins throughout for professional appearance
-
-- ✅ **Gradient Platform Buttons with Custom Logos** (October 2025)
-  - Redesigned all platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with:
-    - **Orange gradient background**: `from-orange-500 to-orange-600` with hover effect
-    - **Extra large custom platform logos**: 64px size (w-16 h-16) for maximum visibility
-    - **White bold text**: Platform name in text-sm font-extrabold below logo
-    - **Vertical compact design**: Logo stacked above text (flex-col) for minimal width and maximum logo size
-    - **Minimal padding**: px-2 py-3 for compact square-like buttons
-    - **Personalized title**: Large centered heading (text-2xl/3xl) with orange gradient @username, matching token name size
-    - **Shadow effects**: Added `shadow-lg hover:shadow-xl` for depth
-    - **Consistent layout**: Vertical logo + text layout on all pages
-  - All platform logos replaced with custom uploaded images:
-    - GMGN: Green pixelated character logo
-    - Axiom: Blue pyramid logo  
-    - Photon: Cyan/purple gradient rocket logo
-    - BullX: Green bull head logo
-    - Trojan: White horse head logo
-  - All logos stored in `/public/platforms/` directory
-  - Buttons now visible on all screen sizes (removed mobile hidden state)
-  - Applied to both call pages and profile feed cards
-
-- ✅ **Simplified Profile Header & Tabbed Feed** (October 2025)
-  - Clean, compact profile header on token call pages:
-    - **Left-aligned layout**: Small profile image (48-64px) next to username with verified badge
-    - **No bio section**: Streamlined header focuses on the call content
-    - **Wider centered content**: Using max-w-6xl for optimal reading width
-  - **Tabbed feed system** with "Pinned Call" and "Recent Calls":
-    - **Pinned Call tab**: Shows the specific call with:
-      - Custom dark card with gradient orange border
-      - Token image, symbol, name, and "shared @ X mcap" format
-      - ROI percentage and multiplier badge
-      - Entry/Current/ATH stats row
-      - Platform buttons (GMGN, Axiom, Photon, BullX, Trojan) with referral code priority
-      - Thesis displayed as styled quote block
-      - Live DexScreener chart (1-second candles, dark theme)
-      - Twitter/X-style interaction buttons (Share on X, Copy Link, Comment) with view/click counts
-    - **Recent Calls tab**: Grid layout showing user's other recent token calls with ROI display
-  - Mobile-responsive design with proper breakpoints for all elements
-  - Fixed Next.js App Router compatibility (removed old Head component)
-  
-- ✅ **Embedded Live Charts in Profile Feed** (October 2025)
-  - Redesigned profile page token calls as self-contained social media posts:
-    - **Simplified header**: User avatar, name, and date (no banner on feed cards)
-    - **Token information**: Image, name, and "shared @ X mcap" format
-    - **Thesis display**: Clean text block (when available)
-    - **Embedded DexScreener chart**: Live 1-second candles with dark theme (300px height) directly in each card
-    - **Platform buy buttons**: GMGN, Axiom, Photon, BullX, Trojan with proper referral codes below chart
-  - Platform buttons correctly link to external trading platforms with referral code priority:
-    - Call-specific referral code → User settings → Default fallback
-    - Buttons open in new tab without interfering with card navigation
-  - Card navigation: User info and token info sections are clickable to view call details
-  - Mobile-responsive grid: 2 columns for buttons on mobile, 5 columns on desktop
-  - Created reusable `EmbeddedChart` component for DexScreener integration
-  
-- ✅ **KOL Profile System** (October 2025)
-  - Added bio (160 char max), telegram, and website fields to user profiles
-  - Created public profile page at `/profile/[address]` with Twitter-style layout:
-    - Full-width user banner at top with circular avatar overlapping
-    - Display name, handle, bio, and social links (Twitter, Telegram, Website)
-    - Performance stats: Total Calls, Avg ROI, Best Call
-    - Tabs for "Calls" and "Stats" views
-    - List of user's calls with ROI display using ATH fallback
-  - Updated Settings page with new profile fields in organized grid layout
-  - Token call pages now show caller's avatar with clickable link to profile
-  - Added "More Calls by @user" section on token pages (shows 3 recent calls)
-  - Database schema updated with new profile fields (bio, telegram, website)
-  
-- ✅ **Custom Dark Card with Gradient Borders** (October 2025)
-  - Replaced full-width ape banner with sleek dark card design
-  - Orange gradient border effect matching platform buttons (`from-orange-500/50 to-orange-600/50`)
-  - Dark inner background (`bg-gray-900`) for high contrast and readability
-  - Card layout features:
-    - Token image (64-80px circular) on the left
-    - Token symbol, name, and market cap displayed prominently
-    - Green dot indicator with "shared at X MC" format
-    - ROI percentage and multiplier badge on the right
-    - Stats row at bottom showing Entry, Current, and ATH values
-  - Mobile-responsive flexbox layout with proper spacing
-  - Modern, clean design matching social media platform aesthetics
+- **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
+- **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment.
+- **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
+- **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
+- **Tabbed Feed System:** Profile pages feature "Pinned Call" and "Recent Calls" tabs, displaying calls in a grid layout with ROI.
 
 ## External Dependencies
-- **Supabase:** Used as the PostgreSQL database and for authentication.
-- **DexScreener API:** Provides real-time token data, including price, market cap, and chart information.
-- **Solana Wallet Adapter (Phantom):** For connecting and interacting with Phantom wallets.
+- **Supabase:** PostgreSQL database and authentication.
+- **DexScreener API:** Real-time token data, prices, market cap, and charts.
+- **Solana Wallet Adapter (Phantom):** Wallet connection and interaction.
 - **Trading Platforms:** Integration with GMGN, Axiom, Photon, BullX, and Trojan for referral linking.

@@ -472,14 +472,14 @@ export default function CallPage() {
               </span>{' '}
               on your preferred platform
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {platforms.map((platform) => {
                 const Logo = platform.Logo
                 return (
                   <button
                     key={platform.id}
                     onClick={() => handlePlatformClick(platform.id)}
-                    className="flex flex-col items-center justify-center gap-2 px-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all shadow-lg hover:shadow-xl"
+                    className="flex flex-col items-center justify-center gap-2 px-3 py-4 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-xl transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
                   >
                     <Logo className="w-16 h-16" />
                     <span className="text-white font-extrabold text-sm">{platform.name}</span>
