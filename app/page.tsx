@@ -6,6 +6,7 @@ import { CallForm } from '@/components/CallForm'
 import OnboardingFlow from '@/components/OnboardingFlow'
 import LandingPage from '@/components/LandingPage'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
+import { CallPageHeader } from '@/components/CallPageHeader'
 
 export default function Home() {
   const { publicKey } = useWallet()
@@ -86,6 +87,8 @@ export default function Home() {
         backgroundAttachment: 'fixed',
       }}
     >
+      {/* Glassmorphic Header */}
+      <CallPageHeader />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
         <div className="text-center mb-8">
