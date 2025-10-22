@@ -4,6 +4,13 @@
 BroadCall is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## Recent Changes
+- ✅ **Fixed Double Header Issue** (October 22, 2025)
+  - Removed ConditionalHeader from root layout that was causing duplicate headers
+  - **Single glassmorphic header across all pages** - No more double menu issue
+  - Added CallPageHeader to authenticated Homepage for consistency
+  - Clean, unified navigation experience throughout the platform
+  - **Architect-approved**: No functional regressions
+
 - ✅ **Glassmorphic Navigation Header on All Pages** (October 21, 2025)
   - **Profile and Settings pages now use CallPageHeader** (glassmorphic navigation header)
   - Replaced old dark banner/headers with consistent glassmorphic design across all pages
