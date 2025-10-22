@@ -4,6 +4,30 @@
 BroadCall is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## Recent Changes
+- ✅ **Token Call Page KOL Showcase Redesign** (October 22, 2025)
+  - **Complete UX transformation**: Token call pages now showcase the KOL's full profile and track record
+  - **KOL Profile Banner Section** at top:
+    - Twitter-style banner image with avatar overlay (24-32px, rounded-full with 4px border)
+    - Username with verification badge (orange gradient checkmark)
+    - Bio/description text
+    - "Trades in: @username" label in glassmorphic pill
+  - **Latest Call Hero Card**: Most recent call prominently featured first
+    - "Called: $TOKEN And it's UP/DOWN by" typography
+    - Large ROI display (5xl-7xl, green gradient for gains, red for losses)
+    - Token logo positioned top-right (20-24px rounded square)
+    - Platform trading buttons (24-32px, glassmorphic design)
+    - Embedded DexScreener chart (280-350px height)
+    - Market cap when called info
+    - Thesis quote if available
+  - **Previous Calls Stack**: All other calls by the KOL shown chronologically below
+    - Smaller call cards (same structure as hero but 4xl text, 250px charts)
+    - Each card fully functional with platform buttons, charts, and stats
+  - **Data fetching**: Fetches ALL calls by creator on page load, sorted by date (newest first)
+  - **Performance**: Parallel price fetching for all calls with 30-second auto-refresh
+  - **Social sharing benefit**: Users clicking shared links immediately see KOL's credibility and full track record
+  - **Glassmorphic consistency**: All cards use white/12% bg, 20px blur, white/20% borders, 34-51px corners
+  - **Fully responsive**: Mobile-first design with md: breakpoints for desktop
+
 - ✅ **Fixed Double Header Issue** (October 22, 2025)
   - Removed ConditionalHeader from root layout that was causing duplicate headers
   - **Single glassmorphic header across all pages** - No more double menu issue

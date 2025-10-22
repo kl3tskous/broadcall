@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
@@ -20,24 +20,33 @@ interface TokenPrice {
   dexId: string
 }
 
+interface CallWithPrice extends Call {
+  priceData?: TokenPrice | null
+}
+
 export default function CallPage() {
   const params = useParams()
   const id = params.id as string
-  const [call, setCall] = useState<Call | null>(null)
+  
+  const [allCalls, setAllCalls] = useState<CallWithPrice[]>([])
   const [creatorSettings, setCreatorSettings] = useState<UserSettings | null>(null)
   const [creatorBanner, setCreatorBanner] = useState<string | null>(null)
   const [creatorAvatar, setCreatorAvatar] = useState<string | null>(null)
   const [creatorAlias, setCreatorAlias] = useState<string | null>(null)
   const [creatorBio, setCreatorBio] = useState<string | null>(null)
-  const [moreCalls, setMoreCalls] = useState<Call[]>([])
+  const [creatorWallet, setCreatorWallet] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [priceData, setPriceData] = useState<TokenPrice | null>(null)
-  const [priceLoading, setPriceLoading] = useState(true)
+  
+  const callsRef = useRef<CallWithPrice[]>([])
+  
+  useEffect(() => {
+    callsRef.current = allCalls
+  }, [allCalls])
 
   useEffect(() => {
-    const fetchCall = async () => {
+    const fetchData = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: initialCall, error } = await supabase
           .from('calls')
           .select('*')
           .eq('id', id)
@@ -45,147 +54,142 @@ export default function CallPage() {
 
         if (error) throw error
 
-        setCall(data)
+        const creatorWalletAddr = initialCall.creator_wallet
+        setCreatorWallet(creatorWalletAddr)
 
-        const { data: settingsData } = await supabase
-          .from('user_settings')
-          .select('*')
-          .eq('wallet_address', data.creator_wallet)
-          .single()
+        const [settingsResult, profileResult, callsResult] = await Promise.all([
+          supabase
+            .from('user_settings')
+            .select('*')
+            .eq('wallet_address', creatorWalletAddr)
+            .single(),
+          supabase
+            .from('profiles')
+            .select('banner_url, avatar_url, alias, bio')
+            .eq('wallet_address', creatorWalletAddr)
+            .single(),
+          supabase
+            .from('calls')
+            .select('*')
+            .eq('creator_wallet', creatorWalletAddr)
+            .order('created_at', { ascending: false })
+        ])
 
-        if (settingsData) {
-          setCreatorSettings(settingsData)
+        if (settingsResult.data) {
+          setCreatorSettings(settingsResult.data)
         }
 
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('banner_url, avatar_url, alias, bio')
-          .eq('wallet_address', data.creator_wallet)
-          .single()
-
-        if (profileData) {
-          setCreatorBanner(profileData.banner_url || null)
-          setCreatorAvatar(profileData.avatar_url || null)
-          setCreatorAlias(profileData.alias || null)
-          setCreatorBio(profileData.bio || null)
+        if (profileResult.data) {
+          setCreatorBanner(profileResult.data.banner_url || null)
+          setCreatorAvatar(profileResult.data.avatar_url || null)
+          setCreatorAlias(profileResult.data.alias || null)
+          setCreatorBio(profileResult.data.bio || null)
         }
 
-        // Fetch more calls by the same creator
-        const { data: moreCallsData } = await supabase
-          .from('calls')
-          .select('*')
-          .eq('creator_wallet', data.creator_wallet)
-          .neq('id', id)
-          .order('created_at', { ascending: false })
-          .limit(3)
-
-        if (moreCallsData) {
-          setMoreCalls(moreCallsData)
+        if (callsResult.data) {
+          setAllCalls(callsResult.data)
         }
 
         setLoading(false)
 
-        const updatedViews = (data.views || 0) + 1
-
-        void supabase
+        const updatedViews = (initialCall.views || 0) + 1
+        supabase
           .from('calls')
           .update({ views: updatedViews })
           .eq('id', id)
           .then(({ error: updateError }) => {
-            if (!updateError) {
-              setCall({ ...data, views: updatedViews })
+            if (updateError) {
+              console.error('Error updating views:', updateError)
             }
           })
-          .catch(console.error)
       } catch (error) {
-        console.error('Error fetching call:', error)
+        console.error('Error fetching data:', error)
         setLoading(false)
       }
     }
 
     if (id) {
-      fetchCall()
+      fetchData()
     }
   }, [id])
 
   useEffect(() => {
-    const fetchPrice = async () => {
-      if (!call?.token_address) return
+    const fetchPrices = async () => {
+      const currentCalls = callsRef.current
+      if (currentCalls.length === 0) return
 
-      try {
-        const response = await fetch(
-          `https://api.dexscreener.com/latest/dex/tokens/${call.token_address}`
-        )
-        const data = await response.json()
+      const pricePromises = currentCalls.map(async (call) => {
+        if (!call.token_address) return { ...call, priceData: null }
 
-        if (data.pairs && data.pairs.length > 0) {
-          const mainPair = data.pairs[0]
-          setPriceData({
-            priceUsd: mainPair.priceUsd || '0',
-            priceChange24h: mainPair.priceChange?.h24 || 0,
-            liquidity: mainPair.liquidity?.usd || 0,
-            volume24h: mainPair.volume?.h24 || 0,
-            marketCap: mainPair.fdv || 0,
-            pairAddress: mainPair.pairAddress,
-            dexId: mainPair.dexId
-          })
+        try {
+          const response = await fetch(
+            `https://api.dexscreener.com/latest/dex/tokens/${call.token_address}`
+          )
+          const data = await response.json()
 
-          if (call.initial_price) {
-            const currentPrice = parseFloat(mainPair.priceUsd)
-            const currentMcap = mainPair.fdv || 0
-            
-            const shouldUpdateATH = !call.ath_price || currentPrice > call.ath_price
-            
-            if (shouldUpdateATH) {
-              await supabase
-                .from('calls')
-                .update({
-                  current_price: currentPrice,
-                  current_mcap: currentMcap,
-                  ath_price: currentPrice,
-                  ath_mcap: currentMcap
-                })
-                .eq('id', id)
-                
-              setCall(prev => prev ? {
-                ...prev,
-                current_price: currentPrice,
-                current_mcap: currentMcap,
-                ath_price: currentPrice,
-                ath_mcap: currentMcap
-              } : null)
-            } else {
-              await supabase
-                .from('calls')
-                .update({
-                  current_price: currentPrice,
-                  current_mcap: currentMcap,
-                })
-                .eq('id', id)
-                
-              setCall(prev => prev ? {
-                ...prev,
-                current_price: currentPrice,
-                current_mcap: currentMcap,
-              } : null)
+          if (data.pairs && data.pairs.length > 0) {
+            const mainPair = data.pairs[0]
+            const priceData: TokenPrice = {
+              priceUsd: mainPair.priceUsd || '0',
+              priceChange24h: mainPair.priceChange?.h24 || 0,
+              liquidity: mainPair.liquidity?.usd || 0,
+              volume24h: mainPair.volume?.h24 || 0,
+              marketCap: mainPair.fdv || 0,
+              pairAddress: mainPair.pairAddress,
+              dexId: mainPair.dexId
             }
+
+            if (call.initial_price) {
+              const currentPrice = parseFloat(mainPair.priceUsd)
+              const currentMcap = mainPair.fdv || 0
+              const shouldUpdateATH = !call.ath_price || currentPrice > call.ath_price
+
+              const updates = shouldUpdateATH
+                ? {
+                    current_price: currentPrice,
+                    current_mcap: currentMcap,
+                    ath_price: currentPrice,
+                    ath_mcap: currentMcap
+                  }
+                : {
+                    current_price: currentPrice,
+                    current_mcap: currentMcap,
+                  }
+
+              await supabase
+                .from('calls')
+                .update(updates)
+                .eq('id', call.id)
+
+              return {
+                ...call,
+                ...updates,
+                priceData
+              }
+            }
+
+            return { ...call, priceData }
           }
+        } catch (error) {
+          console.error(`Error fetching price for ${call.token_symbol}:`, error)
         }
-      } catch (error) {
-        console.error('Error fetching price:', error)
-      } finally {
-        setPriceLoading(false)
-      }
+
+        return { ...call, priceData: null }
+      })
+
+      const callsWithPrices = await Promise.all(pricePromises)
+      setAllCalls(callsWithPrices)
     }
 
-    fetchPrice()
-    const interval = setInterval(fetchPrice, 30000)
-    return () => clearInterval(interval)
-  }, [call?.token_address, call?.initial_price, id])
-
-  const getPlatformUrl = (platformId: string) => {
-    if (!call) return ''
+    if (allCalls.length > 0) {
+      fetchPrices()
+    }
     
+    const interval = setInterval(fetchPrices, 30000)
+    return () => clearInterval(interval)
+  }, [allCalls.length])
+
+  const getPlatformUrl = (call: Call, platformId: string) => {
     const tokenAddress = call.token_address
     
     switch (platformId) {
@@ -222,25 +226,22 @@ export default function CallPage() {
     }
   }
 
-  const handlePlatformClick = async (platformId: string) => {
-    if (!call) return
-
-    const url = getPlatformUrl(platformId)
+  const handlePlatformClick = async (call: Call, platformId: string) => {
+    const url = getPlatformUrl(call, platformId)
     if (!url) return
 
     const updatedClicks = (call.clicks || 0) + 1
-    setCall({ ...call, clicks: updatedClicks })
+    setAllCalls(prev => prev.map(c => c.id === call.id ? { ...c, clicks: updatedClicks } : c))
 
     window.open(url, '_blank', 'noopener,noreferrer')
 
     supabase
       .from('calls')
       .update({ clicks: updatedClicks })
-      .eq('id', id)
+      .eq('id', call.id)
       .then(({ error }) => {
         if (error) {
           console.error('Error updating clicks:', error)
-          setCall({ ...call, clicks: call.clicks })
         }
       })
   }
@@ -261,7 +262,7 @@ export default function CallPage() {
     )
   }
 
-  if (!call) {
+  if (allCalls.length === 0) {
     return (
       <div 
         className="min-h-screen flex items-center justify-center relative overflow-hidden"
@@ -280,17 +281,111 @@ export default function CallPage() {
     )
   }
 
-  const roi = call.initial_price && call.current_price 
-    ? calculateROI(call.initial_price, call.current_price)
-    : 0
-  
-  const multiplier = call.initial_price && call.current_price
-    ? calculateMultiplier(call.initial_price, call.current_price)
-    : 0
+  const latestCall = allCalls[0]
+  const previousCalls = allCalls.slice(1)
 
-  const athROI = call.initial_price && call.ath_price
-    ? calculateROI(call.initial_price, call.ath_price)
-    : 0
+  const renderCallCard = (call: CallWithPrice, isHero: boolean = false) => {
+    const roi = call.initial_price && call.current_price 
+      ? calculateROI(call.initial_price, call.current_price)
+      : 0
+
+    return (
+      <div 
+        key={call.id}
+        className={`relative bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] shadow-[0px_4px_6px_rgba(0,0,0,0.38)] ${
+          isHero ? 'p-6 md:p-8 mb-8' : 'p-6 mb-6'
+        }`}
+      >
+        {/* Token Logo - Top Right */}
+        <div className={`absolute ${isHero ? 'top-6 right-6 md:top-8 md:right-8' : 'top-6 right-6'}`}>
+          {call.token_logo ? (
+            <img 
+              src={call.token_logo} 
+              alt={call.token_symbol || 'Token'} 
+              className={`rounded-xl shadow-lg ${isHero ? 'w-20 h-20 md:w-24 md:h-24' : 'w-16 h-16'}`}
+            />
+          ) : (
+            <div className={`rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold shadow-lg ${
+              isHero ? 'w-20 h-20 md:w-24 md:h-24 text-3xl' : 'w-16 h-16 text-2xl'
+            }`}>
+              {call.token_symbol?.charAt(0) || '?'}
+            </div>
+          )}
+        </div>
+
+        {/* Called: Token Name & ROI */}
+        <div className="mb-6">
+          <div className={`${isHero ? 'text-2xl md:text-3xl' : 'text-xl'} font-bold text-white mb-2 flex items-center gap-2`}>
+            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+              Called:
+            </span>
+            <span>${call.token_symbol || 'TOKEN'}</span>
+          </div>
+          <p className={`${isHero ? 'text-base md:text-lg' : 'text-sm'} text-gray-400 mb-3`}>
+            And it's {roi >= 0 ? 'UP' : 'DOWN'} by
+          </p>
+          {call.initial_price && call.current_price && (
+            <div className={`font-black ${
+              roi >= 0 ? 'bg-gradient-to-r from-green-400 to-emerald-500' : 'text-red-500'
+            } ${roi >= 0 ? 'bg-clip-text text-transparent' : ''} ${
+              isHero ? 'text-5xl md:text-7xl' : 'text-4xl'
+            }`}>
+              {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
+            </div>
+          )}
+        </div>
+
+        {/* Platform Buttons */}
+        <div className="mb-6">
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {platforms.map((platform) => {
+              const Logo = platform.Logo
+              return (
+                <button
+                  key={platform.id}
+                  onClick={() => handlePlatformClick(call, platform.id)}
+                  className={`flex-shrink-0 flex flex-col items-center justify-center gap-2 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[28px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)] ${
+                    isHero ? 'w-28 h-28 md:w-32 md:h-32' : 'w-24 h-24'
+                  }`}
+                >
+                  <Logo className={isHero ? 'w-10 h-10 md:w-12 md:h-12' : 'w-8 h-8'} />
+                  <span className="text-white font-extrabold text-xs">{platform.name}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Chart */}
+        {call.priceData?.pairAddress && (
+          <div className="mb-6 rounded-2xl overflow-hidden shadow-lg">
+            <iframe
+              src={`https://dexscreener.com/solana/${call.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+              className={`w-full border-0 ${isHero ? 'h-[280px] md:h-[350px]' : 'h-[250px]'}`}
+              style={{ background: 'transparent' }}
+            />
+          </div>
+        )}
+
+        {/* Market Cap Info */}
+        {call.priceData?.marketCap && (
+          <div className="flex items-center justify-between text-sm text-gray-300 mb-4">
+            <span>Marketcap when called:</span>
+            <span className="text-green-400 font-bold">
+              ${formatMarketCap(call.initial_mcap || 0)}
+            </span>
+          </div>
+        )}
+
+        {/* Thesis */}
+        {call.thesis && (
+          <div className="bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl p-4">
+            <p className="text-gray-300 text-sm italic">&ldquo;{call.thesis}&rdquo;</p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <main 
@@ -303,250 +398,90 @@ export default function CallPage() {
         backgroundAttachment: 'fixed',
       }}
     >
-      {/* Glassmorphic Header */}
       <CallPageHeader />
 
-      {/* Decorative Corner Lines */}
-      <div className="fixed pointer-events-none">
-        {/* Top Right Lines */}
-        <div className="absolute right-96 top-64 w-16 h-1 bg-white/12 origin-left" style={{ transform: 'rotate(38.66deg)' }} />
-        <div className="absolute right-96 top-72 w-16 h-1 bg-white/12 origin-left" style={{ transform: 'rotate(-38.66deg)' }} />
+      <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
         
-        {/* Top Left Lines */}
-        <div className="absolute left-96 top-64 w-16 h-1 bg-white/12 origin-right" style={{ transform: 'rotate(-38.66deg)' }} />
-        <div className="absolute left-96 top-72 w-16 h-1 bg-white/12 origin-right" style={{ transform: 'rotate(38.66deg)' }} />
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-4 md:py-6">
-        
-        {/* Hero Token Card */}
-        <div className="mb-6 relative">
-          <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-4 md:p-6 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
-            
-            {/* Token Logo - Top Right */}
-            <div className="absolute top-4 right-4 md:top-6 md:right-6">
-              {call.token_logo ? (
+        {/* KOL Profile Banner Section */}
+        <div className="mb-8">
+          {/* Banner Image */}
+          <div 
+            className="w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20 relative"
+            style={{
+              backgroundImage: creatorBanner ? `url(${creatorBanner})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {/* Avatar Overlay */}
+            <div className="absolute -bottom-12 left-6 md:left-8">
+              {creatorAvatar ? (
                 <img 
-                  src={call.token_logo} 
-                  alt={call.token_symbol || 'Token'} 
-                  className="w-16 h-16 md:w-20 md:h-20 rounded-xl shadow-lg"
+                  src={creatorAvatar} 
+                  alt={creatorAlias || 'User'} 
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black/50 shadow-2xl"
                 />
               ) : (
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl font-bold shadow-lg">
-                  {call.token_symbol?.charAt(0) || '?'}
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black/50 bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl">
+                  {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Token Name & ROI */}
-            <div className="mb-4">
-              <h1 className="text-4xl md:text-6xl font-black text-white mb-3">
-                ${call.token_symbol || 'TOKEN'}
-              </h1>
-              {call.initial_price && call.current_price && (
-                <div className={`text-4xl md:text-6xl font-black ${
-                  roi >= 0 ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 'text-red-500'
-                } bg-clip-text text-transparent`}>
-                  {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
-                </div>
-              )}
-            </div>
-
-            {/* Since called by */}
-            <div className="mb-4">
-              <p className="text-gray-400 text-lg mb-3">Since called by:</p>
-              <Link href={`/profile/${call.creator_wallet}`} className="flex items-center gap-3 group">
-                <div className="flex-shrink-0">
-                  {creatorAvatar ? (
-                    <img 
-                      src={creatorAvatar} 
-                      alt={creatorAlias || 'User'} 
-                      className="w-12 h-12 rounded-full border-2 border-white/20"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-bold">
-                      {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-white text-xl font-bold group-hover:underline">
-                    @{creatorAlias || 'Anonymous'}
-                  </span>
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
+          {/* Profile Info */}
+          <div className="mt-16 md:mt-20 mb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <Link 
+                href={`/profile/${creatorWallet}`}
+                className="text-2xl md:text-3xl font-black text-white hover:underline flex items-center gap-2"
+              >
+                @{creatorAlias || 'Anonymous'}
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
                 </div>
               </Link>
             </div>
 
-            {/* Inline Chart */}
-            {priceData?.pairAddress && (
-              <div className="rounded-2xl overflow-hidden shadow-lg">
-                <iframe
-                  src={`https://dexscreener.com/solana/${priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                  className="w-full h-[200px] md:h-[280px] border-0"
-                  style={{ background: 'transparent' }}
-                />
+            {/* Bio */}
+            {creatorBio && (
+              <p className="text-gray-300 text-base md:text-lg mb-4 max-w-2xl">
+                {creatorBio}
+              </p>
+            )}
+
+            {/* Trades In Label */}
+            {creatorSettings && (
+              <div className="bg-white/[0.08] border border-white/12 rounded-2xl px-4 py-2 inline-block">
+                <span className="text-gray-400 text-sm">Trades in: </span>
+                <span className="text-orange-400 font-bold text-sm">
+                  @{creatorAlias || 'Anonymous'}
+                </span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Every buy powers call */}
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-white flex items-center justify-center gap-4">
-            {/* Left Arrow */}
-            <img 
-              src="/arrow-down.png" 
-              alt="Arrow" 
-              className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"
-            />
-            
-            <span>
-              Every buy powers{' '}
-              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                @{creatorAlias || 'Anonymous'}
-              </span>
-              's call
-            </span>
-            
-            {/* Right Arrow */}
-            <img 
-              src="/arrow-down.png" 
-              alt="Arrow" 
-              className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"
-            />
-          </h2>
-          
-          {/* Horizontal Scrollable Platform Buttons */}
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            <div className="flex gap-3 mx-auto">
-              {platforms.map((platform) => {
-                const Logo = platform.Logo
-                return (
-                  <button
-                    key={platform.id}
-                    onClick={() => handlePlatformClick(platform.id)}
-                    className="flex-shrink-0 flex flex-col items-center justify-center gap-2 w-32 h-32 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[28px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)]"
-                  >
-                    <Logo className="w-12 h-12" />
-                    <span className="text-white font-extrabold text-xs">{platform.name}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+        {/* Latest Call - Hero Card */}
+        <div className="relative">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-300 mb-4">Latest Call</h2>
+          {renderCallCard(latestCall, true)}
         </div>
 
-        {/* Thesis Quote */}
-        {call.thesis && (
-          <div className="mb-8 bg-white/[0.08] backdrop-blur-[20px] border border-white/10 rounded-2xl p-6">
-            <p className="text-gray-200 text-lg italic">&ldquo;{call.thesis}&rdquo;</p>
-          </div>
-        )}
-
-        {/* Stats & Social Sharing */}
-        <div className="mb-8 bg-white/[0.08] backdrop-blur-[20px] border border-white/10 rounded-2xl p-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex gap-6 text-gray-300">
-              <button 
-                onClick={() => {
-                  const shareUrl = `${window.location.origin}/call/${call.id}`
-                  const shareText = `🚀 ${call.token_symbol} ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI\n\nCalled by @${creatorAlias || call.user_alias || 'Anonymous'} on BroadCall`
-                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
-                }}
-                className="flex items-center gap-2 hover:text-orange-400 transition-colors"
-              >
-                <span className="text-xl">🔁</span>
-                <span className="text-sm font-medium">Share on X</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/call/${call.id}`)
-                  alert('Link copied to clipboard!')
-                }}
-                className="flex items-center gap-2 hover:text-orange-400 transition-colors"
-              >
-                <span className="text-xl">🔗</span>
-                <span className="text-sm font-medium">Copy Link</span>
-              </button>
-            </div>
-
-            <div className="flex gap-6 text-sm text-gray-400">
-              <span className="flex items-center gap-2">
-                <span className="text-orange-400">👁</span> {call.views || 0} views
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="text-orange-400">🖱</span> {call.clicks || 0} clicks
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* More Calls by Creator */}
-        {moreCalls.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-white mb-6">
-              More calls by{' '}
-              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                @{creatorAlias || 'Anonymous'}
-              </span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {moreCalls.map((otherCall) => {
-                const otherROI = otherCall.initial_price && otherCall.current_price
-                  ? calculateROI(otherCall.initial_price, otherCall.current_price)
-                  : 0
-
-                return (
-                  <Link
-                    key={otherCall.id}
-                    href={`/call/${otherCall.id}`}
-                    className="bg-white/[0.08] backdrop-blur-[20px] border border-white/10 hover:bg-white/[0.12] hover:border-white/20 rounded-2xl p-4 transition-all"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      {otherCall.token_logo ? (
-                        <img 
-                          src={otherCall.token_logo} 
-                          alt={otherCall.token_name || ''} 
-                          className="w-12 h-12 rounded-full"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none'
-                          }}
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-lg font-bold">
-                          {otherCall.token_symbol?.charAt(0) || '?'}
-                        </div>
-                      )}
-                      <div>
-                        <h4 className="font-bold text-white">
-                          ${otherCall.token_symbol || 'TOKEN'}
-                        </h4>
-                        <p className="text-xs text-gray-400 truncate">
-                          {otherCall.token_name || 'Unknown'}
-                        </p>
-                      </div>
-                    </div>
-                    {otherCall.initial_price && otherCall.current_price && (
-                      <div className={`text-2xl font-bold ${
-                        otherROI >= 0 ? 'bg-gradient-to-r from-green-400 to-emerald-400' : 'text-red-400'
-                      } ${otherROI >= 0 ? 'bg-clip-text text-transparent' : ''}`}>
-                        {otherROI >= 0 ? '+' : ''}{otherROI.toFixed(1)}%
-                      </div>
-                    )}
-                  </Link>
-                )
-              })}
-            </div>
+        {/* Previous Calls */}
+        {previousCalls.length > 0 && (
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-300 mb-4">Previous Calls</h2>
+            {previousCalls.map((call) => (
+              <div key={call.id} className="relative">
+                {renderCallCard(call, false)}
+              </div>
+            ))}
           </div>
         )}
       </div>
-      </main>
+    </main>
   )
 }
