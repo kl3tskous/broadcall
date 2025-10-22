@@ -8,9 +8,9 @@ BroadCall is a Next.js-based platform empowering Solana influencers to create an
   - **Complete UX transformation**: Token call pages now showcase the KOL's full profile and track record
   - **KOL Profile Banner Section** at top:
     - Twitter-style banner image with avatar overlay positioned in front (overlapping banner bottom with z-20)
-    - Avatar uses `transform: translateY(50%)` for perfect 50/50 overlap with banner
+    - Avatar uses `transform: translateY(-50%)` positioning center of avatar at banner's bottom edge (50% on banner, 50% below)
     - Avatar has orange gradient stroke border (135deg, #ff8800 to #ff4400) using CSS border-box technique
-    - Proper spacing between banner and username (mt-14 md:mt-16) to accommodate avatar overlap
+    - Proper spacing between banner and username (mt-16 md:mt-20) to accommodate avatar overlap
     - Username with verification badge (orange gradient checkmark)
     - Bio/description text
     - "Trades in: @username" label in glassmorphic pill
