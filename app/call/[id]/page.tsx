@@ -403,18 +403,19 @@ export default function CallPage() {
       <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
         
         {/* KOL Profile Banner Section */}
-        <div className="mb-8">
-          {/* Banner Image - with relative positioning for avatar overlay */}
+        <div className="mb-8 relative">
+          {/* Banner Image */}
           <div 
-            className="relative w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20"
+            className="w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20"
             style={{
               backgroundImage: creatorBanner ? `url(${creatorBanner})` : undefined,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
-          >
-            {/* Avatar Overlay - center of avatar at banner bottom */}
-            <div className="absolute bottom-0 left-6 md:left-8 z-20" style={{ transform: 'translateY(50%)' }}>
+          />
+          
+          {/* Avatar Overlay - positioned to overlap banner */}
+          <div className="absolute bottom-0 left-6 md:left-8 z-20" style={{ transform: 'translateY(50%)' }}>
             {creatorAvatar ? (
               <img 
                 src={creatorAvatar} 
@@ -440,7 +441,6 @@ export default function CallPage() {
                 {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
               </div>
             )}
-            </div>
           </div>
 
           {/* Profile Info */}
