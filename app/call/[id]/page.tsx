@@ -403,48 +403,48 @@ export default function CallPage() {
       <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
         
         {/* KOL Profile Banner Section */}
-        <div className="mb-8">
+        <div className="mb-8 relative">
           {/* Banner Image */}
           <div 
-            className="w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20 relative"
+            className="w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20"
             style={{
               backgroundImage: creatorBanner ? `url(${creatorBanner})` : undefined,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
-          >
-            {/* Avatar Overlay */}
-            <div className="absolute -bottom-12 left-6 md:left-8">
-              {creatorAvatar ? (
-                <img 
-                  src={creatorAvatar} 
-                  alt={creatorAlias || 'User'} 
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl"
-                  style={{
-                    border: '4px solid transparent',
-                    backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff8800, #ff4400)',
-                    backgroundOrigin: 'border-box',
-                    backgroundClip: 'padding-box, border-box'
-                  }}
-                />
-              ) : (
-                <div 
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl"
-                  style={{
-                    border: '4px solid transparent',
-                    backgroundImage: 'linear-gradient(135deg, #ff5722, #ff9800), linear-gradient(135deg, #ff8800, #ff4400)',
-                    backgroundOrigin: 'border-box',
-                    backgroundClip: 'padding-box, border-box'
-                  }}
-                >
-                  {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-                </div>
-              )}
-            </div>
+          />
+          
+          {/* Avatar Overlay - positioned above banner */}
+          <div className="absolute bottom-0 left-6 md:left-8 z-20" style={{ transform: 'translateY(50%)' }}>
+            {creatorAvatar ? (
+              <img 
+                src={creatorAvatar} 
+                alt={creatorAlias || 'User'} 
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl"
+                style={{
+                  border: '4px solid transparent',
+                  backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff8800, #ff4400)',
+                  backgroundOrigin: 'border-box',
+                  backgroundClip: 'padding-box, border-box'
+                }}
+              />
+            ) : (
+              <div 
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl"
+                style={{
+                  border: '4px solid transparent',
+                  backgroundImage: 'linear-gradient(135deg, #ff5722, #ff9800), linear-gradient(135deg, #ff8800, #ff4400)',
+                  backgroundOrigin: 'border-box',
+                  backgroundClip: 'padding-box, border-box'
+                }}
+              >
+                {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
+              </div>
+            )}
           </div>
 
           {/* Profile Info */}
-          <div className="mt-8 md:mt-10 mb-6">
+          <div className="mt-14 md:mt-16 mb-6">
             <div className="flex items-center gap-3 mb-3">
               <Link 
                 href={`/profile/${creatorWallet}`}
