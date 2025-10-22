@@ -415,7 +415,7 @@ export default function CallPage() {
           />
           
           {/* Avatar Overlay - positioned above banner */}
-          <div className="absolute -bottom-12 md:-bottom-16 left-6 md:left-8 z-20">
+          <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 z-20">
             {creatorAvatar ? (
               <img 
                 src={creatorAvatar} 
@@ -444,7 +444,7 @@ export default function CallPage() {
           </div>
 
           {/* Profile Info */}
-          <div className="mt-14 md:mt-18 mb-6">
+          <div className="mt-4 md:mt-6 mb-6">
             <div className="flex items-center gap-3 mb-3">
               <Link 
                 href={`/profile/${creatorWallet}`}
