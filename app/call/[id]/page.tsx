@@ -419,10 +419,24 @@ export default function CallPage() {
                 <img 
                   src={creatorAvatar} 
                   alt={creatorAlias || 'User'} 
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black/50 shadow-2xl"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl"
+                  style={{
+                    border: '4px solid transparent',
+                    backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff8800, #ff4400)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'padding-box, border-box'
+                  }}
                 />
               ) : (
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black/50 bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl">
+                <div 
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl"
+                  style={{
+                    border: '4px solid transparent',
+                    backgroundImage: 'linear-gradient(135deg, #ff5722, #ff9800), linear-gradient(135deg, #ff8800, #ff4400)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'padding-box, border-box'
+                  }}
+                >
                   {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
                 </div>
               )}
@@ -430,7 +444,7 @@ export default function CallPage() {
           </div>
 
           {/* Profile Info */}
-          <div className="mt-16 md:mt-20 mb-6">
+          <div className="mt-8 md:mt-10 mb-6">
             <div className="flex items-center gap-3 mb-3">
               <Link 
                 href={`/profile/${creatorWallet}`}
