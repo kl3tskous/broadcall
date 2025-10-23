@@ -124,20 +124,23 @@ export async function POST(request: NextRequest) {
 
       const userSettings = userResult.rows[0] || {}
       
-      // Build platform links with user's referral codes
+      // Default BroadCall referral codes (fallback when user hasn't set their own)
+      const DEFAULT_GMGN_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+      const DEFAULT_AXIOM_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+      const DEFAULT_BULLX_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+      
+      // Build platform links with new URL formats
+      const gmgnRef = userSettings.gmgn_ref || DEFAULT_GMGN_REF
+      const axiomRef = userSettings.axiom_ref || DEFAULT_AXIOM_REF
+      const bullxRef = userSettings.bullx_ref || DEFAULT_BULLX_REF
+      
       platform_links = {
-        gmgn: userSettings.gmgn_ref 
-          ? `https://gmgn.ai/sol/token/${token_address}?ref=${userSettings.gmgn_ref}`
-          : `https://gmgn.ai/sol/token/${token_address}`,
-        axiom: userSettings.axiom_ref
-          ? `https://axiom.trade/?token=${token_address}&ref=${userSettings.axiom_ref}`
-          : `https://axiom.trade/?token=${token_address}`,
+        gmgn: `https://gmgn.ai/sol/token/${gmgnRef}_${token_address}`,
+        axiom: `https://axiom.trade/t/${axiomRef}/@soltrade`,
         photon: userSettings.photon_ref
           ? `https://photon-sol.tinyastro.io/en/lp/${token_address}?ref=${userSettings.photon_ref}`
           : `https://photon-sol.tinyastro.io/en/lp/${token_address}`,
-        bullx: userSettings.bullx_ref
-          ? `https://bullx.io/terminal?chainId=1399811149&address=${token_address}&r=${userSettings.bullx_ref}`
-          : `https://bullx.io/terminal?chainId=1399811149&address=${token_address}`,
+        bullx: `https://neo.bullx.io/terminal?chainId=1399811149&address=${token_address}&r=${bullxRef}&l=en&r=${bullxRef}`,
         trojan: userSettings.trojan_ref
           ? `https://trojan.bot/trade/${token_address}?ref=${userSettings.trojan_ref}`
           : `https://trojan.bot/trade/${token_address}`

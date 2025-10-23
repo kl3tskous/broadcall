@@ -189,34 +189,34 @@ export default function CallPage() {
   const getPlatformUrl = (call: Call, platformId: string) => {
     const tokenAddress = call.token_address
     
+    // Default BroadCall referral codes (fallback when user hasn't set their own)
+    const DEFAULT_AXIOM_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+    const DEFAULT_BULLX_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+    
     switch (platformId) {
       case 'gmgn':
         const gmgnRef = call.gmgn_ref || creatorSettings?.gmgn_ref || DEFAULT_GMGN_REF
         return `https://gmgn.ai/sol/token/${gmgnRef}_${tokenAddress}`
       
       case 'axiom':
-        const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || ''
-        return axiomRef 
-          ? `https://axiom.trade/t/${tokenAddress}/@${axiomRef}`
-          : `https://axiom.trade/solana/${tokenAddress}`
+        const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || DEFAULT_AXIOM_REF
+        return `https://axiom.trade/t/${axiomRef}/@soltrade`
       
       case 'photon':
         const photonRef = call.photon_ref || creatorSettings?.photon_ref || ''
         return photonRef
-          ? `https://photon-sol.tinyastro.io/${photonRef}`
+          ? `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}?ref=${photonRef}`
           : `https://photon-sol.tinyastro.io/en/lp/${tokenAddress}`
       
       case 'bullx':
-        const bullxRef = call.bullx_ref || creatorSettings?.bullx_ref || ''
-        return bullxRef
-          ? `https://neo.bullx.io/p/${bullxRef}`
-          : `https://bullx.io/terminal?chainId=1399811149&address=${tokenAddress}`
+        const bullxRef = call.bullx_ref || creatorSettings?.bullx_ref || DEFAULT_BULLX_REF
+        return `https://neo.bullx.io/terminal?chainId=1399811149&address=${tokenAddress}&r=${bullxRef}&l=en&r=${bullxRef}`
       
       case 'trojan':
         const trojanRef = call.trojan_ref || creatorSettings?.trojan_ref || ''
         return trojanRef
-          ? `https://t.me/solana_trojanbot?start=r-${trojanRef}`
-          : `https://t.me/solana_trojanbot`
+          ? `https://trojan.bot/trade/${tokenAddress}?ref=${trojanRef}`
+          : `https://trojan.bot/trade/${tokenAddress}`
       
       default:
         return ''
