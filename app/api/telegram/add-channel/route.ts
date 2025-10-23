@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
 
       // Add the channel
       await client.query(
-        `INSERT INTO telegram_channels (wallet_address, channel_id, channel_name, channel_username, enabled)
-         VALUES ($1, $2, $3, $4, true)`,
-        [walletAddress, channel_id, channel_name, channel_username]
+        `INSERT INTO telegram_channels (wallet_address, telegram_id, channel_id, channel_name, channel_username, enabled)
+         VALUES ($1, $2, $3, $4, $5, true)`,
+        [walletAddress, telegram_id, channel_id, channel_name, channel_username]
       )
 
       return NextResponse.json({
