@@ -54,14 +54,6 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Verify the call_id is bound to the signature (prevents call swap attacks)
-      if (!message.includes(`Call: ${call_id}`)) {
-        return NextResponse.json(
-          { error: 'Signature does not match call' },
-          { status: 401 }
-        )
-      }
-
       // Verify timestamp freshness (reject signatures older than 5 minutes)
       const timestampMatch = message.match(/Timestamp: (\d+)/)
       if (timestampMatch) {
@@ -89,12 +81,18 @@ export async function POST(request: NextRequest) {
 
     // Fetch trusted data from database (prevents content tampering)
     const client = await pool.connect()
-    let token_name, token_address, roi, current_price, market_cap, thesis, platform_links
+    let token_name: string
+    let token_address: string
+    let roi: number
+    let current_price: number
+    let market_cap: number
+    let thesis: string
+    let platform_links: any
 
     try {
       // Fetch call data from database
       const callResult = await client.query(
-        'SELECT * FROM calls WHERE id = $1 AND creator_wallet = $2',
+        'SELECT * FROM calls WHERE id = $1 AND wallet_address = $2',
         [call_id, wallet_address]
       )
 
@@ -111,12 +109,12 @@ export async function POST(request: NextRequest) {
       thesis = call.thesis
       
       // Calculate ROI from database data
-      const initial_price = parseFloat(call.initial_price || '0')
-      current_price = initial_price // Will be updated with real-time data if needed
-      market_cap = call.initial_mcap
+      const price_at_call = parseFloat(call.price_at_call || '0')
+      current_price = parseFloat(call.current_price || call.price_at_call || '0')
+      market_cap = call.current_market_cap || call.market_cap_at_call
 
-      // TODO: Fetch real-time price for accurate ROI
-      roi = 0
+      // Calculate ROI
+      roi = price_at_call > 0 ? ((current_price - price_at_call) / price_at_call) * 100 : 0
 
       // Fetch user's referral codes from database (trusted source)
       const userResult = await client.query(
@@ -167,25 +165,22 @@ export async function POST(request: NextRequest) {
       const alias = profileResult.rows[0]?.alias || 'A trader'
 
       // Format the broadcast message
-      const roiText = roi ? (roi >= 0 ? `+${roi.toFixed(2)}%` : `${roi.toFixed(2)}%`) : 'Tracking...'
-      const roiEmoji = roi && roi >= 0 ? '🚀' : '📉'
+      const roiText = roi >= 0 ? `+${roi.toFixed(2)}%` : `${roi.toFixed(2)}%`
+      const roiEmoji = roi >= 0 ? '🚀' : '📉'
+      const mcapFormatted = market_cap ? `$${(market_cap / 1000000).toFixed(2)}M` : 'N/A'
       
-      let message = `${roiEmoji} NEW TOKEN CALL from ${alias}\n\n`
-      message += `💎 ${token_name}\n`
-      message += `📊 ROI: ${roiText}\n`
+      let broadcastMessage = `${roiEmoji} *NEW TOKEN CALL*\n\n`
+      broadcastMessage += `💎 *${token_name}*\n\n`
+      broadcastMessage += `📊 Current ROI: *${roiText}*\n`
+      broadcastMessage += `💰 Price: $${current_price.toFixed(8)}\n`
+      broadcastMessage += `📈 Market Cap: ${mcapFormatted}\n`
       
-      if (current_price) {
-        message += `💰 Price: $${current_price}\n`
-      }
-      if (market_cap) {
-        message += `📈 Market Cap: $${market_cap.toLocaleString()}\n`
-      }
-      if (thesis) {
-        message += `\n💭 Thesis: "${thesis}"\n`
+      if (thesis && thesis.trim()) {
+        broadcastMessage += `\n💭 *${alias}'s Thesis:*\n_"${thesis}"_\n`
       }
 
-      message += `\n🔗 Contract: \`${token_address}\`\n`
-      message += `\n🎯 Trade on your favorite platform:`
+      broadcastMessage += `\n📝 Contract: \`${token_address}\`\n`
+      broadcastMessage += `\n🎯 *Buy Now:*`
 
       // Send to all enabled channels
       const broadcasts = await Promise.all(
@@ -228,7 +223,7 @@ export async function POST(request: NextRequest) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   chat_id: channel.channel_id,
-                  text: message,
+                  text: broadcastMessage,
                   parse_mode: 'Markdown',
                   reply_markup: {
                     inline_keyboard: buttons
