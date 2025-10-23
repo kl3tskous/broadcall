@@ -33,10 +33,23 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 **Feature Specifications:**
 - **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
-- **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment.
+- **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment. The `/create-call` page provides a dedicated interface for KOLs to create and broadcast token calls.
 - **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
 - **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
-- **Telegram Channel Broadcasting:** KOLs can broadcast their token calls to linked Telegram channels with professionally formatted messages and inline buy buttons, utilizing their referral codes.
+- **Telegram Channel Broadcasting:** KOLs can broadcast their token calls to linked Telegram channels with professionally formatted messages and inline buy buttons, utilizing their referral codes. The broadcast system includes:
+  - Automatic DexScreener data fetching (token name, symbol, logo, price, market cap)
+  - Professional Markdown-formatted messages with ROI display, token details, and KOL thesis
+  - Inline keyboard buttons for all 5 trading platforms (GMGN, Axiom, Photon, BullX, Trojan) plus DexScreener chart
+  - Smart referral link injection using user's saved platform codes
+  - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
+
+## Recent Changes (October 23, 2025)
+- ✅ Created `calls` table for storing token call data with comprehensive schema
+- ✅ Built `/api/calls/create` endpoint with DexScreener integration and automatic broadcasting
+- ✅ Updated `/api/telegram/broadcast` with professional message formatting and inline buy buttons
+- ✅ Created `/create-call` page with clean UX for token call creation
+- ✅ Fixed authentication flow between create and broadcast endpoints
+- ✅ Implemented complete end-to-end call broadcasting system
 
 ## External Dependencies
 - **Supabase:** PostgreSQL database and authentication.
