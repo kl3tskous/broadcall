@@ -4,6 +4,26 @@
 BroadCall is a Next.js-based platform empowering Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats) and offers social sharing capabilities. Influencers can monetize their calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan), enhancing their market presence and earnings.
 
 ## Recent Changes
+- ✅ **Telegram Bot Integration - Phase 1: Account Linking** (October 23, 2025)
+  - **Secure KOL-Telegram account linking** with cryptographic wallet signature verification
+  - **Python Telegram bot** (@BroadCallBot) with /start, /status, /disconnect commands
+  - **Settings page UI**: Glassmorphic Telegram connection section with connect/disconnect functionality
+  - **Security implementation**:
+    - Ed25519 signature verification using tweetnacl and bs58
+    - Strict message format validation (prevents replay attacks)
+    - 5-minute timestamp window (prevents signature reuse)
+    - Wallet ownership proof required for all connections
+  - **Backend API endpoints**:
+    - POST /api/telegram/generate-token: Creates secure connection tokens with signature verification
+    - POST /api/telegram/verify: Links Telegram account after bot verification
+    - GET /api/telegram/status: Checks connection status
+    - DELETE /api/telegram/disconnect: Unlinks Telegram account
+  - **Database schema**: Added telegram_id, telegram_username to profiles table; created telegram_connection_tokens table
+  - **Dual-workflow system**: Next.js server + Python bot running in parallel
+  - **Connection flow**: Settings → Sign message with wallet → Deep link to Telegram → Bot verifies → Account linked
+  - **Phase 2 roadmap**: Enable KOLs to broadcast token calls to Telegram channels with buy buttons
+  - **Architect-approved**: Security reviewed and validated, no vulnerabilities
+
 - ✅ **Token Call Page KOL Showcase Redesign** (October 22, 2025)
   - **Complete UX transformation**: Token call pages now showcase the KOL's full profile and track record
   - **KOL Profile Banner Section** at top:
@@ -137,6 +157,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **File Upload System:** Replit App Storage for secure profile picture and banner uploads.
 - **KOL Profile System:** Public profile pages (`/profile/[address]`) with Twitter-style layouts, including user bio, social links, performance stats, and tabbed views for "Calls" and "Stats."
 - **Embedded Charts:** Integrates compact DexScreener embedded iframes for live charts within call cards and profile feed.
+- **Telegram Bot Integration:** Python-based Telegram bot for KOL account linking with Ed25519 signature verification, secure token generation, and webhook-free polling architecture.
 
 **Feature Specifications:**
 - **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
@@ -144,9 +165,12 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
 - **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
 - **Tabbed Feed System:** Profile pages feature "Pinned Call" and "Recent Calls" tabs, displaying calls in a grid layout with ROI.
+- **Telegram Account Linking:** Secure wallet-signature-based Telegram connection for KOLs, with deep linking flow and status management in Settings page.
 
 ## External Dependencies
 - **Supabase:** PostgreSQL database and authentication.
 - **DexScreener API:** Real-time token data, prices, market cap, and charts.
 - **Solana Wallet Adapter (Phantom):** Wallet connection and interaction.
 - **Trading Platforms:** Integration with GMGN, Axiom, Photon, BullX, and Trojan for referral linking.
+- **Telegram Bot API:** Python-telegram-bot library for Telegram bot functionality and account linking.
+- **Cryptography Libraries:** tweetnacl (Ed25519 signatures), bs58 (Base58 encoding), for wallet signature verification.
