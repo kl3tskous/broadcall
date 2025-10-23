@@ -5,24 +5,18 @@ BroadCall is a Next.js-based platform empowering Solana influencers to create an
 
 ## Recent Changes
 - ✅ **Telegram Bot Integration - Phase 1: Account Linking** (October 23, 2025)
-  - **Secure KOL-Telegram account linking** with cryptographic wallet signature verification
+  - **Simple KOL-Telegram account linking** for seamless integration
   - **Python Telegram bot** (@BroadCallBot) with /start, /status, /disconnect commands
   - **Settings page UI**: Glassmorphic Telegram connection section with connect/disconnect functionality
-  - **Security implementation**:
-    - Ed25519 signature verification using tweetnacl and bs58
-    - Strict message format validation (prevents replay attacks)
-    - 5-minute timestamp window (prevents signature reuse)
-    - Wallet ownership proof required for all connections
   - **Backend API endpoints**:
-    - POST /api/telegram/generate-token: Creates secure connection tokens with signature verification
+    - POST /api/telegram/generate-token: Creates connection tokens (uses direct PostgreSQL queries)
     - POST /api/telegram/verify: Links Telegram account after bot verification
     - GET /api/telegram/status: Checks connection status
     - DELETE /api/telegram/disconnect: Unlinks Telegram account
   - **Database schema**: Added telegram_id, telegram_username to profiles table; created telegram_connection_tokens table
   - **Dual-workflow system**: Next.js server + Python bot running in parallel
-  - **Connection flow**: Settings → Sign message with wallet → Deep link to Telegram → Bot verifies → Account linked
+  - **Connection flow**: Settings → Click Connect → Telegram opens with deep link → Bot verifies → Account linked
   - **Phase 2 roadmap**: Enable KOLs to broadcast token calls to Telegram channels with buy buttons
-  - **Architect-approved**: Security reviewed and validated, no vulnerabilities
 
 - ✅ **Token Call Page KOL Showcase Redesign** (October 22, 2025)
   - **Complete UX transformation**: Token call pages now showcase the KOL's full profile and track record
