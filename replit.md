@@ -6,7 +6,7 @@ BroadCall is a Next.js-based platform empowering Solana influencers to create an
 ## Recent Changes
 - ✅ **Telegram Bot Integration - Phase 1: Account Linking** (October 23, 2025)
   - **Simple KOL-Telegram account linking** for seamless integration
-  - **Python Telegram bot** (@BroadCallBot) with /start, /status, /disconnect commands
+  - **Python Telegram bot** (@Broadcall_Bot) with /start, /status, /disconnect commands
   - **Settings page UI**: Glassmorphic Telegram connection section with connect/disconnect functionality
   - **Backend API endpoints**:
     - POST /api/telegram/generate-token: Creates connection tokens (uses direct PostgreSQL queries)

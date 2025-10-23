@@ -129,7 +129,7 @@ export default function SettingsPage() {
 
       const { token } = await response.json()
       
-      const botUsername = 'BroadCallBot'
+      const botUsername = 'Broadcall_Bot'
       const telegramLink = `https://t.me/${botUsername}?start=${token}`
       
       window.open(telegramLink, '_blank')
