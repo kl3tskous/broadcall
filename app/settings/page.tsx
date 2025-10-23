@@ -8,9 +8,10 @@ import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
 import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/components/PlatformLogos'
 import { CallPageHeader } from '@/components/CallPageHeader'
+import bs58 from 'bs58'
 
 export default function SettingsPage() {
-  const { publicKey } = useWallet()
+  const { publicKey, signMessage } = useWallet()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -107,18 +108,33 @@ export default function SettingsPage() {
   }
 
   const handleConnectTelegram = async () => {
-    if (!publicKey) return
+    if (!publicKey || !signMessage) {
+      alert('Please ensure your wallet is connected and supports message signing.')
+      return
+    }
 
     setConnectingTelegram(true)
     try {
+      const timestamp = Date.now()
+      const message = `BroadCall Telegram Connection\nTimestamp: ${timestamp}`
+      const messageBytes = new TextEncoder().encode(message)
+      
+      const signatureBytes = await signMessage(messageBytes)
+      const signature = bs58.encode(signatureBytes)
+
       const response = await fetch('/api/telegram/generate-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: publicKey.toString() })
+        body: JSON.stringify({ 
+          wallet_address: publicKey.toString(),
+          signature,
+          message
+        })
       })
 
       if (!response.ok) {
-        throw new Error('Failed to generate connection token')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to generate connection token')
       }
 
       const { token } = await response.json()
@@ -129,9 +145,13 @@ export default function SettingsPage() {
       window.open(telegramLink, '_blank')
       
       alert('Opening Telegram... Follow the bot instructions to complete the connection!')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error connecting Telegram:', error)
-      alert('Failed to generate Telegram connection link. Please try again.')
+      if (error.message?.includes('User rejected')) {
+        alert('Signature request was rejected. Please try again and approve the signature.')
+      } else {
+        alert(error.message || 'Failed to generate Telegram connection link. Please try again.')
+      }
     } finally {
       setConnectingTelegram(false)
     }
