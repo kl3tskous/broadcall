@@ -157,30 +157,19 @@ export async function POST(request: NextRequest) {
         })
       }
 
-      // Get user's alias for the message
-      const profileResult = await client.query(
-        `SELECT alias FROM profiles WHERE wallet_address = $1`,
-        [wallet_address]
-      )
-      const alias = profileResult.rows[0]?.alias || 'A trader'
+      // Construct the token call page URL
+      const callPageUrl = `https://${process.env.REPLIT_DEV_DOMAIN || 'localhost:5000'}/call/${call_id}`
 
       // Format the broadcast message
-      const roiText = roi >= 0 ? `+${roi.toFixed(2)}%` : `${roi.toFixed(2)}%`
-      const roiEmoji = roi >= 0 ? '🚀' : '📉'
-      const mcapFormatted = market_cap ? `$${(market_cap / 1000000).toFixed(2)}M` : 'N/A'
+      let broadcastMessage = ''
       
-      let broadcastMessage = `${roiEmoji} *NEW TOKEN CALL*\n\n`
-      broadcastMessage += `💎 *${token_name}*\n\n`
-      broadcastMessage += `📊 Current ROI: *${roiText}*\n`
-      broadcastMessage += `💰 Price: $${current_price.toFixed(8)}\n`
-      broadcastMessage += `📈 Market Cap: ${mcapFormatted}\n`
-      
+      // Show thesis first (if exists)
       if (thesis && thesis.trim()) {
-        broadcastMessage += `\n💭 *${alias}'s Thesis:*\n_"${thesis}"_\n`
+        broadcastMessage += `${thesis}\n\n`
       }
 
-      broadcastMessage += `\n📝 Contract: \`${token_address}\`\n`
-      broadcastMessage += `\n🎯 *Buy Now:*`
+      // Add the "Trade [Token Name](link) below" line with hyperlink
+      broadcastMessage += `Trade [${token_name}](${callPageUrl}) below 👇`
 
       // Send to all enabled channels
       const broadcasts = await Promise.all(
