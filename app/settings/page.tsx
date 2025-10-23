@@ -62,17 +62,15 @@ export default function SettingsPage() {
           })
         }
 
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('wallet_address', publicKey.toString())
-          .single()
-
-        if (profileData) {
-          setProfile(profileData)
+        // Fetch profile using API endpoint to bypass Supabase PostgREST cache issues
+        const profileResponse = await fetch(`/api/profile/get?wallet_address=${publicKey.toString()}`)
+        const profileResult = await profileResponse.json()
+        
+        if (profileResult.success && profileResult.data) {
+          setProfile(profileResult.data)
           
           // Fetch channels if Telegram is connected
-          if (profileData.telegram_id) {
+          if (profileResult.data.telegram_id) {
             fetchChannels()
           }
         }

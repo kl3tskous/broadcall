@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { Pool } from 'pg';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Use DATABASE_URL for direct PostgreSQL connection (bypasses Supabase PostgREST cache)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,22 +15,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Create client with service key
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Query directly from PostgreSQL database, bypassing Supabase PostgREST completely
+    const result = await pool.query(
+      `SELECT 
+        id, wallet_address, alias, avatar_url, banner_url, 
+        twitter_handle, bio, telegram, website, 
+        created_at, updated_at, telegram_id, telegram_username
+      FROM profiles 
+      WHERE wallet_address = $1`,
+      [wallet_address]
+    );
 
-    // Use raw SQL to bypass schema cache completely
-    const { data, error } = await supabase.rpc('get_profile_data', {
-      p_wallet_address: wallet_address
-    });
-
-    if (error) {
-      console.error('RPC error:', error);
-      // Return empty data if profile not found
-      return NextResponse.json({ success: true, data: null });
-    }
-
-    // RPC returns an array, get first item
-    const profileData = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    const profileData = result.rows[0] || null;
     return NextResponse.json({ success: true, data: profileData });
   } catch (error: any) {
     console.error('API error:', error);
