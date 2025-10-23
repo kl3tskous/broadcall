@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { supabase, UserSettings } from '@/utils/supabaseClient'
+import { supabase, UserSettings, Profile } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
 import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/components/PlatformLogos'
@@ -15,7 +15,10 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [settings, setSettings] = useState<UserSettings | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [connectingTelegram, setConnectingTelegram] = useState(false)
+  const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
   const [refCodes, setRefCodes] = useState({
     gmgn_ref: '',
     axiom_ref: '',
@@ -56,6 +59,16 @@ export default function SettingsPage() {
             trojan_ref: data.trojan_ref || ''
           })
         }
+
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('wallet_address', publicKey.toString())
+          .single()
+
+        if (profileData) {
+          setProfile(profileData)
+        }
       } catch (error) {
         console.error('Error fetching settings:', error)
       } finally {
@@ -90,6 +103,66 @@ export default function SettingsPage() {
       alert('Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleConnectTelegram = async () => {
+    if (!publicKey) return
+
+    setConnectingTelegram(true)
+    try {
+      const response = await fetch('/api/telegram/generate-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet_address: publicKey.toString() })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate connection token')
+      }
+
+      const { token } = await response.json()
+      
+      const botUsername = 'BroadCallBot'
+      const telegramLink = `https://t.me/${botUsername}?start=${token}`
+      
+      window.open(telegramLink, '_blank')
+      
+      alert('Opening Telegram... Follow the bot instructions to complete the connection!')
+    } catch (error) {
+      console.error('Error connecting Telegram:', error)
+      alert('Failed to generate Telegram connection link. Please try again.')
+    } finally {
+      setConnectingTelegram(false)
+    }
+  }
+
+  const handleDisconnectTelegram = async () => {
+    if (!profile?.telegram_id) return
+
+    if (!confirm('Are you sure you want to disconnect your Telegram account?')) {
+      return
+    }
+
+    setDisconnectingTelegram(true)
+    try {
+      const response = await fetch('/api/telegram/disconnect', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telegram_id: profile.telegram_id })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to disconnect Telegram')
+      }
+
+      setProfile({ ...profile, telegram_id: null, telegram_username: null })
+      alert('Telegram disconnected successfully!')
+    } catch (error) {
+      console.error('Error disconnecting Telegram:', error)
+      alert('Failed to disconnect Telegram. Please try again.')
+    } finally {
+      setDisconnectingTelegram(false)
     }
   }
 
@@ -156,6 +229,52 @@ export default function SettingsPage() {
         </div>
 
         <UserProfile walletAddress={publicKey.toString()} />
+
+        {/* Telegram Connection Section */}
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white flex items-center gap-2">
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.038-1.359 5.353-.168.557-.5.743-.82.762-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.441-.751-.244-1.349-.374-1.297-.788.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.325.016.093.036.305.02.471z"/>
+            </svg>
+            Telegram Connection
+          </h2>
+          <p className="text-gray-300 mb-6 text-sm">
+            Connect your Telegram account to push token calls directly to your channel (coming soon!)
+          </p>
+
+          {profile?.telegram_id ? (
+            <div className="space-y-4">
+              <div className="bg-white/[0.08] backdrop-blur-[10px] p-4 rounded-2xl border border-white/10">
+                <p className="text-sm text-gray-400 mb-2">Connected Account</p>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <p className="font-medium text-white">@{profile.telegram_username}</p>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">ID: {profile.telegram_id}</p>
+              </div>
+              <button
+                onClick={handleDisconnectTelegram}
+                disabled={disconnectingTelegram}
+                className="w-full bg-white/[0.08] backdrop-blur-[10px] border border-red-500/30 text-red-400 rounded-2xl px-6 py-3 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+              >
+                {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleConnectTelegram}
+              disabled={connectingTelegram}
+              className="w-full bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.038-1.359 5.353-.168.557-.5.743-.82.762-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.441-.751-.244-1.349-.374-1.297-.788.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.325.016.093.036.305.02.471z"/>
+              </svg>
+              <span className="text-black text-base font-bold">
+                {connectingTelegram ? 'Generating Link...' : 'Connect Telegram'}
+              </span>
+            </button>
+          )}
+        </div>
 
         <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
           <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Your Referral Codes</h2>
