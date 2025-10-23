@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const walletAddress = searchParams.get('wallet_address')
     const signature = request.headers.get('x-wallet-signature')
-    const message = request.headers.get('x-wallet-message')
+    const messageBase64 = request.headers.get('x-wallet-message')
+    
+    // Decode base64 message
+    const message = messageBase64 ? Buffer.from(messageBase64, 'base64').toString('utf-8') : null
 
     if (!walletAddress) {
       return NextResponse.json(

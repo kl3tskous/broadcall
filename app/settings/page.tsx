@@ -96,10 +96,13 @@ export default function SettingsPage() {
       const bs58 = await import('bs58')
       const signature = bs58.default.encode(signatureBytes)
 
+      // Encode message as base64 for HTTP header (headers can't contain newlines)
+      const messageBase64 = btoa(message)
+
       const response = await fetch(`/api/telegram/channels?wallet_address=${publicKey.toString()}`, {
         headers: {
           'x-wallet-signature': signature,
-          'x-wallet-message': message
+          'x-wallet-message': messageBase64
         }
       })
       
