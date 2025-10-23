@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/utils/supabaseClient'
+import { Pool } from 'pg'
+
+// Use direct PostgreSQL connection to bypass Supabase PostgREST schema cache
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+})
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,18 +18,21 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('telegram_id, telegram_username, alias, wallet_address')
-      .eq('telegram_id', parseInt(telegram_id))
-      .single()
+    // Query PostgreSQL directly to avoid Supabase PostgREST cache
+    const result = await pool.query(
+      `SELECT telegram_id, telegram_username, alias, wallet_address 
+       FROM profiles 
+       WHERE telegram_id = $1`,
+      [parseInt(telegram_id)]
+    )
 
-    if (error || !profile) {
+    if (result.rows.length === 0) {
       return NextResponse.json({
         connected: false,
       })
     }
 
+    const profile = result.rows[0]
     return NextResponse.json({
       connected: true,
       telegram_username: profile.telegram_username,
