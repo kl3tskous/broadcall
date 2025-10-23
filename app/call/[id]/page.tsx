@@ -46,52 +46,49 @@ export default function CallPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: initialCall, error } = await supabase
-          .from('calls')
-          .select('*')
-          .eq('id', id)
-          .single()
+        // Fetch call data using API endpoint (bypasses Supabase PostgREST cache)
+        const callResponse = await fetch(`/api/calls/get?id=${id}`)
+        const callResult = await callResponse.json()
+        
+        if (!callResult.success || !callResult.data) {
+          throw new Error('Call not found')
+        }
 
-        if (error) throw error
-
+        const initialCall = callResult.data
         const creatorWalletAddr = initialCall.creator_wallet
         setCreatorWallet(creatorWalletAddr)
 
-        const [settingsResult, profileResult, callsResult] = await Promise.all([
-          supabase
-            .from('user_settings')
-            .select('*')
-            .eq('wallet_address', creatorWalletAddr)
-            .single(),
-          supabase
-            .from('profiles')
-            .select('banner_url, avatar_url, alias, bio')
-            .eq('wallet_address', creatorWalletAddr)
-            .single(),
-          supabase
-            .from('calls')
-            .select('*')
-            .eq('creator_wallet', creatorWalletAddr)
-            .order('created_at', { ascending: false })
+        // Fetch additional data in parallel
+        const [settingsResponse, profileResponse, callsResponse] = await Promise.all([
+          fetch(`/api/settings/get?wallet_address=${creatorWalletAddr}`),
+          fetch(`/api/profile/get?wallet_address=${creatorWalletAddr}`),
+          fetch(`/api/calls/get?wallet_address=${creatorWalletAddr}`)
         ])
 
-        if (settingsResult.data) {
+        const [settingsResult, profileResult, callsResult] = await Promise.all([
+          settingsResponse.json(),
+          profileResponse.json(),
+          callsResponse.json()
+        ])
+
+        if (settingsResult.success && settingsResult.data) {
           setCreatorSettings(settingsResult.data)
         }
 
-        if (profileResult.data) {
+        if (profileResult.success && profileResult.data) {
           setCreatorBanner(profileResult.data.banner_url || null)
           setCreatorAvatar(profileResult.data.avatar_url || null)
           setCreatorAlias(profileResult.data.alias || null)
           setCreatorBio(profileResult.data.bio || null)
         }
 
-        if (callsResult.data) {
+        if (callsResult.success && callsResult.data) {
           setAllCalls(callsResult.data)
         }
 
         setLoading(false)
 
+        // Update views count
         const updatedViews = (initialCall.views || 0) + 1
         supabase
           .from('calls')
