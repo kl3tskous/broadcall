@@ -62,7 +62,7 @@ export default function SettingsPage() {
           })
         }
 
-        // Fetch profile using API endpoint to bypass Supabase PostgREST cache issues
+        // Fetch profile using API endpoint (bypasses Supabase PostgREST cache)
         const profileResponse = await fetch(`/api/profile/get?wallet_address=${publicKey.toString()}`)
         const profileResult = await profileResponse.json()
         

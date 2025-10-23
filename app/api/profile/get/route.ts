@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
-// Use DATABASE_URL for direct PostgreSQL connection (bypasses Supabase PostgREST cache)
+// Use direct PostgreSQL connection to bypass Supabase PostgREST schema cache issues
+// PostgREST schema cache doesn't update automatically when columns are added
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
@@ -15,14 +16,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Query directly from PostgreSQL database, bypassing Supabase PostgREST completely
+    // Query PostgreSQL directly - ensures all columns are returned
     const result = await pool.query(
-      `SELECT 
-        id, wallet_address, alias, avatar_url, banner_url, 
-        twitter_handle, bio, telegram, website, 
-        created_at, updated_at, telegram_id, telegram_username
-      FROM profiles 
-      WHERE wallet_address = $1`,
+      'SELECT * FROM profiles WHERE wallet_address = $1',
       [wallet_address]
     );
 
