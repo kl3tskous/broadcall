@@ -50,7 +50,7 @@ export function CallPageHeader() {
         {mounted && (
           publicKey ? (
             <Link
-              href="/"
+              href="/create-call"
               className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-[16px] md:rounded-[24px] px-3 md:px-6 py-2 md:py-3 hover:opacity-90 transition-opacity"
             >
               <span className="text-black text-sm md:text-lg font-bold">Create Call</span>
