@@ -86,10 +86,10 @@ export async function GET(request: NextRequest) {
     const client = await pool.connect()
     try {
       const result = await client.query(
-        `SELECT id, channel_id, channel_name, channel_username, enabled, added_at
+        `SELECT id, channel_id, channel_name, channel_username, enabled, created_at as added_at
          FROM telegram_channels
          WHERE wallet_address = $1
-         ORDER BY added_at DESC`,
+         ORDER BY created_at DESC`,
         [walletAddress]
       )
 
