@@ -10,7 +10,7 @@ import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/compon
 import { CallPageHeader } from '@/components/CallPageHeader'
 
 export default function SettingsPage() {
-  const { publicKey } = useWallet()
+  const { publicKey, signMessage } = useWallet()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -19,6 +19,8 @@ export default function SettingsPage() {
   const [mounted, setMounted] = useState(false)
   const [connectingTelegram, setConnectingTelegram] = useState(false)
   const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
+  const [channels, setChannels] = useState<any[]>([])
+  const [loadingChannels, setLoadingChannels] = useState(false)
   const [refCodes, setRefCodes] = useState({
     gmgn_ref: '',
     axiom_ref: '',
@@ -68,6 +70,11 @@ export default function SettingsPage() {
 
         if (profileData) {
           setProfile(profileData)
+          
+          // Fetch channels if Telegram is connected
+          if (profileData.telegram_id) {
+            fetchChannels()
+          }
         }
       } catch (error) {
         console.error('Error fetching settings:', error)
@@ -78,6 +85,74 @@ export default function SettingsPage() {
 
     fetchSettings()
   }, [publicKey])
+
+  const fetchChannels = async () => {
+    if (!publicKey || !signMessage) return
+    
+    setLoadingChannels(true)
+    try {
+      // Sign a message to authenticate
+      const message = `BroadCall Channel Access\nWallet: ${publicKey.toString()}\nTimestamp: ${Date.now()}`
+      const messageBytes = new TextEncoder().encode(message)
+      const signatureBytes = await signMessage(messageBytes)
+      const bs58 = await import('bs58')
+      const signature = bs58.default.encode(signatureBytes)
+
+      const response = await fetch(`/api/telegram/channels?wallet_address=${publicKey.toString()}`, {
+        headers: {
+          'x-wallet-signature': signature,
+          'x-wallet-message': message
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setChannels(data.channels || [])
+      }
+    } catch (error) {
+      console.error('Error fetching channels:', error)
+    } finally {
+      setLoadingChannels(false)
+    }
+  }
+
+  const handleToggleChannel = async (channelId: number, currentlyEnabled: boolean) => {
+    if (!publicKey || !signMessage) return
+    
+    try {
+      // Sign a message to authenticate (includes the action to prevent replay attacks)
+      const newEnabledState = !currentlyEnabled
+      const message = `BroadCall Channel Toggle\nWallet: ${publicKey.toString()}\nChannel: ${channelId}\nEnable: ${newEnabledState}\nTimestamp: ${Date.now()}`
+      const messageBytes = new TextEncoder().encode(message)
+      const signatureBytes = await signMessage(messageBytes)
+      const bs58 = await import('bs58')
+      const signature = bs58.default.encode(signatureBytes)
+
+      const response = await fetch('/api/telegram/channels/toggle', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          channel_id: channelId,
+          wallet_address: publicKey.toString(),
+          enabled: newEnabledState,
+          signature,
+          message
+        })
+      })
+
+      if (response.ok) {
+        // Update local state
+        setChannels(channels.map(ch => 
+          ch.channel_id === channelId ? { ...ch, enabled: !currentlyEnabled } : ch
+        ))
+      } else {
+        alert('Failed to update channel. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error toggling channel:', error)
+      alert('Failed to update channel. Please try again.')
+    }
+  }
 
   const handleSave = async () => {
     if (!publicKey) return
@@ -281,6 +356,63 @@ export default function SettingsPage() {
             </button>
           )}
         </div>
+
+        {/* Telegram Channels Section - Only show if Telegram is connected */}
+        {profile?.telegram_id && (
+          <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 text-white flex items-center gap-2">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+              </svg>
+              Telegram Channels
+            </h2>
+            <p className="text-gray-300 mb-6 text-sm">
+              Add @Broadcall_Bot as an admin to your Telegram channels. Your token calls will be automatically broadcast to all enabled channels.
+            </p>
+
+            {loadingChannels ? (
+              <div className="text-center py-8 text-gray-400">Loading channels...</div>
+            ) : channels.length === 0 ? (
+              <div className="bg-white/[0.08] backdrop-blur-[10px] p-6 rounded-2xl border border-white/10 text-center">
+                <p className="text-gray-400 mb-2">No channels connected yet</p>
+                <p className="text-sm text-gray-500">
+                  Add @Broadcall_Bot as an admin to your Telegram channel to start broadcasting
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {channels.map((channel) => (
+                  <div
+                    key={channel.id}
+                    className="bg-white/[0.08] backdrop-blur-[10px] p-4 rounded-2xl border border-white/10 flex items-center justify-between"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-white">{channel.channel_name}</p>
+                      {channel.channel_username && (
+                        <p className="text-sm text-gray-400">@{channel.channel_username}</p>
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">
+                        Added {new Date(channel.added_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleToggleChannel(channel.channel_id, channel.enabled)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        channel.enabled ? 'bg-gradient-to-r from-orange-400 to-red-600' : 'bg-gray-600'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          channel.enabled ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
           <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Your Referral Codes</h2>

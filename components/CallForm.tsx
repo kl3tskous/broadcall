@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { supabase, UserSettings } from '@/utils/supabaseClient'
 import { fetchTokenMetadata, fetchTokenLogo } from '@/utils/dexscreener'
 import Link from 'next/link'
@@ -11,6 +12,7 @@ interface CallFormProps {
 }
 
 export function CallForm({ walletAddress, userSettings }: CallFormProps) {
+  const { signMessage } = useWallet()
   const [tokenAddress, setTokenAddress] = useState('')
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
@@ -64,6 +66,46 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
 
       const link = `${window.location.origin}/call/${data.id}`
       setGeneratedLink(link)
+      
+      // Broadcast to Telegram channels (non-blocking)
+      try {
+        // Sign a message to authenticate the broadcast (only call_id needed - server fetches trusted data)
+        let signature = ''
+        let authMessage = ''
+        if (signMessage) {
+          authMessage = `BroadCall Broadcast\nWallet: ${walletAddress}\nCall: ${data.id}\nTimestamp: ${Date.now()}`
+          const messageBytes = new TextEncoder().encode(authMessage)
+          const signatureBytes = await signMessage(messageBytes)
+          const bs58 = await import('bs58')
+          signature = bs58.default.encode(signatureBytes)
+        }
+
+        const broadcastResponse = await fetch('/api/telegram/broadcast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            wallet_address: walletAddress,
+            call_id: data.id,
+            signature,
+            message: authMessage
+          })
+        })
+        
+        if (broadcastResponse.ok) {
+          const broadcastData = await broadcastResponse.json()
+          console.log('Broadcast result:', broadcastData)
+          if (broadcastData.broadcasts && broadcastData.broadcasts.length > 0) {
+            const successCount = broadcastData.broadcasts.filter((b: any) => b.success).length
+            if (successCount > 0) {
+              console.log(`✅ Call broadcasted to ${successCount} Telegram channels`)
+            }
+          }
+        }
+      } catch (broadcastError) {
+        // Broadcast errors don't block call creation
+        console.error('Telegram broadcast failed:', broadcastError)
+      }
+      
       setTokenAddress('')
       setThesis('')
     } catch (error: any) {
