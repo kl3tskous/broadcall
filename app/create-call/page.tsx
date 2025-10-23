@@ -62,9 +62,9 @@ export default function CreateCallPage() {
         setTokenAddress('')
         setThesis('')
         
-        // Redirect to profile after 2 seconds
+        // Redirect to the token call page after 2 seconds
         setTimeout(() => {
-          router.push(`/profile/${publicKey.toString()}`)
+          router.push(`/call/${data.call.id}`)
         }, 2000)
       } else {
         setError(data.error || 'Failed to create call')
@@ -139,7 +139,7 @@ export default function CreateCallPage() {
                   ✅ Call created successfully! Broadcasting to your channels...
                 </p>
                 <p className="text-green-400/70 text-sm mt-1">
-                  Redirecting to your profile...
+                  Redirecting to your call page...
                 </p>
               </div>
             )}
