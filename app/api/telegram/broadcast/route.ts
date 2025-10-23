@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       
       platform_links = {
         gmgn: `https://gmgn.ai/sol/token/${gmgnRef}_${token_address}`,
-        axiom: `https://axiom.trade/t/${axiomRef}/@soltrade`,
+        axiom: `https://axiom.trade/t/${token_address}/@${axiomRef}`,
         photon: userSettings.photon_ref
           ? `https://photon-sol.tinyastro.io/en/lp/${token_address}?ref=${userSettings.photon_ref}`
           : `https://photon-sol.tinyastro.io/en/lp/${token_address}`,

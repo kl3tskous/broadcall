@@ -200,7 +200,7 @@ export default function CallPage() {
       
       case 'axiom':
         const axiomRef = call.axiom_ref || creatorSettings?.axiom_ref || DEFAULT_AXIOM_REF
-        return `https://axiom.trade/t/${axiomRef}/@soltrade`
+        return `https://axiom.trade/t/${tokenAddress}/@${axiomRef}`
       
       case 'photon':
         const photonRef = call.photon_ref || creatorSettings?.photon_ref || ''
