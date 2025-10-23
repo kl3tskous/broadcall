@@ -61,6 +61,17 @@ export interface Profile {
   bio: string | null
   telegram: string | null
   website: string | null
+  telegram_id: number | null
+  telegram_username: string | null
   created_at: string
   updated_at: string
+}
+
+export interface TelegramConnectionToken {
+  id: string
+  wallet_address: string
+  token: string
+  created_at: string
+  expires_at: string
+  used: boolean
 }
