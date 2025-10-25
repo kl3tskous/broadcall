@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { Pool } from 'pg';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Direct PostgreSQL connection (bypasses PostgREST cache)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,36 +24,52 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Create client with service key to bypass RLS
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Use direct PostgreSQL to bypass PostgREST schema cache
+    const query = `
+      INSERT INTO user_settings (
+        wallet_address,
+        gmgn_ref,
+        axiom_ref,
+        photon_ref,
+        bullx_ref,
+        trojan_ref,
+        trades_in_name,
+        trades_in_image,
+        onboarded,
+        updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+      ON CONFLICT (wallet_address) 
+      DO UPDATE SET
+        gmgn_ref = EXCLUDED.gmgn_ref,
+        axiom_ref = EXCLUDED.axiom_ref,
+        photon_ref = EXCLUDED.photon_ref,
+        bullx_ref = EXCLUDED.bullx_ref,
+        trojan_ref = EXCLUDED.trojan_ref,
+        trades_in_name = EXCLUDED.trades_in_name,
+        trades_in_image = EXCLUDED.trades_in_image,
+        onboarded = EXCLUDED.onboarded,
+        updated_at = NOW()
+      RETURNING *;
+    `;
 
-    // Upsert settings
-    const { data, error } = await supabase
-      .from('user_settings')
-      .upsert(
-        {
-          wallet_address,
-          gmgn_ref: gmgn_ref || null,
-          axiom_ref: axiom_ref || null,
-          photon_ref: photon_ref || null,
-          bullx_ref: bullx_ref || null,
-          trojan_ref: trojan_ref || null,
-          trades_in_name: trades_in_name || null,
-          trades_in_image: trades_in_image || null,
-          onboarded: true,
-          updated_at: new Date().toISOString()
-        },
-        { onConflict: 'wallet_address' }
-      )
-      .select()
-      .single();
+    const values = [
+      wallet_address,
+      gmgn_ref || null,
+      axiom_ref || null,
+      photon_ref || null,
+      bullx_ref || null,
+      trojan_ref || null,
+      trades_in_name || null,
+      trades_in_image || null,
+      true
+    ];
 
-    if (error) {
-      console.error('Supabase error saving settings:', error);
-      throw error;
-    }
+    const result = await pool.query(query, values);
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ 
+      success: true, 
+      data: result.rows[0] 
+    });
   } catch (error: any) {
     console.error('API error saving settings:', error);
     return NextResponse.json(
