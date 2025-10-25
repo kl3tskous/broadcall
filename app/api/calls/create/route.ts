@@ -105,9 +105,9 @@ export async function POST(request: NextRequest) {
         thesis, 
         dexscreener_url,
         current_price,
-        current_market_cap,
+        current_mcap,
         ath_price,
-        ath_market_cap,
+        ath_mcap,
         ath_timestamp
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())
       RETURNING id, created_at`,
