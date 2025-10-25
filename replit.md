@@ -43,7 +43,19 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Smart referral link injection using user's saved platform codes
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
-## Recent Changes (October 23, 2025)
+## Recent Changes (October 25, 2025)
+- ✅ **"Trades in" Feature**: Added trades_in_name and trades_in_image columns to user_settings table for group/community attribution
+- ✅ **Settings Page Enhancement**: Added "Trades in" section with group name input and image upload functionality
+- ✅ **Upload API**: Created `/api/upload/trades-image` endpoint using Replit Object Storage (requires setup)
+- ✅ **Call Page Redesign**: Completely redesigned `/call/[id]` to match Figma design with:
+  - Twitter-style banner + profile header (avatar with orange border, verification badge, bio)
+  - Thesis + "Trades in" display row showing community attribution
+  - Main call card: "Called: $TOKEN And it's UP by +X%" with price badge, chart preview, stats
+  - 6 trading platforms (GMGN, Axiom, Photon, BullX, Trojan, DexScreener) in horizontal glassmorphic layout
+- ✅ **DexScreener Integration**: Added as 6th trading platform with proper logo and URL handling
+- ✅ **Performance Tracking**: Maintained auto-updating ROI, multiplier, ATH stats with 30-second refresh
+
+## Previous Changes (October 23, 2025)
 - ✅ Created `calls` table for storing token call data with comprehensive schema
 - ✅ Built `/api/calls/create` endpoint with DexScreener integration and automatic broadcasting
 - ✅ Updated `/api/telegram/broadcast` with professional message formatting and inline buy buttons
