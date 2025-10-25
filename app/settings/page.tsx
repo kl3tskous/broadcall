@@ -165,25 +165,27 @@ export default function SettingsPage() {
 
     setSaving(true)
     try {
-      const { error } = await supabase
-        .from('user_settings')
-        .upsert(
-          {
-            wallet_address: publicKey.toString(),
-            ...refCodes,
-            trades_in_name: tradesInName,
-            trades_in_image: tradesInImage,
-            onboarded: true
-          },
-          { onConflict: 'wallet_address' }
-        )
+      const response = await fetch('/api/settings/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          wallet_address: publicKey.toString(),
+          ...refCodes,
+          trades_in_name: tradesInName,
+          trades_in_image: tradesInImage
+        })
+      })
 
-      if (error) throw error
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save settings')
+      }
 
       alert('Settings saved successfully!')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving settings:', error)
-      alert('Failed to save settings. Please try again.')
+      alert(error?.message || 'Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
     }
