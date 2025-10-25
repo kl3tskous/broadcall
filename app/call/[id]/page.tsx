@@ -141,13 +141,13 @@ export default function CallPage() {
               const updates = shouldUpdateATH
                 ? {
                     current_price: currentPrice,
-                    current_mcap: currentMcap,
+                    current_market_cap: currentMcap,
                     ath_price: currentPrice,
-                    ath_mcap: currentMcap
+                    ath_market_cap: currentMcap
                   }
                 : {
                     current_price: currentPrice,
-                    current_mcap: currentMcap,
+                    current_market_cap: currentMcap,
                   }
 
               await supabase
@@ -407,7 +407,7 @@ export default function CallPage() {
                   Marketcap when called:
                 </p>
                 <p className="text-emerald-400 text-xl font-extrabold">
-                  ${formatMarketCap(latestCall.market_cap_at_call || 0)} ({calculateMultiplier(latestCall.market_cap_at_call || 0, latestCall.current_mcap || 0).toFixed(2)}x)
+                  ${formatMarketCap(latestCall.market_cap_at_call || 0)} ({calculateMultiplier(latestCall.market_cap_at_call || 0, latestCall.current_market_cap || 0).toFixed(2)}x)
                 </p>
               </div>
             </div>
