@@ -45,8 +45,8 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 ## Recent Changes (October 25, 2025)
 - ✅ **"Trades in" Feature**: Added trades_in_name and trades_in_image columns to user_settings table for group/community attribution
-- ✅ **Settings Page Enhancement**: Added "Trades in" section with group name input and image upload functionality
-- ✅ **Upload API**: Created `/api/upload/trades-image` endpoint using Replit Object Storage (requires setup)
+- ✅ **Settings Page Enhancement**: Added "Trades in" section with group name input and image upload functionality using existing Replit Object Storage system
+- ✅ **Upload Consistency**: Unified all image uploads (avatar, banner, trades-in) to use the same `/api/upload` endpoint and FileUploader flow
 - ✅ **Call Page Redesign**: Completely redesigned `/call/[id]` to match Figma design with:
   - Twitter-style banner + profile header (avatar with orange border, verification badge, bio)
   - Thesis + "Trades in" display row showing community attribution

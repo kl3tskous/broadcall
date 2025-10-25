@@ -205,19 +205,30 @@ export default function SettingsPage() {
 
     setUploadingTradesImage(true)
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('wallet_address', publicKey!.toString())
+      // Use the same upload flow as avatars and banners  
+      const uploadRes = await fetch('/api/upload', { method: 'POST' })
+      const { uploadURL } = await uploadRes.json()
 
-      const response = await fetch('/api/upload/trades-image', {
-        method: 'POST',
-        body: formData,
+      const putRes = await fetch(uploadURL, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
       })
 
-      if (!response.ok) throw new Error('Upload failed')
+      if (!putRes.ok) {
+        throw new Error('Upload failed')
+      }
 
-      const data = await response.json()
-      setTradesInImage(data.url)
+      // Extract normalized URL (same as FileUploader component)
+      const url = new URL(uploadURL)
+      const pathname = decodeURIComponent(url.pathname)
+      const parts = pathname.split('/').filter((p: string) => p)
+      const objectPath = parts.slice(1).join('/')
+      const normalizedURL = `/api/objects/${objectPath}`
+      
+      setTradesInImage(normalizedURL)
       alert('Group image uploaded successfully!')
     } catch (error) {
       console.error('Error uploading image:', error)
