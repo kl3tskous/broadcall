@@ -205,34 +205,26 @@ export default function SettingsPage() {
 
     setUploadingTradesImage(true)
     try {
-      // Use the same upload flow as avatars and banners  
-      const uploadRes = await fetch('/api/upload', { method: 'POST' })
-      const { uploadURL } = await uploadRes.json()
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('wallet_address', publicKey!.toString())
 
-      const putRes = await fetch(uploadURL, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
+      const response = await fetch('/api/upload/trades-image', {
+        method: 'POST',
+        body: formData,
       })
 
-      if (!putRes.ok) {
-        throw new Error('Upload failed')
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Upload failed')
       }
 
-      // Extract normalized URL (same as FileUploader component)
-      const url = new URL(uploadURL)
-      const pathname = decodeURIComponent(url.pathname)
-      const parts = pathname.split('/').filter((p: string) => p)
-      const objectPath = parts.slice(1).join('/')
-      const normalizedURL = `/api/objects/${objectPath}`
-      
-      setTradesInImage(normalizedURL)
+      const data = await response.json()
+      setTradesInImage(data.url)
       alert('Group image uploaded successfully!')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading image:', error)
-      alert('Failed to upload image. Please try again.')
+      alert(error?.message || 'Failed to upload image. Please try again.')
     } finally {
       setUploadingTradesImage(false)
     }
