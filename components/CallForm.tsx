@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { supabase, UserSettings } from '@/utils/supabaseClient'
-import { fetchTokenMetadata, fetchTokenLogo } from '@/utils/dexscreener'
+import { UserSettings } from '@/utils/supabaseClient'
 import Link from 'next/link'
 
 interface CallFormProps {
@@ -17,104 +16,70 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [generatedLink, setGeneratedLink] = useState('')
-  const [fetchingMetadata, setFetchingMetadata] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!signMessage) {
+      alert('Please connect your wallet')
+      return
+    }
+
+    if (!tokenAddress.trim()) {
+      alert('Please enter a token address')
+      return
+    }
+
     setLoading(true)
-    setFetchingMetadata(true)
     setGeneratedLink('')
 
     try {
-      const tokenMetadata = await fetchTokenMetadata(tokenAddress)
-      const tokenLogo = await fetchTokenLogo(tokenAddress)
-      
-      setFetchingMetadata(false)
+      // Create authentication signature
+      const message = `BroadCall Create Call\nWallet: ${walletAddress}\nToken: ${tokenAddress}\nTimestamp: ${Date.now()}`
+      const messageBytes = new TextEncoder().encode(message)
+      const signatureBytes = await signMessage(messageBytes)
+      const bs58 = await import('bs58')
+      const signature = bs58.default.encode(signatureBytes)
 
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('alias')
-        .eq('wallet_address', walletAddress)
-        .single()
+      // Create the call via API
+      const response = await fetch('/api/calls/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet_address: walletAddress,
+          token_address: tokenAddress.trim(),
+          thesis: thesis.trim(),
+          signature,
+          message,
+        }),
+      })
 
-      const { data, error } = await supabase
-        .from('calls')
-        .insert([
-          {
-            creator_wallet: walletAddress,
-            token_address: tokenAddress,
-            platform: 'GMGN',
-            thesis: thesis || null,
-            gmgn_ref: userSettings?.gmgn_ref || null,
-            axiom_ref: userSettings?.axiom_ref || null,
-            photon_ref: userSettings?.photon_ref || null,
-            bullx_ref: userSettings?.bullx_ref || null,
-            trojan_ref: userSettings?.trojan_ref || null,
-            token_name: tokenMetadata?.name || null,
-            token_symbol: tokenMetadata?.symbol || null,
-            token_logo: tokenLogo || null,
-            initial_price: tokenMetadata?.price || null,
-            initial_mcap: tokenMetadata?.marketCap || null,
-            first_shared_at: new Date().toISOString(),
-            user_alias: profileData?.alias || null,
-          },
-        ])
-        .select()
-        .single()
+      const data = await response.json()
 
-      if (error) throw error
-
-      const link = `${window.location.origin}/call/${data.id}`
-      setGeneratedLink(link)
-      
-      // Broadcast to Telegram channels (non-blocking)
-      try {
-        // Sign a message to authenticate the broadcast (only call_id needed - server fetches trusted data)
-        let signature = ''
-        let authMessage = ''
-        if (signMessage) {
-          authMessage = `BroadCall Broadcast\nWallet: ${walletAddress}\nCall: ${data.id}\nTimestamp: ${Date.now()}`
-          const messageBytes = new TextEncoder().encode(authMessage)
-          const signatureBytes = await signMessage(messageBytes)
-          const bs58 = await import('bs58')
-          signature = bs58.default.encode(signatureBytes)
-        }
-
-        const broadcastResponse = await fetch('/api/telegram/broadcast', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            wallet_address: walletAddress,
-            call_id: data.id,
-            signature,
-            message: authMessage
-          })
-        })
+      if (response.ok) {
+        const link = `${window.location.origin}/call/${data.call.id}`
+        setGeneratedLink(link)
+        setTokenAddress('')
+        setThesis('')
         
-        if (broadcastResponse.ok) {
-          const broadcastData = await broadcastResponse.json()
-          console.log('Broadcast result:', broadcastData)
-          if (broadcastData.broadcasts && broadcastData.broadcasts.length > 0) {
-            const successCount = broadcastData.broadcasts.filter((b: any) => b.success).length
-            if (successCount > 0) {
-              console.log(`✅ Call broadcasted to ${successCount} Telegram channels`)
-            }
+        // Log broadcast results
+        if (data.broadcast) {
+          const successCount = data.broadcast.filter((b: any) => b.success).length
+          if (successCount > 0) {
+            console.log(`✅ Call broadcasted to ${successCount} Telegram channels`)
           }
         }
-      } catch (broadcastError) {
-        // Broadcast errors don't block call creation
-        console.error('Telegram broadcast failed:', broadcastError)
+      } else {
+        throw new Error(data.error || 'Failed to create call')
       }
-      
-      setTokenAddress('')
-      setThesis('')
     } catch (error: any) {
       console.error('Error creating call:', error)
       const errorMessage = error?.message || error?.error_description || JSON.stringify(error)
       alert(`Failed to create call: ${errorMessage}`)
     } finally {
       setLoading(false)
-      setFetchingMetadata(false)
     }
   }
 
@@ -182,7 +147,7 @@ export function CallForm({ walletAddress, userSettings }: CallFormProps) {
           className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 w-full"
         >
           <span className="text-black text-base md:text-lg font-bold">
-            {fetchingMetadata ? 'Fetching token data...' : loading ? 'Creating call...' : 'Generate Link'}
+            {loading ? 'Creating call...' : 'Generate Link'}
           </span>
         </button>
       </form>
