@@ -49,10 +49,23 @@ export const TrojanLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
   />
 )
 
+export const DexScreenerLogo: React.FC<LogoProps> = ({ className = 'w-5 h-5' }) => (
+  <svg 
+    className={className}
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="12" cy="12" r="10" fill="#0D1421" stroke="#00D4AA" strokeWidth="1.5"/>
+    <path d="M8 12L11 15L16 9" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
 export const platforms = [
   { id: 'gmgn', name: 'GMGN', Logo: GmgnLogo },
   { id: 'axiom', name: 'Axiom', Logo: AxiomLogo },
   { id: 'photon', name: 'Photon', Logo: PhotonLogo },
   { id: 'bullx', name: 'BullX', Logo: BullxLogo },
   { id: 'trojan', name: 'Trojan', Logo: TrojanLogo },
+  { id: 'dexscreener', name: 'DexScreener', Logo: DexScreenerLogo },
 ]

@@ -28,6 +28,9 @@ export default function SettingsPage() {
     bullx_ref: '',
     trojan_ref: ''
   })
+  const [tradesInName, setTradesInName] = useState('')
+  const [tradesInImage, setTradesInImage] = useState('')
+  const [uploadingTradesImage, setUploadingTradesImage] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -60,6 +63,8 @@ export default function SettingsPage() {
             bullx_ref: data.bullx_ref || '',
             trojan_ref: data.trojan_ref || ''
           })
+          setTradesInName(data.trades_in_name || '')
+          setTradesInImage(data.trades_in_image || '')
         }
 
         // Fetch profile using API endpoint (bypasses Supabase PostgREST cache)
@@ -166,6 +171,8 @@ export default function SettingsPage() {
           {
             wallet_address: publicKey.toString(),
             ...refCodes,
+            trades_in_name: tradesInName,
+            trades_in_image: tradesInImage,
             onboarded: true
           },
           { onConflict: 'wallet_address' }
@@ -179,6 +186,44 @@ export default function SettingsPage() {
       alert('Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleTradesImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be less than 5MB')
+      return
+    }
+
+    setUploadingTradesImage(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('wallet_address', publicKey!.toString())
+
+      const response = await fetch('/api/upload/trades-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) throw new Error('Upload failed')
+
+      const data = await response.json()
+      setTradesInImage(data.url)
+      alert('Group image uploaded successfully!')
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Failed to upload image. Please try again.')
+    } finally {
+      setUploadingTradesImage(false)
     }
   }
 
@@ -505,6 +550,66 @@ export default function SettingsPage() {
               <p className="text-xs text-gray-400 mt-1">
                 Used for Trojan bot referrals
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Trades In Section */}
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Trades In</h2>
+          <p className="text-gray-300 mb-6 text-sm">
+            Display your trading group or channel info on your call pages
+          </p>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white">
+                Group/Channel Name
+              </label>
+              <input
+                type="text"
+                value={tradesInName}
+                onChange={(e) => setTradesInName(e.target.value)}
+                placeholder="@your_channel"
+                className="w-full px-4 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 transition-colors"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                Example: @ccf_fnf - This will be displayed on your call pages
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white">
+                Group/Channel Logo
+              </label>
+              <div className="flex items-center gap-4">
+                {tradesInImage && (
+                  <img
+                    src={tradesInImage}
+                    alt="Group logo"
+                    className="w-16 h-16 rounded-full border-2 border-orange-600 object-cover"
+                  />
+                )}
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleTradesImageUpload}
+                    disabled={uploadingTradesImage}
+                    className="hidden"
+                    id="trades-image-upload"
+                  />
+                  <label
+                    htmlFor="trades-image-upload"
+                    className="cursor-pointer inline-block px-6 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white hover:bg-white/[0.12] transition-colors"
+                  >
+                    {uploadingTradesImage ? 'Uploading...' : tradesInImage ? 'Change Image' : 'Upload Image'}
+                  </label>
+                  <p className="text-xs text-gray-400 mt-2">
+                    Recommended: Square image, max 5MB
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

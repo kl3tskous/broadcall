@@ -214,6 +214,9 @@ export default function CallPage() {
           ? `https://trojan.bot/trade/${tokenAddress}?ref=${trojanRef}`
           : `https://trojan.bot/trade/${tokenAddress}`
       
+      case 'dexscreener':
+        return `https://dexscreener.com/solana/${tokenAddress}`
+      
       default:
         return ''
     }
@@ -281,6 +284,10 @@ export default function CallPage() {
     ? calculateROI(parseFloat(latestCall.price_at_call), parseFloat(latestCall.current_price))
     : 0
 
+  const multiplier = latestCall.market_cap_at_call && latestCall.current_market_cap
+    ? calculateMultiplier(latestCall.market_cap_at_call, latestCall.current_market_cap)
+    : 0
+
   return (
     <main 
       className="relative min-h-screen overflow-hidden bg-black"
@@ -302,130 +309,164 @@ export default function CallPage() {
         
         {/* Banner Image */}
         <img 
-          className="w-full h-64 md:h-80 rounded-[40px] md:rounded-[51px] border-2 border-orange-600 object-cover mb-6" 
+          className="w-full h-48 md:h-64 rounded-[40px] border-2 border-orange-600 object-cover mb-6" 
           src={creatorBanner || 'https://placehold.co/1271x312'} 
           alt="Banner"
         />
 
-        {/* Main Content Card */}
-        <div className="relative bg-white/10 rounded-[40px] border-2 border-white/10 p-6 md:p-8 mb-8">
-          
-          {/* User Profile Section */}
-          <div className="flex items-start gap-4 mb-8">
-            {/* Avatar */}
-            <div className="relative">
-              <div className="size-32 md:size-36 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden">
-                <img 
-                  className="size-full rounded-full object-cover" 
-                  src={creatorAvatar || 'https://placehold.co/146x146'} 
-                  alt={creatorAlias || 'User'}
-                />
-              </div>
-            </div>
-
-            {/* User Info */}
-            <div className="flex-1 pt-2">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-5 h-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
-                <h1 className="text-2xl md:text-4xl font-extrabold text-white">
-                  {creatorAlias || 'Anonymous'}
-                </h1>
-              </div>
-              <p className="text-base md:text-xl text-white/80 font-light opacity-60 mb-4">
-                @{creatorAlias || 'anonymous'}
-              </p>
-              
-              {/* Thesis */}
-              {latestCall.thesis && (
-                <div className="bg-white/10 rounded-2xl border border-white/10 p-4 mb-4">
-                  <p className="text-white text-xl font-bold leading-4 mb-2">Thesis:</p>
-                  <p className="text-white/80 text-sm font-normal leading-3">
-                    &ldquo;{latestCall.thesis}&rdquo;
-                  </p>
-                </div>
-              )}
-
-              {/* Trades In */}
-              {creatorSettings && (
-                <div className="inline-block bg-white/10 rounded-2xl border border-white/10 px-4 py-3">
-                  <span className="text-white text-xl font-extrabold">Trades in: </span>
-                  <span className="text-orange-600 text-xl font-extrabold">
-                    @{creatorAlias || 'anonymous'}
-                  </span>
-                </div>
-              )}
+        {/* Profile Section */}
+        <div className="flex items-start gap-4 md:gap-6 mb-6">
+          {/* Avatar */}
+          <div className="flex-shrink-0">
+            <div className="size-28 md:size-36 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden">
+              <img 
+                className="size-full rounded-full object-cover" 
+                src={creatorAvatar || 'https://placehold.co/146x146'} 
+                alt={creatorAlias || 'User'}
+              />
             </div>
           </div>
 
-          {/* Token Call Info */}
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
-            {/* Left: Called Token */}
+          {/* User Info */}
+          <div className="flex-1 pt-2">
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-xl md:text-2xl font-extrabold text-white">
+                {creatorAlias || 'Anonymous'}
+              </h1>
+              <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
+            </div>
+            <p className="text-sm md:text-base text-white/80 font-light opacity-60 mb-4">
+              @{creatorAlias || 'anonymous'}
+            </p>
+            
+            {creatorBio && (
+              <p className="text-white/80 text-sm mb-4">
+                {creatorBio}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Thesis + Trades In Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Thesis */}
+          {latestCall.thesis && (
+            <div className="bg-white/10 rounded-2xl border border-white/10 p-4">
+              <p className="text-white text-xl font-bold leading-4 mb-2">Thesis:</p>
+              <p className="text-white/80 text-sm font-normal leading-snug">
+                &ldquo;{latestCall.thesis}&rdquo;
+              </p>
+            </div>
+          )}
+
+          {/* Trades In */}
+          {creatorSettings && (
+            <div className="bg-white/10 rounded-2xl border border-white/10 p-4 flex items-center justify-between">
+              <div>
+                <span className="text-white text-xl font-extrabold">Trades in: </span>
+                <span className="text-orange-600 text-xl font-extrabold">
+                  @{creatorSettings.trades_in_name || creatorAlias || 'anonymous'}
+                </span>
+              </div>
+              {creatorSettings.trades_in_image && (
+                <div className="size-8 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden">
+                  <img 
+                    className="size-full rounded-full object-cover" 
+                    src={creatorSettings.trades_in_image} 
+                    alt="Group"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Main Call Card */}
+        <div className="relative bg-white/10 rounded-[40px] border-2 border-white/10 p-6 md:p-8 mb-8">
+          
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-6">
+            {/* Left: Token Call Info */}
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-3xl font-extrabold text-orange-600">Called:</span>
-                <span className="text-4xl font-extrabold text-white">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <span className="text-2xl md:text-3xl font-extrabold text-orange-600">Called:</span>
+                <span className="text-3xl md:text-4xl font-extrabold text-white">
                   ${latestCall.token_symbol || 'TOKEN'}
                 </span>
               </div>
               
-              <p className="text-white/80 text-xl font-extrabold opacity-60 mb-2">
-                And it's <span className="text-emerald-400">{roi >= 0 ? 'UP' : 'DOWN'}</span> by
+              <p className="text-white/80 text-lg md:text-xl font-extrabold opacity-60 mb-2">
+                And it's <span className={roi >= 0 ? 'text-emerald-400' : 'text-red-500'}>{roi >= 0 ? 'UP' : 'DOWN'}</span> by
               </p>
               
               {latestCall.price_at_call && latestCall.current_price && (
-                <div className={`text-5xl md:text-6xl font-bold ${
+                <div className={`text-4xl md:text-5xl font-bold ${
                   roi >= 0 ? 'text-emerald-400' : 'text-red-500'
                 }`}>
-                  {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
+                  {roi >= 0 ? '+ ' : ''}{roi.toFixed(0)}%
                 </div>
               )}
             </div>
 
-            {/* Right: Market Cap & Chart Preview */}
-            <div className="relative">
-              {/* Market Cap Badge */}
-              <div className="absolute top-0 right-0 z-10 bg-orange-600/80 rounded-md border border-white/10 px-4 py-1">
-                <p className="text-white text-sm font-bold">
-                  ${formatMarketCap(latestCall.market_cap_at_call || 0)}
-                </p>
-              </div>
+            {/* Right: Chart & Token Logo */}
+            <div className="relative flex-shrink-0">
+              {/* Current Price Badge */}
+              {latestCall.priceData && (
+                <div className="absolute top-0 right-0 z-10 bg-orange-600/80 rounded-md border border-white/10 px-3 py-1">
+                  <p className="text-white text-xs md:text-sm font-bold">
+                    ${formatMarketCap(latestCall.priceData.marketCap || 0)}
+                  </p>
+                </div>
+              )}
 
               {/* Chart Preview */}
-              <div className="relative bg-white/10 rounded-[40px] backdrop-blur-[10px] overflow-hidden border-2 border-orange-600 w-full md:w-56">
-                {latestCall.priceData?.pairAddress && (
+              {latestCall.priceData?.pairAddress && (
+                <div className="relative bg-white/10 rounded-[40px] backdrop-blur-[10px] overflow-hidden border-2 border-orange-600 w-full md:w-56 lg:w-64">
                   <iframe
                     src={`https://dexscreener.com/solana/${latestCall.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                    className="w-full h-40 border-0"
+                    className="w-full h-36 md:h-40 border-0"
                     style={{ background: 'transparent' }}
                   />
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Token Logo Card */}
+              {latestCall.token_logo && (
+                <div className="absolute -bottom-4 -right-4 z-10">
+                  <img 
+                    src={latestCall.token_logo} 
+                    alt={latestCall.token_symbol || 'Token'} 
+                    className="size-16 md:size-20 rounded-2xl border-2 border-orange-600 shadow-xl"
+                  />
+                </div>
+              )}
 
               {/* Marketcap Stats */}
               <div className="mt-4 text-center">
-                <p className="text-white text-base font-extrabold mb-1">
+                <p className="text-white text-sm md:text-base font-extrabold mb-1">
                   Marketcap when called:
                 </p>
-                <p className="text-emerald-400 text-xl font-extrabold">
-                  ${formatMarketCap(latestCall.market_cap_at_call || 0)} ({calculateMultiplier(latestCall.market_cap_at_call || 0, latestCall.current_market_cap || 0).toFixed(2)}x)
+                <p className="text-emerald-400 text-lg md:text-xl font-extrabold">
+                  ${formatMarketCap(latestCall.market_cap_at_call || 0)} ({multiplier.toFixed(2)}x)
                 </p>
               </div>
             </div>
           </div>
 
           {/* Platform Trading Buttons */}
-          <div className="flex gap-4 flex-wrap justify-center md:justify-start">
+          <div className="flex gap-3 md:gap-4 flex-wrap justify-center lg:justify-start">
             {platforms.map((platform) => {
               const Logo = platform.Logo
+              const isFeatured = platform.id === 'gmgn' || platform.id === 'bullx'
               return (
                 <button
                   key={platform.id}
                   onClick={() => handlePlatformClick(latestCall, platform.id)}
-                  className={`bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg hover:shadow-xl size-20 flex items-center justify-center ${
-                    platform.id === 'gmgn' || platform.id === 'bullx' ? 'border-2 border-orange-600' : ''
+                  className={`bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg hover:shadow-xl size-16 md:size-20 flex items-center justify-center ${
+                    isFeatured ? 'border-2 border-orange-600' : ''
                   }`}
+                  title={platform.name}
                 >
-                  <Logo className="w-10 h-10" />
+                  <Logo className="w-8 h-8 md:w-10 md:h-10" />
                 </button>
               )
             })}
@@ -478,7 +519,7 @@ export default function CallPage() {
                   </div>
 
                   <p className="text-white/80 text-base opacity-60 mb-2">
-                    And it's <span className="text-emerald-400">{callRoi >= 0 ? 'UP' : 'DOWN'}</span> by
+                    And it's <span className={callRoi >= 0 ? 'text-emerald-400' : 'text-red-500'}>{callRoi >= 0 ? 'UP' : 'DOWN'}</span> by
                   </p>
 
                   {call.price_at_call && call.current_price && (
@@ -504,7 +545,7 @@ export default function CallPage() {
                         <button
                           key={platform.id}
                           onClick={() => handlePlatformClick(call, platform.id)}
-                          className="flex-shrink-0 bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg size-20 flex items-center justify-center"
+                          className="flex-shrink-0 bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg size-16 md:size-20 flex items-center justify-center"
                         >
                           <Logo className="w-8 h-8" />
                         </button>
