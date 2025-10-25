@@ -1,0 +1,85 @@
+<div className="w-[1920px] h-[2776px] relative bg-black overflow-hidden">
+  <div className="size-[767px] left-[590px] top-[1105px] absolute bg-gradient-to-l from-orange-600/70 via-orange-500/70 to-amber-500/70 rounded-full blur-[300px]" />
+  <div className="w-[901px] h-[720px] left-[26px] top-[-548px] absolute bg-emerald-400/50 rounded-full blur-[300px]" />
+  <div className="size-64 left-[839px] top-[1326px] absolute bg-gradient-to-b from-purple-800 to-amber-700/0 rounded-full blur-[300px]" />
+  <div className="size-[575px] left-[686px] top-[942px] absolute bg-radial-[at_17%_7%] from-zinc-300/0 from 100% rounded-full blur-[250px]" />
+  <div className="size-4 left-[1574px] top-[1698px] absolute overflow-hidden">
+    <div className="w-3.5 h-4 left-[0.50px] top-0 absolute bg-black" />
+  </div>
+  <div className="w-20 h-0 left-[752px] top-[499px] absolute outline outline-[0.50px] outline-offset-[-0.25px] outline-orange-600"></div>
+  <img className="w-[1271px] h-80 left-[326px] top-[139px] absolute rounded-[51px] border border-orange-600" src="https://placehold.co/1271x312" />
+  <div className="w-[1314px] h-24 left-[303px] top-[20px] absolute bg-white/5 rounded-[50px] backdrop-blur-[10px]" />
+  <div className="w-20 left-[798px] top-[56px] absolute text-center justify-start text-white text-2xl font-bold font-['Inter']">Home</div>
+  <div className="w-24 left-[1051px] top-[56px] absolute text-center justify-start text-white text-2xl font-bold font-['Inter']">Career</div>
+  <div className="w-24 left-[909px] top-[56px] absolute text-center justify-start text-white text-2xl font-bold font-['Inter']">Features</div>
+  <div className="w-40 h-14 left-[1422.56px] top-[43px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-[30px]" />
+  <div className="w-32 left-[1443px] top-[58px] absolute text-center justify-start text-black text-xl font-bold font-['Inter']">Create Call</div>
+  <div className="size-20 left-[326px] top-[27px] absolute overflow-hidden">
+    <div className="size-20 left-0 top-0 absolute bg-black" />
+    <img className="w-28 h-32 left-[-18.55px] top-[-19.90px] absolute" src="https://placehold.co/112x126" />
+    <img className="w-28 h-32 left-[-18.55px] top-[-19.90px] absolute" src="https://placehold.co/112x126" />
+  </div>
+  <div className="size-5 left-[1023px] top-[645px] absolute" />
+  <div className="w-[1271px] h-64 left-[326px] top-[555px] absolute bg-white/10 rounded-[40px] outline outline-2 outline-offset-[-1px] outline-white/10" />
+  <div className="w-80 h-44 left-[970px] top-[603px] absolute">
+    <div className="size-3.5 left-[84.62px] top-[115.28px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
+    <div className="w-80 h-44 left-0 top-0 absolute outline outline-2 outline-offset-[-1px] outline-orange-600" />
+    <div className="w-80 h-44 left-0 top-0 absolute bg-gradient-to-b from-orange-600/25 to-stone-500/0" />
+  </div>
+  <div className="size-3.5 left-[1302px] top-[596.06px] absolute bg-gradient-to-l from-emerald-400 via-emerald-300 via 31% to-emerald-600 to 83% rounded-full" />
+  <div className="size-56 left-[1365px] top-[568.70px] absolute bg-white/10 rounded-[40px] backdrop-blur-[10px]" />
+  <img className="w-56 h-40 left-[1365.17px] top-[566px] absolute rounded-[40px] border-2 border-orange-600" src="https://placehold.co/217x160" />
+  <div className="w-[468px] h-16 left-[740px] top-[466px] absolute bg-white/10 rounded-2xl outline outline-1 outline-offset-[-0.50px] outline-white/10" />
+  <div className="w-52 h-16 left-[1221px] top-[466px] absolute bg-white/10 rounded-2xl outline outline-1 outline-offset-[-0.50px] outline-white/10" />
+  <div className="w-16 h-4 left-[1230px] top-[595px] absolute bg-orange-600/80 rounded-md outline outline-1 outline-offset-[-0.50px] outline-white/10" />
+  <img className="size-16 left-[1365px] top-[466px] absolute rounded-2xl border border-orange-600" src="https://placehold.co/70x67" />
+  <div className="w-80 h-16 left-[476px] top-[569px] absolute justify-start text-white text-4xl font-extrabold font-['Inter']">$Futardio</div>
+  <div className="w-40 h-16 left-[351px] top-[574px] absolute justify-start text-orange-600 text-3xl font-extrabold font-['Inter']">Called:</div>
+  <div className="w-36 h-16 left-[1456px] top-[735px] absolute text-center justify-start text-emerald-400 text-xl font-extrabold font-['Inter']">$246K <br/>(3.65x)</div>
+  <div className="w-[591px] h-14 left-[752px] top-[477px] absolute justify-start"><span class="text-white text-xl font-bold font-['Inter'] leading-4">Thesis:<br/></span><span class="text-white text-base font-bold font-['Inter'] leading-4"><br/></span><span class="text-white/80 text-sm font-normal font-['Inter'] leading-3">‘’ Fu-tar-dio, We’re going so much higher ’’</span></div>
+  <div className="w-32 h-12 left-[1244px] top-[479px] absolute justify-start"><span class="text-white text-xl font-extrabold font-['Inter']">Trades in: </span><span class="text-orange-600 text-xl font-extrabold font-['Inter']">@ccf_fnf</span></div>
+  <div className="w-14 h-3.5 left-[1240px] top-[595px] absolute justify-start text-white text-sm font-bold font-['Inter']">$948K</div>
+  <div className="w-32 h-12 left-[1368px] top-[739px] absolute text-center justify-start text-white text-base font-extrabold font-['Inter']">Marketcap when called :</div>
+  <div className="w-64 h-8 left-[591px] top-[466px] absolute justify-start text-white text-2xl font-extrabold font-['Inter']">Jobba</div>
+  <div className="w-52 h-5 left-[672px] top-[589px] absolute opacity-60 justify-start"><span class="text-white/80 text-xl font-extrabold font-['Inter']">And it’s </span><span class="text-emerald-400 text-xl font-extrabold font-['Inter']">UP</span><span class="text-white/80 text-xl font-extrabold font-['Inter']"> by</span></div>
+  <div className="w-28 h-4 left-[591px] top-[496px] absolute opacity-60 justify-start text-white/80 text-base font-light font-['Inter']">@JobbaTrades</div>
+  <div className="w-96 h-11 left-[817px] top-[573px] absolute justify-start text-emerald-400 text-5xl font-bold font-['Inter']">+ 400%</div>
+  <div className="size-36 left-[428px] top-[364px] absolute bg-white/10 rounded-full outline outline-2 outline-offset-[-1px] outline-orange-600 backdrop-blur-[10px]" />
+  <img className="size-36 left-[429.23px] top-[365.23px] absolute rounded-[252px]" src="https://placehold.co/146x146" />
+  <div className="size-8 left-[1042px] top-[704px] absolute bg-white/10 rounded-full outline outline-2 outline-offset-[-1px] outline-orange-600 backdrop-blur-[10px]" />
+  <img className="size-8 left-[1042.28px] top-[704.27px] absolute rounded-[252px]" src="https://placehold.co/32x32" />
+  <div className="size-7 left-[490px] top-[709px] absolute" />
+  <div className="size-5 left-[703px] top-[471px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
+  <div className="size-5 left-[779px] top-[556px] absolute" />
+  <div className="size-2.5 left-[681.08px] top-[476.62px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500" />
+  <div className="size-5 left-[675px] top-[471px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500" />
+  <div className="w-16 h-0 left-[1050px] top-[674px] absolute origin-top-left rotate-45 overflow-hidden">
+    <div className="size-9 left-[10.47px] top-[4.55px] absolute bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500" />
+  </div>
+  <div className="w-3.5 h-3 left-[705px] top-[476px] absolute bg-black" />
+  <div className="w-96 h-36 left-[474.49px] top-[861.38px] absolute bg-gradient-to-b from-pink-900 to-yellow-950 rounded-full blur-[300px]" />
+  <div className="size-20 left-[473.49px] top-[700.51px] absolute bg-white/10 rounded-[20px] backdrop-blur-[20px]" />
+  <img className="size-16 left-[480.02px] top-[705.54px] absolute" src="https://placehold.co/67x67" />
+  <div className="size-20 left-[383px] top-[699px] absolute bg-white/10 rounded-[20px] border border-orange-600 backdrop-blur-[20px]" />
+  <div className="size-9 left-[405.12px] top-[722.63px] absolute overflow-hidden">
+    <img className="size-9 left-0 top-0 absolute" src="https://placehold.co/36x36" />
+    <img className="size-9 left-0 top-0 absolute" src="https://placehold.co/36x36" />
+  </div>
+  <div className="size-20 left-[563.98px] top-[699px] absolute bg-white/10 rounded-[20px] backdrop-blur-[20px]" />
+  <div className="size-16 left-[569px] top-[704.03px] absolute overflow-hidden">
+    <img className="size-16 left-0 top-[-0.66px] absolute" src="https://placehold.co/70x70" />
+    <img className="size-16 left-0 top-[-0.66px] absolute" src="https://placehold.co/70x70" />
+  </div>
+  <div className="size-20 left-[654.47px] top-[700.51px] absolute bg-white/10 rounded-[20px] shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] backdrop-blur-[20px]" />
+  <div className="size-11 left-[671.56px] top-[717.60px] absolute overflow-hidden">
+    <div className="w-9 h-3 left-[3.87px] top-[14.95px] absolute bg-orange-500" />
+    <div className="w-9 h-1.5 left-[3.87px] top-[3.92px] absolute bg-orange-500" />
+    <div className="w-9 h-1.5 left-[3.87px] top-[31.98px] absolute bg-orange-500" />
+  </div>
+  <div className="size-20 left-[835.44px] top-[700.51px] absolute bg-white/10 rounded-[20px] border border-orange-600 backdrop-blur-[20px]" />
+  <div className="w-6 h-7 left-[864.40px] top-[725.36px] absolute bg-linear-270 from-cyan-500 to-cyan-300" />
+  <div className="w-7 h-9 left-[860.79px] top-[723.01px] absolute bg-linear-270 from-cyan-500 to-cyan-300" />
+  <div className="w-9 h-10 left-[857.56px] top-[720.62px] absolute bg-linear-270 from-cyan-500 to-cyan-300" />
+  <div className="size-20 left-[745px] top-[701px] absolute bg-white/10 rounded-[20px] backdrop-blur-[20px]" />
+  <div className="w-9 h-10 left-[767.12px] top-[721.11px] absolute bg-linear-2 from-white to-white" />
+</div>
