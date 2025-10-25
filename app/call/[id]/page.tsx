@@ -46,7 +46,6 @@ export default function CallPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch call data using API endpoint (bypasses Supabase PostgREST cache)
         const callResponse = await fetch(`/api/calls/get?id=${id}`)
         const callResult = await callResponse.json()
         
@@ -58,7 +57,6 @@ export default function CallPage() {
         const creatorWalletAddr = initialCall.creator_wallet
         setCreatorWallet(creatorWalletAddr)
 
-        // Fetch additional data in parallel
         const [settingsResponse, profileResponse, callsResponse] = await Promise.all([
           fetch(`/api/settings/get?wallet_address=${creatorWalletAddr}`),
           fetch(`/api/profile/get?wallet_address=${creatorWalletAddr}`),
@@ -88,7 +86,6 @@ export default function CallPage() {
 
         setLoading(false)
 
-        // Update views count
         const updatedViews = (initialCall.views || 0) + 1
         supabase
           .from('calls')
@@ -189,9 +186,8 @@ export default function CallPage() {
   const getPlatformUrl = (call: Call, platformId: string) => {
     const tokenAddress = call.token_address
     
-    // Default BroadCall referral codes (fallback when user hasn't set their own)
-    const DEFAULT_AXIOM_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
-    const DEFAULT_BULLX_REF = 'BROADCALL' // TODO: Replace with actual BroadCall ref code
+    const DEFAULT_AXIOM_REF = 'BROADCALL'
+    const DEFAULT_BULLX_REF = 'BROADCALL'
     
     switch (platformId) {
       case 'gmgn':
@@ -246,7 +242,7 @@ export default function CallPage() {
   if (loading) {
     return (
       <div 
-        className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
         style={{
           backgroundImage: 'url(/background.png)',
           backgroundSize: 'cover',
@@ -262,7 +258,7 @@ export default function CallPage() {
   if (allCalls.length === 0) {
     return (
       <div 
-        className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
         style={{
           backgroundImage: 'url(/background.png)',
           backgroundSize: 'cover',
@@ -270,7 +266,7 @@ export default function CallPage() {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center relative z-10">
+        <div className="bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-[40px] p-8 shadow-lg text-center relative z-10">
           <h2 className="text-2xl font-bold mb-2 text-white">Call Not Found</h2>
           <p className="text-gray-300">This call doesn't exist or has been removed.</p>
         </div>
@@ -280,216 +276,244 @@ export default function CallPage() {
 
   const latestCall = allCalls[0]
   const previousCalls = allCalls.slice(1)
+  
+  const roi = latestCall.initial_price && latestCall.current_price 
+    ? calculateROI(latestCall.initial_price, latestCall.current_price)
+    : 0
 
-  const renderCallCard = (call: CallWithPrice, isHero: boolean = false) => {
-    const roi = call.initial_price && call.current_price 
-      ? calculateROI(call.initial_price, call.current_price)
-      : 0
+  return (
+    <main 
+      className="relative min-h-screen overflow-hidden bg-black"
+      style={{
+        backgroundImage: 'url(/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Gradient Blobs */}
+      <div className="size-[767px] left-[590px] top-[1105px] absolute bg-gradient-to-l from-orange-600/70 via-orange-500/70 to-amber-500/70 rounded-full blur-[300px]" />
+      <div className="w-[901px] h-[720px] left-[26px] top-[-548px] absolute bg-emerald-400/50 rounded-full blur-[300px]" />
+      <div className="size-64 left-[839px] top-[1326px] absolute bg-gradient-to-b from-purple-800 to-amber-700/0 rounded-full blur-[300px]" />
 
-    return (
-      <div 
-        key={call.id}
-        className={`relative bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] shadow-[0px_4px_6px_rgba(0,0,0,0.38)] ${
-          isHero ? 'p-6 md:p-8 mb-8' : 'p-6 mb-6'
-        }`}
-      >
-        {/* Token Logo - Top Right */}
-        <div className={`absolute ${isHero ? 'top-6 right-6 md:top-8 md:right-8' : 'top-6 right-6'}`}>
-          {call.token_logo ? (
-            <img 
-              src={call.token_logo} 
-              alt={call.token_symbol || 'Token'} 
-              className={`rounded-xl shadow-lg ${isHero ? 'w-20 h-20 md:w-24 md:h-24' : 'w-16 h-16'}`}
-            />
-          ) : (
-            <div className={`rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold shadow-lg ${
-              isHero ? 'w-20 h-20 md:w-24 md:h-24 text-3xl' : 'w-16 h-16 text-2xl'
-            }`}>
-              {call.token_symbol?.charAt(0) || '?'}
+      <CallPageHeader />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-6 md:px-8">
+        
+        {/* Banner Image */}
+        <img 
+          className="w-full h-64 md:h-80 rounded-[40px] md:rounded-[51px] border-2 border-orange-600 object-cover mb-6" 
+          src={creatorBanner || 'https://placehold.co/1271x312'} 
+          alt="Banner"
+        />
+
+        {/* Main Content Card */}
+        <div className="relative bg-white/10 rounded-[40px] border-2 border-white/10 p-6 md:p-8 mb-8">
+          
+          {/* User Profile Section */}
+          <div className="flex items-start gap-4 mb-8">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="size-32 md:size-36 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden">
+                <img 
+                  className="size-full rounded-full object-cover" 
+                  src={creatorAvatar || 'https://placehold.co/146x146'} 
+                  alt={creatorAlias || 'User'}
+                />
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Called: Token Name & ROI */}
-        <div className="mb-6">
-          <div className={`${isHero ? 'text-2xl md:text-3xl' : 'text-xl'} font-bold text-white mb-2 flex items-center gap-2`}>
-            <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-              Called:
-            </span>
-            <span>${call.token_symbol || 'TOKEN'}</span>
+            {/* User Info */}
+            <div className="flex-1 pt-2">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-5 h-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
+                <h1 className="text-2xl md:text-4xl font-extrabold text-white">
+                  {creatorAlias || 'Anonymous'}
+                </h1>
+              </div>
+              <p className="text-base md:text-xl text-white/80 font-light opacity-60 mb-4">
+                @{creatorAlias || 'anonymous'}
+              </p>
+              
+              {/* Thesis */}
+              {latestCall.thesis && (
+                <div className="bg-white/10 rounded-2xl border border-white/10 p-4 mb-4">
+                  <p className="text-white text-xl font-bold leading-4 mb-2">Thesis:</p>
+                  <p className="text-white/80 text-sm font-normal leading-3">
+                    &ldquo;{latestCall.thesis}&rdquo;
+                  </p>
+                </div>
+              )}
+
+              {/* Trades In */}
+              {creatorSettings && (
+                <div className="inline-block bg-white/10 rounded-2xl border border-white/10 px-4 py-3">
+                  <span className="text-white text-xl font-extrabold">Trades in: </span>
+                  <span className="text-orange-600 text-xl font-extrabold">
+                    @{creatorAlias || 'anonymous'}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-          <p className={`${isHero ? 'text-base md:text-lg' : 'text-sm'} text-gray-400 mb-3`}>
-            And it's {roi >= 0 ? 'UP' : 'DOWN'} by
-          </p>
-          {call.initial_price && call.current_price && (
-            <div className={`font-black ${
-              roi >= 0 ? 'bg-gradient-to-r from-green-400 to-emerald-500' : 'text-red-500'
-            } ${roi >= 0 ? 'bg-clip-text text-transparent' : ''} ${
-              isHero ? 'text-5xl md:text-7xl' : 'text-4xl'
-            }`}>
-              {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
-            </div>
-          )}
-        </div>
 
-        {/* Platform Buttons */}
-        <div className="mb-6">
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          {/* Token Call Info */}
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
+            {/* Left: Called Token */}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-3xl font-extrabold text-orange-600">Called:</span>
+                <span className="text-4xl font-extrabold text-white">
+                  ${latestCall.token_symbol || 'TOKEN'}
+                </span>
+              </div>
+              
+              <p className="text-white/80 text-xl font-extrabold opacity-60 mb-2">
+                And it's <span className="text-emerald-400">{roi >= 0 ? 'UP' : 'DOWN'}</span> by
+              </p>
+              
+              {latestCall.initial_price && latestCall.current_price && (
+                <div className={`text-5xl md:text-6xl font-bold ${
+                  roi >= 0 ? 'text-emerald-400' : 'text-red-500'
+                }`}>
+                  {roi >= 0 ? '+' : ''}{roi.toFixed(0)}%
+                </div>
+              )}
+            </div>
+
+            {/* Right: Market Cap & Chart Preview */}
+            <div className="relative">
+              {/* Market Cap Badge */}
+              <div className="absolute top-0 right-0 z-10 bg-orange-600/80 rounded-md border border-white/10 px-4 py-1">
+                <p className="text-white text-sm font-bold">
+                  ${formatMarketCap(latestCall.initial_mcap || 0)}
+                </p>
+              </div>
+
+              {/* Chart Preview */}
+              <div className="relative bg-white/10 rounded-[40px] backdrop-blur-[10px] overflow-hidden border-2 border-orange-600 w-full md:w-56">
+                {latestCall.priceData?.pairAddress && (
+                  <iframe
+                    src={`https://dexscreener.com/solana/${latestCall.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                    className="w-full h-40 border-0"
+                    style={{ background: 'transparent' }}
+                  />
+                )}
+              </div>
+
+              {/* Marketcap Stats */}
+              <div className="mt-4 text-center">
+                <p className="text-white text-base font-extrabold mb-1">
+                  Marketcap when called:
+                </p>
+                <p className="text-emerald-400 text-xl font-extrabold">
+                  ${formatMarketCap(latestCall.initial_mcap || 0)} ({calculateMultiplier(latestCall.initial_mcap || 0, latestCall.current_mcap || 0).toFixed(2)}x)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Platform Trading Buttons */}
+          <div className="flex gap-4 flex-wrap justify-center md:justify-start">
             {platforms.map((platform) => {
               const Logo = platform.Logo
               return (
                 <button
                   key={platform.id}
-                  onClick={() => handlePlatformClick(call, platform.id)}
-                  className={`flex-shrink-0 flex flex-col items-center justify-center gap-2 bg-white/[0.12] border border-white/20 backdrop-blur-[20px] hover:bg-white/[0.18] rounded-[28px] transition-all shadow-[0px_4px_6px_rgba(0,0,0,0.38)] hover:shadow-[0px_6px_12px_rgba(0,0,0,0.5)] ${
-                    isHero ? 'w-28 h-28 md:w-32 md:h-32' : 'w-24 h-24'
+                  onClick={() => handlePlatformClick(latestCall, platform.id)}
+                  className={`bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg hover:shadow-xl size-20 flex items-center justify-center ${
+                    platform.id === 'gmgn' || platform.id === 'bullx' ? 'border-2 border-orange-600' : ''
                   }`}
                 >
-                  <Logo className={isHero ? 'w-10 h-10 md:w-12 md:h-12' : 'w-8 h-8'} />
-                  <span className="text-white font-extrabold text-xs">{platform.name}</span>
+                  <Logo className="w-10 h-10" />
                 </button>
               )
             })}
           </div>
         </div>
 
-        {/* Chart */}
-        {call.priceData?.pairAddress && (
-          <div className="mb-6 rounded-2xl overflow-hidden shadow-lg">
+        {/* Full DexScreener Chart */}
+        {latestCall.priceData?.pairAddress && (
+          <div className="relative bg-gradient-to-b from-orange-600/25 to-stone-500/0 rounded-[40px] border-2 border-orange-600 overflow-hidden mb-8">
             <iframe
-              src={`https://dexscreener.com/solana/${call.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-              className={`w-full border-0 ${isHero ? 'h-[280px] md:h-[350px]' : 'h-[250px]'}`}
+              src={`https://dexscreener.com/solana/${latestCall.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+              className="w-full h-[280px] md:h-96 border-0"
               style={{ background: 'transparent' }}
             />
           </div>
         )}
 
-        {/* Market Cap Info */}
-        {call.priceData?.marketCap && (
-          <div className="flex items-center justify-between text-sm text-gray-300 mb-4">
-            <span>Marketcap when called:</span>
-            <span className="text-green-400 font-bold">
-              ${formatMarketCap(call.initial_mcap || 0)}
-            </span>
-          </div>
-        )}
-
-        {/* Thesis */}
-        {call.thesis && (
-          <div className="bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl p-4">
-            <p className="text-gray-300 text-sm italic">&ldquo;{call.thesis}&rdquo;</p>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  return (
-    <main 
-      className="relative min-h-screen overflow-hidden"
-      style={{
-        backgroundImage: 'url(/background.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      <CallPageHeader />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
-        
-        {/* KOL Profile Banner Section */}
-        <div className="mb-8 relative">
-          {/* Banner Image */}
-          <div 
-            className="w-full h-48 md:h-64 rounded-[34px] md:rounded-[51px] overflow-hidden bg-gradient-to-br from-orange-500/20 to-purple-600/20"
-            style={{
-              backgroundImage: creatorBanner ? `url(${creatorBanner})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
-          
-          {/* Avatar Overlay - positioned to overlap banner */}
-          <div className="absolute bottom-0 left-6 md:left-8 z-20" style={{ transform: 'translateY(50%)' }}>
-            {creatorAvatar ? (
-              <img 
-                src={creatorAvatar} 
-                alt={creatorAlias || 'User'} 
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl"
-                style={{
-                  border: '4px solid transparent',
-                  backgroundImage: 'linear-gradient(black, black), linear-gradient(135deg, #ff8800, #ff4400)',
-                  backgroundOrigin: 'border-box',
-                  backgroundClip: 'padding-box, border-box'
-                }}
-              />
-            ) : (
-              <div 
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl md:text-5xl font-bold shadow-2xl"
-                style={{
-                  border: '4px solid transparent',
-                  backgroundImage: 'linear-gradient(135deg, #ff5722, #ff9800), linear-gradient(135deg, #ff8800, #ff4400)',
-                  backgroundOrigin: 'border-box',
-                  backgroundClip: 'padding-box, border-box'
-                }}
-              >
-                {creatorAlias?.charAt(0)?.toUpperCase() || '?'}
-              </div>
-            )}
-          </div>
-
-          {/* Profile Info */}
-          <div className="mt-16 md:mt-20 mb-6">
-            <div className="flex items-center gap-3 mb-3">
-              <Link 
-                href={`/profile/${creatorWallet}`}
-                className="text-2xl md:text-3xl font-black text-white hover:underline flex items-center gap-2"
-              >
-                @{creatorAlias || 'Anonymous'}
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                  </svg>
-                </div>
-              </Link>
-            </div>
-
-            {/* Bio */}
-            {creatorBio && (
-              <p className="text-gray-300 text-base md:text-lg mb-4 max-w-2xl">
-                {creatorBio}
-              </p>
-            )}
-
-            {/* Trades In Label */}
-            {creatorSettings && (
-              <div className="bg-white/[0.08] border border-white/12 rounded-2xl px-4 py-2 inline-block">
-                <span className="text-gray-400 text-sm">Trades in: </span>
-                <span className="text-orange-400 font-bold text-sm">
-                  @{creatorAlias || 'Anonymous'}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Latest Call - Hero Card */}
-        <div className="relative">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-300 mb-4">Latest Call</h2>
-          {renderCallCard(latestCall, true)}
-        </div>
-
         {/* Previous Calls */}
         {previousCalls.length > 0 && (
-          <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-300 mb-4">Previous Calls</h2>
-            {previousCalls.map((call) => (
-              <div key={call.id} className="relative">
-                {renderCallCard(call, false)}
-              </div>
-            ))}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-300">Previous Calls</h2>
+            {previousCalls.map((call) => {
+              const callRoi = call.initial_price && call.current_price 
+                ? calculateROI(call.initial_price, call.current_price)
+                : 0
+
+              return (
+                <div 
+                  key={call.id}
+                  className="relative bg-white/10 rounded-[40px] border border-white/10 p-6"
+                >
+                  {/* Token Logo */}
+                  <div className="absolute top-6 right-6">
+                    {call.token_logo ? (
+                      <img 
+                        src={call.token_logo} 
+                        alt={call.token_symbol || 'Token'} 
+                        className="size-16 rounded-xl shadow-lg"
+                      />
+                    ) : (
+                      <div className="size-16 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold text-2xl">
+                        {call.token_symbol?.charAt(0) || '?'}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl font-bold text-orange-600">Called:</span>
+                    <span className="text-2xl font-bold text-white">${call.token_symbol || 'TOKEN'}</span>
+                  </div>
+
+                  <p className="text-white/80 text-base opacity-60 mb-2">
+                    And it's <span className="text-emerald-400">{callRoi >= 0 ? 'UP' : 'DOWN'}</span> by
+                  </p>
+
+                  {call.initial_price && call.current_price && (
+                    <div className={`text-4xl font-bold mb-4 ${
+                      callRoi >= 0 ? 'text-emerald-400' : 'text-red-500'
+                    }`}>
+                      {callRoi >= 0 ? '+' : ''}{callRoi.toFixed(0)}%
+                    </div>
+                  )}
+
+                  {/* Thesis */}
+                  {call.thesis && (
+                    <div className="bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl p-4 mb-4">
+                      <p className="text-gray-300 text-sm italic">&ldquo;{call.thesis}&rdquo;</p>
+                    </div>
+                  )}
+
+                  {/* Platform Buttons */}
+                  <div className="flex gap-3 overflow-x-auto pb-2">
+                    {platforms.map((platform) => {
+                      const Logo = platform.Logo
+                      return (
+                        <button
+                          key={platform.id}
+                          onClick={() => handlePlatformClick(call, platform.id)}
+                          className="flex-shrink-0 bg-white/10 rounded-[20px] backdrop-blur-[20px] hover:bg-white/[0.18] transition-all shadow-lg size-20 flex items-center justify-center"
+                        >
+                          <Logo className="w-8 h-8" />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
