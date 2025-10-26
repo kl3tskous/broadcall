@@ -4,10 +4,7 @@ import nacl from 'tweetnacl'
 import bs58 from 'bs58'
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL
 })
 
 export async function POST(request: NextRequest) {

@@ -3,10 +3,7 @@ import { Pool } from 'pg';
 import { PublicKey } from '@solana/web3.js';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL
 });
 
 function isValidSolanaAddress(address: string): boolean {

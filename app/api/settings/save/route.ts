@@ -3,10 +3,7 @@ import { Pool } from 'pg';
 
 // Direct PostgreSQL connection (bypasses PostgREST cache)
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL
 });
 
 export async function POST(request: NextRequest) {
