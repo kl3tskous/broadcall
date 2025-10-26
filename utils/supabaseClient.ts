@@ -46,6 +46,8 @@ export interface UserSettings {
   photon_ref: string | null
   bullx_ref: string | null
   trojan_ref: string | null
+  trades_in_name: string | null
+  trades_in_image: string | null
   onboarded: boolean
   created_at: string
   updated_at: string

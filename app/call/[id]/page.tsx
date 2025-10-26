@@ -133,7 +133,7 @@ export default function CallPage() {
               dexId: mainPair.dexId
             }
 
-            if (call.price_at_call) {
+            if (call.initial_price) {
               const currentPrice = parseFloat(mainPair.priceUsd)
               const currentMcap = mainPair.fdv || 0
               const shouldUpdateATH = !call.ath_price || currentPrice > call.ath_price
@@ -141,13 +141,13 @@ export default function CallPage() {
               const updates = shouldUpdateATH
                 ? {
                     current_price: currentPrice,
-                    current_market_cap: currentMcap,
+                    current_mcap: currentMcap,
                     ath_price: currentPrice,
                     ath_market_cap: currentMcap
                   }
                 : {
                     current_price: currentPrice,
-                    current_market_cap: currentMcap,
+                    current_mcap: currentMcap,
                   }
 
               await supabase
@@ -280,12 +280,12 @@ export default function CallPage() {
   const latestCall = allCalls[0]
   const previousCalls = allCalls.slice(1)
   
-  const roi = latestCall.price_at_call && latestCall.current_price 
-    ? calculateROI(parseFloat(latestCall.price_at_call), parseFloat(latestCall.current_price))
+  const roi = latestCall.initial_price && latestCall.current_price 
+    ? calculateROI(latestCall.initial_price, latestCall.current_price)
     : 0
 
-  const multiplier = latestCall.market_cap_at_call && latestCall.current_market_cap
-    ? calculateMultiplier(latestCall.market_cap_at_call, latestCall.current_market_cap)
+  const multiplier = latestCall.initial_mcap && latestCall.current_mcap
+    ? calculateMultiplier(latestCall.initial_mcap, latestCall.current_mcap)
     : 0
 
   return (
@@ -398,7 +398,7 @@ export default function CallPage() {
                 And it's <span className={roi >= 0 ? 'text-emerald-400' : 'text-red-500'}>{roi >= 0 ? 'UP' : 'DOWN'}</span> by
               </p>
               
-              {latestCall.price_at_call && latestCall.current_price && (
+              {latestCall.initial_price && latestCall.current_price && (
                 <div className={`text-4xl md:text-5xl font-bold ${
                   roi >= 0 ? 'text-emerald-400' : 'text-red-500'
                 }`}>
@@ -446,7 +446,7 @@ export default function CallPage() {
                   Marketcap when called:
                 </p>
                 <p className="text-emerald-400 text-lg md:text-xl font-extrabold">
-                  ${formatMarketCap(latestCall.market_cap_at_call || 0)} ({multiplier.toFixed(2)}x)
+                  ${formatMarketCap(latestCall.initial_mcap || 0)} ({multiplier.toFixed(2)}x)
                 </p>
               </div>
             </div>
@@ -489,8 +489,8 @@ export default function CallPage() {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-300">Previous Calls</h2>
             {previousCalls.map((call) => {
-              const callRoi = call.price_at_call && call.current_price 
-                ? calculateROI(parseFloat(call.price_at_call), parseFloat(call.current_price))
+              const callRoi = call.initial_price && call.current_price 
+                ? calculateROI(call.initial_price, call.current_price)
                 : 0
 
               return (
@@ -522,7 +522,7 @@ export default function CallPage() {
                     And it's <span className={callRoi >= 0 ? 'text-emerald-400' : 'text-red-500'}>{callRoi >= 0 ? 'UP' : 'DOWN'}</span> by
                   </p>
 
-                  {call.price_at_call && call.current_price && (
+                  {call.initial_price && call.current_price && (
                     <div className={`text-4xl font-bold mb-4 ${
                       callRoi >= 0 ? 'text-emerald-400' : 'text-red-500'
                     }`}>
