@@ -6,8 +6,10 @@ import Image from 'next/image'
 import { UserPlus, Bell } from 'lucide-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
+  const router = useRouter()
   const { setVisible } = useWalletModal()
   const { publicKey, connected } = useWallet()
   const [isJoining, setIsJoining] = useState(false)
@@ -53,7 +55,7 @@ export default function LandingPage() {
 
       if (response.ok || response.status === 409) {
         // Success or already exists - redirect to Telegram linking
-        window.location.href = '/link-telegram'
+        router.push('/link-telegram')
       } else {
         alert(data.error || 'Failed to start waitlist signup')
       }
