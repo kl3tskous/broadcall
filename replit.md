@@ -43,7 +43,17 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Smart referral link injection using user's saved platform codes
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
-## Recent Changes (October 25, 2025)
+## Recent Changes (October 26, 2025)
+- ✅ **One-Click Telegram Waitlist**: Implemented seamless waitlist signup flow using Telegram deep links
+  - Users click "Join Waitlist" → redirected to `/link-telegram` with wallet address in deep link
+  - Single "Open Telegram" button launches Telegram with wallet address pre-encoded in URL parameter
+  - Bot's `/start` command auto-detects wallet addresses (32-44 chars) and completes verification instantly
+  - User just clicks "START" button in Telegram - no manual copy/paste needed
+  - Page auto-polls and updates when verification completes
+  - `/waitlist` command kept as backup verification method
+- ✅ **Improved UX**: Simplified /link-telegram page from 3-step manual process to single-click flow with clear instructions
+
+## Previous Changes (October 25, 2025)
 - ✅ **"Trades in" Feature**: Added trades_in_name and trades_in_image columns to user_settings table for group/community attribution
 - ✅ **Settings Page Enhancement**: Added "Trades in" section with group name input and image upload functionality using existing Replit Object Storage system
 - ✅ **Upload Consistency**: Unified all image uploads (avatar, banner, trades-in) to use the same `/api/upload` endpoint and FileUploader flow
