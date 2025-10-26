@@ -109,6 +109,68 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "❌ Could not connect to BroadCall servers. Please try again later."
         )
 
+async def waitlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle /waitlist command for wallet verification"""
+    user = update.effective_user
+    telegram_id = user.id
+    telegram_username = user.username or user.first_name
+    
+    if not context.args:
+        await update.message.reply_text(
+            "⚠️ Please provide your wallet address.\n\n"
+            "Usage: /waitlist YOUR_WALLET_ADDRESS\n\n"
+            "Example:\n"
+            "/waitlist 5SYktAH1t3ygsxKMQg3rN7T8p8UhXQP88fNKQue7mSBT"
+        )
+        return
+    
+    wallet_address = context.args[0]
+    
+    await update.message.reply_text("🔄 Verifying your wallet and adding you to the waitlist...")
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                f"{BACKEND_URL}/api/waitlist/complete",
+                json={
+                    "wallet_address": wallet_address,
+                    "telegram_user_id": str(telegram_id),
+                    "telegram_username": telegram_username
+                }
+            )
+            
+            if response.status_code == 200:
+                await update.message.reply_text(
+                    f"🎉 Congratulations, @{telegram_username}!\n\n"
+                    f"✅ You're now on the BroadCall waitlist!\n\n"
+                    f"We'll notify you right here on Telegram as soon as BroadCall launches.\n\n"
+                    f"Get ready to turn your token calls into income! 🚀"
+                )
+            elif response.status_code == 400:
+                error_data = response.json()
+                await update.message.reply_text(
+                    f"❌ {error_data.get('error', 'Invalid wallet address')}\n\n"
+                    "Please make sure you're using the correct Solana wallet address from the BroadCall website."
+                )
+            elif response.status_code == 404:
+                await update.message.reply_text(
+                    "❌ This wallet address is not recognized.\n\n"
+                    "Please:\n"
+                    "1. Go to BroadCall website\n"
+                    "2. Connect your wallet\n"
+                    "3. Click 'Join Waitlist'\n"
+                    "4. Follow the instructions to link your Telegram"
+                )
+            else:
+                await update.message.reply_text(
+                    "❌ Something went wrong. Please try again later or contact support."
+                )
+    except Exception as e:
+        logger.error(f"Error during waitlist verification: {e}")
+        await update.message.reply_text(
+            "❌ Could not connect to BroadCall servers. Please try again later."
+        )
+
 async def disconnect(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Disconnect Telegram from BroadCall account"""
     user = update.effective_user
@@ -250,6 +312,7 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("status", status))
     application.add_handler(CommandHandler("disconnect", disconnect))
+    application.add_handler(CommandHandler("waitlist", waitlist))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(ChatMemberHandler(chat_member_updated, ChatMemberHandler.MY_CHAT_MEMBER))
     

@@ -17,8 +17,11 @@ export async function GET(request: NextRequest) {
     const query = 'SELECT * FROM waitlist WHERE wallet_address = $1';
     const result = await pool.query(query, [wallet]);
 
+    // User is only "on waitlist" if status is completed
+    const isCompleted = result.rows.length > 0 && result.rows[0].status === 'completed';
+
     return NextResponse.json({
-      onWaitlist: result.rows.length > 0,
+      onWaitlist: isCompleted,
       data: result.rows[0] || null
     });
 

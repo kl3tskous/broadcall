@@ -14,7 +14,7 @@ export default function LandingPage() {
   const [hasJoined, setHasJoined] = useState(false)
   const [isOnWaitlist, setIsOnWaitlist] = useState(false)
 
-  // Check if wallet is already on waitlist
+  // Check if wallet is already on waitlist (completed)
   useEffect(() => {
     const checkWaitlist = async () => {
       if (!publicKey) return
@@ -22,7 +22,7 @@ export default function LandingPage() {
       try {
         const response = await fetch(`/api/waitlist/check?wallet=${publicKey.toString()}`)
         const data = await response.json()
-        setIsOnWaitlist(data.onWaitlist)
+        setIsOnWaitlist(data.onWaitlist) // Only true if status is 'completed'
       } catch (error) {
         console.error('Error checking waitlist:', error)
       }
@@ -31,36 +31,14 @@ export default function LandingPage() {
     checkWaitlist()
   }, [publicKey])
 
-  const handleJoinWaitlist = async () => {
+  const handleJoinWaitlist = () => {
     if (!connected || !publicKey) {
       setVisible(true)
       return
     }
-
-    setIsJoining(true)
-    try {
-      const response = await fetch('/api/waitlist/join', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wallet_address: publicKey.toString()
-        })
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setHasJoined(true)
-        setIsOnWaitlist(true)
-      } else {
-        alert(data.error || 'Failed to join waitlist')
-      }
-    } catch (error) {
-      console.error('Error joining waitlist:', error)
-      alert('Failed to join waitlist. Please try again.')
-    } finally {
-      setIsJoining(false)
-    }
+    
+    // Redirect to Telegram linking page
+    window.location.href = '/link-telegram'
   }
 
   return (

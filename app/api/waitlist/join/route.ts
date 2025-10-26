@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert into waitlist
+    // Insert into waitlist with pending status
     const query = `
-      INSERT INTO waitlist (wallet_address)
-      VALUES ($1)
+      INSERT INTO waitlist (wallet_address, status)
+      VALUES ($1, 'pending')
       RETURNING *;
     `;
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Successfully joined the waitlist!',
+      message: 'Wallet added to waitlist. Please verify via Telegram.',
       data: result.rows[0]
     });
 
