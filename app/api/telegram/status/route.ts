@@ -4,6 +4,9 @@ import { Pool } from 'pg'
 // Use direct PostgreSQL connection to bypass Supabase PostgREST schema cache
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 })
 
 export async function GET(request: NextRequest) {

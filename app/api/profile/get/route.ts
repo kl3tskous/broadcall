@@ -5,6 +5,9 @@ import { Pool } from 'pg';
 // PostgREST schema cache doesn't update automatically when columns are added
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 export async function GET(request: NextRequest) {
