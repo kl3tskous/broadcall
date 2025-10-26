@@ -60,9 +60,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error('Waitlist signup error:', error);
+    console.error('Waitlist signup error:', {
+      message: error.message,
+      code: error.code,
+      detail: error.detail,
+      hint: error.hint,
+      DATABASE_URL_exists: !!process.env.DATABASE_URL,
+      error_stack: error.stack
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to join waitlist. Please try again.' },
+      { 
+        error: 'Failed to join waitlist. Please try again.',
+        debug: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     );
   }
