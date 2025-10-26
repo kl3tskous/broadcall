@@ -44,6 +44,11 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 26, 2025)
+- ✅ **CRITICAL: Fixed Autoscale Deployment API Routes**: Resolved 404 errors on API routes in production
+  - **Root Cause**: Next.js was listening on `localhost` only, but Replit autoscale deployments require binding to `0.0.0.0`
+  - **Fix**: Updated package.json start script from `next start -p 5000` to `next start -p 5000 -H 0.0.0.0`
+  - This allows the Next.js server to accept connections from all network interfaces, which is mandatory for autoscale deployments
+  - API routes now work correctly in production on broadcall.xyz
 - ✅ **Fixed TypeScript Build Errors**: Resolved all TypeScript compilation issues for production deployment
   - Installed @types/bs58 package for proper type definitions
   - Fixed Buffer type handling in object storage route (converted to Uint8Array)
