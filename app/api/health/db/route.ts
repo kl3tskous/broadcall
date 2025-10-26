@@ -13,9 +13,10 @@ export async function GET() {
     }
 
     // Create a temporary pool for testing
+    const connectionString = process.env.DATABASE_URL;
     const pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
+      connectionString,
+      ssl: connectionString?.includes('localhost') ? false : {
         rejectUnauthorized: false
       }
     });

@@ -1,0 +1,329 @@
+2025-10-26T15:07:44Z info: Deployment: 84d88742-49d8-4d5f-8d1d-9e2bc9a15025
+2025-10-26T15:07:44Z info: Build: 85612d0b-d334-41cd-a5c0-89eec8ee6cf4
+2025-10-26T15:07:44Z info: Connecting to builder
+2025-10-26T15:07:44Z info: Builder connected
+2025-10-26T15:07:45Z info: Installing packages
+--> npm install
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: qrcode.react@1.0.1
+npm warn Found: react@18.3.1
+npm warn node_modules/react
+npm warn   react@"^18.3.0" from the root project
+npm warn   16 more (@fractalwagmi/popup-connection, @keystonehq/sdk, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react@"^15.5.3 || ^16.0.0 || ^17.0.0" from qrcode.react@1.0.1
+npm warn node_modules/qrcode.react
+npm warn   qrcode.react@"^1.0.1" from @keystonehq/sdk@0.19.2
+npm warn   node_modules/@keystonehq/sdk
+npm warn
+npm warn Conflicting peer dependency: react@17.0.2
+npm warn node_modules/react
+npm warn   peer react@"^15.5.3 || ^16.0.0 || ^17.0.0" from qrcode.react@1.0.1
+npm warn   node_modules/qrcode.react
+npm warn     qrcode.react@"^1.0.1" from @keystonehq/sdk@0.19.2
+npm warn     node_modules/@keystonehq/sdk
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: react-native@0.80.2
+npm warn Found: @types/react@18.3.26
+npm warn node_modules/@types/react
+npm warn   dev @types/react@"^18.3.0" from the root project
+npm warn   2 more (@types/react-dom, valtio)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peerOptional @types/react@"^19.1.0" from react-native@0.80.2
+npm warn node_modules/react-native
+npm warn   peer react-native@"^0.0.0-0 || >=0.60 <1.0" from @react-native-async-storage/async-storage@1.24.0
+npm warn   node_modules/@react-native-async-storage/async-storage
+npm warn   3 more (@solana-mobile/mobile-wallet-adapter-protocol, ...)
+npm warn
+npm warn Conflicting peer dependency: @types/react@19.2.2
+npm warn node_modules/@types/react
+npm warn   peerOptional @types/react@"^19.1.0" from react-native@0.80.2
+npm warn   node_modules/react-native
+npm warn     peer react-native@"^0.0.0-0 || >=0.60 <1.0" from @react-native-async-storage/async-storage@1.24.0
+npm warn     node_modules/@react-native-async-storage/async-storage
+npm warn     3 more (@solana-mobile/mobile-wallet-adapter-protocol, ...)
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: react-native@0.80.2
+npm warn Found: react@18.3.1
+npm warn node_modules/react
+npm warn   react@"^18.3.0" from the root project
+npm warn   16 more (@fractalwagmi/popup-connection, @keystonehq/sdk, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react@"^19.1.0" from react-native@0.80.2
+npm warn node_modules/react-native
+npm warn   peer react-native@"^0.0.0-0 || >=0.60 <1.0" from @react-native-async-storage/async-storage@1.24.0
+npm warn   node_modules/@react-native-async-storage/async-storage
+npm warn   3 more (@solana-mobile/mobile-wallet-adapter-protocol, ...)
+npm warn
+npm warn Conflicting peer dependency: react@19.2.0
+npm warn node_modules/react
+npm warn   peer react@"^19.1.0" from react-native@0.80.2
+npm warn   node_modules/react-native
+npm warn     peer react-native@"^0.0.0-0 || >=0.60 <1.0" from @react-native-async-storage/async-storage@1.24.0
+npm warn     node_modules/@react-native-async-storage/async-storage
+npm warn     3 more (@solana-mobile/mobile-wallet-adapter-protocol, ...)
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: react-qr-reader@2.2.1
+npm warn Found: react@18.3.1
+npm warn node_modules/react
+npm warn   react@"^18.3.0" from the root project
+npm warn   16 more (@fractalwagmi/popup-connection, @keystonehq/sdk, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react@"~16" from react-qr-reader@2.2.1
+npm warn node_modules/react-qr-reader
+npm warn   react-qr-reader@"^2.2.1" from @keystonehq/sdk@0.19.2
+npm warn   node_modules/@keystonehq/sdk
+npm warn
+npm warn Conflicting peer dependency: react@16.14.0
+npm warn node_modules/react
+npm warn   peer react@"~16" from react-qr-reader@2.2.1
+npm warn   node_modules/react-qr-reader
+npm warn     react-qr-reader@"^2.2.1" from @keystonehq/sdk@0.19.2
+npm warn     node_modules/@keystonehq/sdk
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: react-qr-reader@2.2.1
+npm warn Found: react-dom@18.3.1
+npm warn node_modules/react-dom
+npm warn   react-dom@"^18.3.0" from the root project
+npm warn   6 more (@fractalwagmi/popup-connection, @keystonehq/sdk, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react-dom@"~16" from react-qr-reader@2.2.1
+npm warn node_modules/react-qr-reader
+npm warn   react-qr-reader@"^2.2.1" from @keystonehq/sdk@0.19.2
+npm warn   node_modules/@keystonehq/sdk
+npm warn
+npm warn Conflicting peer dependency: react-dom@16.14.0
+npm warn node_modules/react-dom
+npm warn   peer react-dom@"~16" from react-qr-reader@2.2.1
+npm warn   node_modules/react-qr-reader
+npm warn     react-qr-reader@"^2.2.1" from @keystonehq/sdk@0.19.2
+npm warn     node_modules/@keystonehq/sdk
+
+npm warn ERESOLVE overriding peer dependency
+
+npm warn While resolving: @react-native/virtualized-lists@0.80.2
+npm warn Found: @types/react@18.3.26
+npm warn node_modules/@types/react
+npm warn   dev @types/react@"^18.3.0" from the root project
+npm warn   2 more (@types/react-dom, valtio)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peerOptional @types/react@"^19.0.0" from @react-native/virtualized-lists@0.80.2
+npm warn node_modules/react-native/node_modules/@react-native/virtualized-lists
+npm warn   @react-native/virtualized-lists@"0.80.2" from react-native@0.80.2
+npm warn   node_modules/react-native
+npm warn
+npm warn Conflicting peer dependency: @types/react@19.2.2
+npm warn node_modules/@types/react
+npm warn   peerOptional @types/react@"^19.0.0" from @react-native/virtualized-lists@0.80.2
+npm warn   node_modules/react-native/node_modules/@react-native/virtualized-lists
+npm warn     @react-native/virtualized-lists@"0.80.2" from react-native@0.80.2
+npm warn     node_modules/react-native
+
+
+up to date, audited 1462 packages in 9s
+
+
+232 packages are looking for funding
+  run `npm fund` for details
+
+
+17 low severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.6.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.2
+npm notice To update run: npm install -g npm@11.6.2
+npm notice
+
+2025-10-26T15:07:55Z info: Starting Build
+
+> coin-call-platform@0.1.0 build
+> next build
+
+
+  ▲ Next.js 14.2.33
+
+   Creating an optimized production build ...
+
+ ✓ Compiled successfully
+
+   Linting and checking validity of types ...
+
+   Collecting page data ...
+
+   Generating static pages (0/27) ...
+
+Error fetching settings: B [Error]: Dynamic server usage: Route /api/settings/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at i (/home/runner/workspace/.next/server/app/api/settings/get/route.js:1:1309)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/settings/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+
+   Generating static pages (6/27) 
+
+API error: B [Error]: Dynamic server usage: Route /api/profile/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at i (/home/runner/workspace/.next/server/app/api/profile/get/route.js:1:1304)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/profile/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+
+Error fetching channels: B [Error]: Dynamic server usage: Route /api/telegram/channels couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at i (/home/runner/workspace/.next/server/app/api/telegram/channels/route.js:1:1980)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/telegram/channels couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+
+Error in status: B [Error]: Dynamic server usage: Route /api/telegram/status couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at i (/home/runner/workspace/.next/server/app/api/telegram/status/route.js:1:1311)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/telegram/status couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+
+Error fetching calls: B [Error]: Dynamic server usage: Route /api/calls/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at l (/home/runner/workspace/.next/server/app/api/calls/get/route.js:1:1295)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/calls/get couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Waitlist check error: B [Error]: Dynamic server usage: Route /api/waitlist/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at o (/home/runner/workspace/.next/server/app/api/waitlist/check/route.js:1:1320)
+    at /home/runner/workspace/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/runner/workspace/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/runner/workspace/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/waitlist/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+
+   Generating static pages (13/27) 
+
+   Generating static pages (20/27) 
+
+ ✓ Generating static pages (27/27)
+
+   Finalizing page optimization ...
+
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    7.88 kB         109 kB
+├ ○ /_not-found                          875 B          88.3 kB
+├ ƒ /api/calls/create                    0 B                0 B
+├ ƒ /api/calls/get                       0 B                0 B
+├ ƒ /api/health/db                       0 B                0 B
+├ ƒ /api/objects/[...path]               0 B                0 B
+├ ƒ /api/profile/get                     0 B                0 B
+├ ƒ /api/profile/save                    0 B                0 B
+├ ƒ /api/settings/get                    0 B                0 B
+├ ƒ /api/settings/save                   0 B                0 B
+├ ƒ /api/telegram/add-channel            0 B                0 B
+├ ƒ /api/telegram/broadcast              0 B                0 B
+├ ƒ /api/telegram/channels               0 B                0 B
+├ ƒ /api/telegram/channels/toggle        0 B                0 B
+├ ƒ /api/telegram/disconnect             0 B                0 B
+├ ƒ /api/telegram/generate-token         0 B                0 B
+├ ƒ /api/telegram/status                 0 B                0 B
+├ ƒ /api/telegram/verify                 0 B                0 B
+├ ƒ /api/upload                          0 B                0 B
+├ ƒ /api/upload/trades-image             0 B                0 B
+├ ƒ /api/waitlist/check                  0 B                0 B
+├ ƒ /api/waitlist/complete               0 B                0 B
+├ ƒ /api/waitlist/join                   0 B                0 B
+├ ƒ /call/[id]                           4.95 kB         152 kB
+├ ○ /create-call                         4.07 kB        91.5 kB
+├ ○ /link-telegram                       3.19 kB         104 kB
+├ ƒ /profile/[address]                   4.37 kB         151 kB
+└ ○ /settings                            8.52 kB         156 kB
++ First Load JS shared by all            87.5 kB
+  ├ chunks/117-e72742def40b35be.js       31.7 kB
+  ├ chunks/fd9d1056-f645e3cd7ccf8003.js  53.7 kB
+  └ other shared chunks (total)          2.09 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+2025-10-26T15:08:52Z info: Pushing pid1 binary layer...
+2025-10-26T15:08:54Z info: Created pid1 binary layer
+2025-10-26T15:08:56Z info: Pushing hosting layer...
+2025-10-26T15:08:56Z info: Pushing Repl layer...
+2025-10-26T15:08:56Z info: Retrieved cached nix layer
+2025-10-26T15:08:56Z info: Created hosting layer
+2025-10-26T15:10:25Z info: Created Repl layer
+2025-10-26T15:10:25Z info: Pushing Repl (cache) layer...
+2025-10-26T15:10:25Z info: Created Repl (cache) layer
+2025-10-26T15:10:27Z info: Pushed image manifest
+2025-10-26T15:10:29Z info: Pushed soci index manifest
+2025-10-26T15:10:32Z info: Creating Autoscale service
+2025-10-26T15:13:27Z info: Waiting for service to be ready
+2025-10-26T15:13:29Z info: Deployment successful
