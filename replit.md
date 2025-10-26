@@ -44,6 +44,20 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 26, 2025)
+- ✅ **Production Domain Setup**: Created domain utility system for broadcall.xyz integration
+  - Added `lib/utils.ts` with `getBaseUrl()`, `getFullUrl()`, and `getDomain()` functions
+  - Environment-aware URL generation (broadcall.xyz in production, localhost in dev)
+  - Added `NEXT_PUBLIC_APP_URL` environment variable to .env.local.example
+  - Ready for production deployment with custom domain support
+- ✅ **Production Deployment Configuration**: Verified deployment setup
+  - Autoscale deployment mode configured in .replit
+  - Build script: `npm run build`
+  - Production server: `npm start` (serves on port 5000)
+  - Both Server and Telegram Bot workflows running successfully
+- ✅ **Code Cleanup**: Removed unused files for cleaner production codebase
+  - Removed unused main.py template file
+  - Cleaned up temporary pasted text files from attached_assets folder
+  - Verified no LSP diagnostics in bot.py
 - ✅ **One-Click Telegram Waitlist (Inline on Homepage)**: Implemented seamless waitlist signup flow entirely on homepage using Telegram deep links
   - Users click "Join Waitlist" → "Open Telegram" UI appears inline in the same section (no page redirect)
   - Single "Open Telegram" button launches Telegram with wallet address pre-encoded in URL parameter
