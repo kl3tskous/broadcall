@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg';
+import { PublicKey } from '@solana/web3.js';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+function isValidSolanaAddress(address: string): boolean {
+  try {
+    new PublicKey(address);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,6 +24,14 @@ export async function POST(request: NextRequest) {
     if (!wallet_address || typeof wallet_address !== 'string') {
       return NextResponse.json(
         { error: 'Please provide a valid wallet address' },
+        { status: 400 }
+      );
+    }
+
+    // Validate Solana address format
+    if (!isValidSolanaAddress(wallet_address)) {
+      return NextResponse.json(
+        { error: 'Invalid Solana wallet address format' },
         { status: 400 }
       );
     }
