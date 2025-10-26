@@ -4,6 +4,9 @@ import { PublicKey } from '@solana/web3.js';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 function isValidSolanaAddress(address: string): boolean {
