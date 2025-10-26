@@ -31,14 +31,38 @@ export default function LandingPage() {
     checkWaitlist()
   }, [publicKey])
 
-  const handleJoinWaitlist = () => {
+  const handleJoinWaitlist = async () => {
     if (!connected || !publicKey) {
       setVisible(true)
       return
     }
+
+    setIsJoining(true)
     
-    // Redirect to Telegram linking page
-    window.location.href = '/link-telegram'
+    try {
+      // Create pending waitlist entry
+      const response = await fetch('/api/waitlist/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          wallet_address: publicKey.toString()
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok || response.status === 409) {
+        // Success or already exists - redirect to Telegram linking
+        window.location.href = '/link-telegram'
+      } else {
+        alert(data.error || 'Failed to start waitlist signup')
+      }
+    } catch (error) {
+      console.error('Error starting waitlist signup:', error)
+      alert('Failed to start waitlist signup. Please try again.')
+    } finally {
+      setIsJoining(false)
+    }
   }
 
   return (
