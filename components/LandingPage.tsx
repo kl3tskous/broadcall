@@ -1,12 +1,68 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { UserPlus } from 'lucide-react'
+import { UserPlus, Bell } from 'lucide-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 export default function LandingPage() {
   const { setVisible } = useWalletModal()
+  const { publicKey, connected } = useWallet()
+  const [isJoining, setIsJoining] = useState(false)
+  const [hasJoined, setHasJoined] = useState(false)
+  const [isOnWaitlist, setIsOnWaitlist] = useState(false)
+
+  // Check if wallet is already on waitlist
+  useEffect(() => {
+    const checkWaitlist = async () => {
+      if (!publicKey) return
+      
+      try {
+        const response = await fetch(`/api/waitlist/check?wallet=${publicKey.toString()}`)
+        const data = await response.json()
+        setIsOnWaitlist(data.onWaitlist)
+      } catch (error) {
+        console.error('Error checking waitlist:', error)
+      }
+    }
+    
+    checkWaitlist()
+  }, [publicKey])
+
+  const handleJoinWaitlist = async () => {
+    if (!connected || !publicKey) {
+      setVisible(true)
+      return
+    }
+
+    setIsJoining(true)
+    try {
+      const response = await fetch('/api/waitlist/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          wallet_address: publicKey.toString()
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setHasJoined(true)
+        setIsOnWaitlist(true)
+      } else {
+        alert(data.error || 'Failed to join waitlist')
+      }
+    } catch (error) {
+      console.error('Error joining waitlist:', error)
+      alert('Failed to join waitlist. Please try again.')
+    } finally {
+      setIsJoining(false)
+    }
+  }
+
   return (
     <div 
       className="relative min-h-screen overflow-hidden"
@@ -101,6 +157,62 @@ export default function LandingPage() {
               Create Profile
             </span>
           </button>
+        </div>
+      </div>
+
+      {/* Join Waitlist Section */}
+      <div className="relative max-w-[800px] mx-auto px-4 mb-12 md:mb-16">
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)]">
+          {hasJoined ? (
+            <div className="text-center">
+              <div className="text-5xl mb-4">🎉</div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">You&apos;re on the list!</h2>
+              <p className="text-gray-300 mb-4">
+                Connect your Telegram to get notified when we launch
+              </p>
+              <Link
+                href="/settings"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] text-black font-semibold py-3 px-8 rounded-[16px] hover:opacity-90 transition-all"
+              >
+                <Bell className="w-5 h-5" />
+                Link Telegram
+              </Link>
+            </div>
+          ) : isOnWaitlist ? (
+            <div className="text-center">
+              <div className="text-4xl mb-4">✓</div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Already on Waitlist</h2>
+              <p className="text-gray-300 mb-4">
+                Link your Telegram to get launch notifications
+              </p>
+              <Link
+                href="/settings"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] text-black font-semibold py-3 px-8 rounded-[16px] hover:opacity-90 transition-all"
+              >
+                <Bell className="w-5 h-5" />
+                Link Telegram
+              </Link>
+            </div>
+          ) : (
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Join the Waitlist</h2>
+              <p className="text-gray-300 mb-6">
+                Connect your wallet to get early access when we launch
+              </p>
+              <button
+                onClick={handleJoinWaitlist}
+                disabled={isJoining}
+                className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] text-black font-bold text-lg py-3 px-8 md:px-12 rounded-[16px] hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              >
+                {isJoining ? 'Joining...' : connected ? 'Join Waitlist' : 'Connect Wallet'}
+              </button>
+              {!connected && (
+                <p className="text-gray-400 text-sm mt-3">
+                  No wallet? No problem. We&apos;ll guide you through setup.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

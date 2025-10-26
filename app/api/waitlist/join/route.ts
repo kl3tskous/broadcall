@@ -8,27 +8,24 @@ const pool = new Pool({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, telegram_handle } = body;
+    const { wallet_address } = body;
 
-    // Validate email
-    if (!email || !email.includes('@')) {
+    // Validate wallet address
+    if (!wallet_address || typeof wallet_address !== 'string') {
       return NextResponse.json(
-        { error: 'Please provide a valid email address' },
+        { error: 'Please provide a valid wallet address' },
         { status: 400 }
       );
     }
 
     // Insert into waitlist
     const query = `
-      INSERT INTO waitlist (email, telegram_handle)
-      VALUES ($1, $2)
+      INSERT INTO waitlist (wallet_address)
+      VALUES ($1)
       RETURNING *;
     `;
 
-    const result = await pool.query(query, [
-      email.toLowerCase().trim(),
-      telegram_handle?.trim() || null
-    ]);
+    const result = await pool.query(query, [wallet_address]);
 
     return NextResponse.json({
       success: true,
@@ -37,10 +34,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    // Handle duplicate email
+    // Handle duplicate wallet address
     if (error.code === '23505') {
       return NextResponse.json(
-        { error: 'This email is already on the waitlist!' },
+        { error: 'This wallet is already on the waitlist!' },
         { status: 409 }
       );
     }

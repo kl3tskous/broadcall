@@ -1,7 +1,7 @@
 'use client'
 
-import WaitlistPage from '@/components/WaitlistPage'
+import LandingPage from '@/components/LandingPage'
 
 export default function Home() {
-  return <WaitlistPage />
+  return <LandingPage />
 }
