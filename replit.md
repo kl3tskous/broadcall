@@ -44,6 +44,12 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 26, 2025)
+- ✅ **Database Security Hardening**: Removed insecure SSL bypass from production database connections
+  - **Root Cause**: All 16 API routes had `ssl: { rejectUnauthorized: false }` which disabled certificate verification
+  - **Fix**: Removed SSL override from all PostgreSQL Pool connections, now relying on proper DATABASE_URL configuration
+  - **Security Decision**: Using standard Supabase practice - Session Pooler connection string with `?pgbouncer=true` parameter handles SSL correctly
+  - Production database now connects securely with proper SSL certificate verification
+  - Verified via `/api/health/db` endpoint on broadcall.xyz showing "healthy" status
 - ✅ **CRITICAL: Fixed Autoscale Deployment API Routes**: Resolved 404 errors on API routes in production
   - **Root Cause**: Next.js was listening on `localhost` only, but Replit autoscale deployments require binding to `0.0.0.0`
   - **Fix**: Updated package.json start script from `next start -p 5000` to `next start -p 5000 -H 0.0.0.0`
