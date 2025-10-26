@@ -1,0 +1,156 @@
+2025-10-26 15:13:02.20
+068bfa4c
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/_bot.py", line 732, in _do_post
+2025-10-26 15:13:02.20
+068bfa4c
+User
+result = await request.post(
+2025-10-26 15:13:02.20
+068bfa4c
+User
+^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:02.20
+068bfa4c
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/request/_baserequest.py", line 198, in post
+2025-10-26 15:13:02.20
+068bfa4c
+User
+result = await self._request_wrapper(
+2025-10-26 15:13:02.20
+068bfa4c
+User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:02.20
+068bfa4c
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/request/_baserequest.py", line 375, in _request_wrapper
+2025-10-26 15:13:02.20
+068bfa4c
+User
+raise exception
+2025-10-26 15:13:02.20
+068bfa4c
+User
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-10-26 15:13:07.36
+9036ddb2
+User
+2025-10-26 14:13:07,360 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8096451897:AAE8ZbLLbh6NfP7RBIxs4GIAH0vOBWSffb0/getUpdates "HTTP/1.1 409 Conflict"
+2025-10-26 15:13:07.36
+9036ddb2
+User
+2025-10-26 14:13:07,361 - telegram.ext.Application - ERROR - No error handlers are registered, logging exception.
+2025-10-26 15:13:07.36
+9036ddb2
+User
+Traceback (most recent call last):
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/ext/_utils/networkloop.py", line 134, in network_retry_loop
+2025-10-26 15:13:07.36
+9036ddb2
+User
+await do_action()
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/ext/_utils/networkloop.py", line 127, in do_action
+2025-10-26 15:13:07.36
+9036ddb2
+User
+action_cb_task.result()
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+2025-10-26 15:13:07.36
+9036ddb2
+User
+updates = await self.bot.get_updates(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/ext/_extbot.py", line 676, in get_updates
+2025-10-26 15:13:07.36
+9036ddb2
+User
+updates = await super().get_updates(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/_bot.py", line 4780, in get_updates
+2025-10-26 15:13:07.36
+9036ddb2
+User
+await self._post(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/_bot.py", line 703, in _post
+2025-10-26 15:13:07.36
+9036ddb2
+User
+return await self._do_post(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/ext/_extbot.py", line 372, in _do_post
+2025-10-26 15:13:07.36
+9036ddb2
+User
+return await super()._do_post(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/_bot.py", line 732, in _do_post
+2025-10-26 15:13:07.36
+9036ddb2
+User
+result = await request.post(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/request/_baserequest.py", line 198, in post
+2025-10-26 15:13:07.36
+9036ddb2
+User
+result = await self._request_wrapper(
+2025-10-26 15:13:07.36
+9036ddb2
+User
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-26 15:13:07.36
+9036ddb2
+User
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/telegram/request/_baserequest.py", line 375, in _request_wrapper
+2025-10-26 15:13:07.36
+9036ddb2
+User
+raise exception
+2025-10-26 15:13:07.36
+9036ddb2
+User
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
