@@ -59,10 +59,6 @@ localPort = 36629
 externalPort = 4200
 
 [[ports]]
-localPort = 37329
-externalPort = 5000
-
-[[ports]]
 localPort = 37997
 externalPort = 3003
 
@@ -79,5 +75,5 @@ defaultBucketID = "replit-objstore-32c64820-4c39-4ffb-b07e-aa918372365e"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["npm", "start"]
+run = ["bash", "-c", "npm start & python bot.py"]
 build = ["npm", "run", "build"]

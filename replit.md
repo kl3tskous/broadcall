@@ -44,6 +44,11 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 26, 2025)
+- ✅ **Fixed Deployment Configuration**: Corrected deployment run command for Next.js + Python bot
+  - Fixed incorrect Python run command that was causing deployment failures
+  - Build command: `npm run build` (compiles Next.js application)
+  - Run command: `bash -c "npm start & python bot.py"` (runs both Next.js and Telegram bot)
+  - Deployment now properly serves Next.js on port 5000 with Telegram bot running in background
 - ✅ **Production Domain Setup**: Created domain utility system for broadcall.xyz integration
   - Added `lib/utils.ts` with `getBaseUrl()`, `getFullUrl()`, and `getDomain()` functions
   - Environment-aware URL generation (broadcall.xyz in production, localhost in dev)
@@ -51,9 +56,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Ready for production deployment with custom domain support
 - ✅ **Production Deployment Configuration**: Verified deployment setup
   - Autoscale deployment mode configured in .replit
-  - Build script: `npm run build`
-  - Production server: `npm start` (serves on port 5000)
-  - Both Server and Telegram Bot workflows running successfully
+  - Both Server and Telegram Bot workflows running successfully in development
 - ✅ **Code Cleanup**: Removed unused files for cleaner production codebase
   - Removed unused main.py template file
   - Cleaned up temporary pasted text files from attached_assets folder
