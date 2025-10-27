@@ -328,18 +328,19 @@ export default function CallPage() {
             </div>
           </div>
 
-          {/* User Info - positioned to the right of bottom half of avatar */}
-          <div className="absolute left-24 md:left-36 -bottom-8 md:-bottom-10 ml-4 md:ml-6">
-            <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-xl md:text-2xl font-extrabold text-white">
-                {creatorAlias || 'Anonymous'}
-              </h1>
-              <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
-            </div>
-            <p className="text-sm md:text-base text-white/80 font-light opacity-60">
-              @{creatorAlias || 'anonymous'}
-            </p>
+        </div>
+
+        {/* User Info - positioned below avatar */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-xl md:text-2xl font-extrabold text-white">
+              {creatorAlias || 'Anonymous'}
+            </h1>
+            <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
           </div>
+          <p className="text-sm md:text-base text-white/80 font-light opacity-60">
+            @{creatorAlias || 'anonymous'}
+          </p>
         </div>
 
         {/* Bio Section */}

@@ -75,7 +75,7 @@ localPort = 41969
 externalPort = 3001
 
 [[ports]]
-localPort = 44653
+localPort = 46817
 externalPort = 5173
 
 [objectStorage]
