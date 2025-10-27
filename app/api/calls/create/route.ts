@@ -60,12 +60,16 @@ export async function POST(request: NextRequest) {
 
     // Check if user has access_granted = true
     try {
+      console.log('Checking access for wallet:', wallet_address)
       const accessCheck = await pool.query(
         'SELECT access_granted FROM waitlist WHERE wallet_address = $1',
         [wallet_address]
       )
 
+      console.log('Access check result:', accessCheck.rows)
+
       if (accessCheck.rows.length === 0) {
+        console.log('Wallet not found in waitlist')
         return NextResponse.json(
           { error: 'Wallet not on waitlist. Please join the waitlist first.' },
           { status: 403 }
@@ -73,12 +77,16 @@ export async function POST(request: NextRequest) {
       }
 
       const hasAccess = accessCheck.rows[0].access_granted === true
+      console.log('Has access:', hasAccess, 'access_granted value:', accessCheck.rows[0].access_granted)
+      
       if (!hasAccess) {
         return NextResponse.json(
           { error: 'Access not granted yet. You are on the waitlist - we will notify you when access is granted.' },
           { status: 403 }
         )
       }
+      
+      console.log('Access check passed!')
     } catch (error) {
       console.error('Access check error:', error)
       return NextResponse.json(
