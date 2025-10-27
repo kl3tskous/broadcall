@@ -2,7 +2,7 @@
 
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function CreateCallPage() {
@@ -14,6 +14,36 @@ export default function CreateCallPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null)
+  const [checkingAccess, setCheckingAccess] = useState(true)
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!publicKey) {
+        setCheckingAccess(false)
+        return
+      }
+
+      try {
+        const response = await fetch(`/api/access/check?wallet=${publicKey.toString()}`)
+        const data = await response.json()
+        setHasAccess(data.hasAccess)
+        
+        if (!data.hasAccess) {
+          setTimeout(() => {
+            router.push('/')
+          }, 3000)
+        }
+      } catch (error) {
+        console.error('Error checking access:', error)
+        setHasAccess(false)
+      } finally {
+        setCheckingAccess(false)
+      }
+    }
+
+    checkAccess()
+  }, [publicKey, router])
 
   const handleCreateCall = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -103,6 +133,58 @@ export default function CreateCallPage() {
               <div className="flex justify-center">
                 <WalletMultiButton />
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (checkingAccess) {
+    return (
+      <div className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
+        <div className="min-h-screen backdrop-blur-sm bg-black/50">
+          <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+                BroadCall
+              </h1>
+              <WalletMultiButton />
+            </div>
+          </header>
+          <div className="flex items-center justify-center pt-32">
+            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+              <p className="text-white text-center">Checking access...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (hasAccess === false) {
+    return (
+      <div className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
+        <div className="min-h-screen backdrop-blur-sm bg-black/50">
+          <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+                BroadCall
+              </h1>
+              <WalletMultiButton />
+            </div>
+          </header>
+          <div className="flex items-center justify-center pt-32">
+            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+              <h2 className="text-2xl font-bold text-white text-center mb-4">
+                🔒 Access Not Granted
+              </h2>
+              <p className="text-gray-400 text-center mb-6">
+                You're on the waitlist! Access will be granted soon.
+              </p>
+              <p className="text-gray-500 text-center text-sm">
+                Redirecting to homepage...
+              </p>
             </div>
           </div>
         </div>

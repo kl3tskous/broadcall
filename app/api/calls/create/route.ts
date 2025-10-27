@@ -58,6 +58,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if user has access_granted = true
+    try {
+      const accessCheck = await pool.query(
+        'SELECT access_granted FROM waitlist WHERE wallet_address = $1',
+        [wallet_address]
+      )
+
+      if (accessCheck.rows.length === 0) {
+        return NextResponse.json(
+          { error: 'Wallet not on waitlist. Please join the waitlist first.' },
+          { status: 403 }
+        )
+      }
+
+      const hasAccess = accessCheck.rows[0].access_granted === true
+      if (!hasAccess) {
+        return NextResponse.json(
+          { error: 'Access not granted yet. You are on the waitlist - we will notify you when access is granted.' },
+          { status: 403 }
+        )
+      }
+    } catch (error) {
+      console.error('Access check error:', error)
+      return NextResponse.json(
+        { error: 'Failed to verify access' },
+        { status: 500 }
+      )
+    }
+
     // Fetch token data from DexScreener
     let tokenData
     try {
