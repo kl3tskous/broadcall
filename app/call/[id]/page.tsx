@@ -7,6 +7,7 @@ import { supabase, Call, UserSettings } from '@/utils/supabaseClient'
 import { platforms } from '@/components/PlatformLogos'
 import { formatTimeAgo, formatPrice, formatMarketCap, calculateROI, calculateMultiplier } from '@/utils/dexscreener'
 import { CallPageHeader } from '@/components/CallPageHeader'
+import { LivePriceChart } from '@/components/LivePriceChart'
 
 const DEFAULT_GMGN_REF = '7rpqjHdf'
 
@@ -451,6 +452,18 @@ export default function CallPage() {
               </div>
             </div>
           </div>
+
+          {/* Live Price Chart */}
+          {latestCall.token_address && (
+            <div className="mb-6">
+              <LivePriceChart 
+                tokenAddress={latestCall.token_address}
+                userProfileImage={creatorAvatar || undefined}
+                initialMarketCap={latestCall.initial_mcap}
+                callTimestamp={latestCall.created_at}
+              />
+            </div>
+          )}
 
           {/* Platform Trading Buttons */}
           <div className="flex gap-3 md:gap-4 flex-wrap justify-center lg:justify-start">

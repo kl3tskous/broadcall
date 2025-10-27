@@ -103,8 +103,7 @@ export function LivePriceChart({
           x: {
             display: true,
             grid: {
-              color: 'rgba(255, 255, 255, 0.05)',
-              drawBorder: false
+              color: 'rgba(255, 255, 255, 0.05)'
             },
             ticks: {
               color: '#666',
@@ -124,8 +123,7 @@ export function LivePriceChart({
             display: true,
             position: 'right',
             grid: {
-              color: 'rgba(255, 255, 255, 0.05)',
-              drawBorder: false
+              color: 'rgba(255, 255, 255, 0.05)'
             },
             ticks: {
               color: '#666',
