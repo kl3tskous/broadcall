@@ -138,13 +138,33 @@ export default function LandingPage() {
             </Link>
           </nav>
 
-          {/* Launch App Button */}
-          <button
-            onClick={() => setVisible(true)}
-            className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-[20px] md:rounded-[30px] px-4 md:px-8 py-2 md:py-4 hover:opacity-90 transition-opacity"
-          >
-            <span className="text-black text-sm md:text-xl font-bold">Launch App</span>
-          </button>
+          {/* Discord Icon & Launch App Button */}
+          <div className="flex items-center gap-3 md:gap-4">
+            {/* Discord Icon */}
+            <a
+              href="https://discord.gg/2Hmcex3S"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+              aria-label="Join Discord"
+            >
+              <Image
+                src="/discord-logo.svg"
+                alt="Discord"
+                width={40}
+                height={40}
+                className="w-8 h-8 md:w-10 md:h-10"
+              />
+            </a>
+
+            {/* Launch App Button */}
+            <button
+              onClick={() => setVisible(true)}
+              className="bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-[20px] md:rounded-[30px] px-4 md:px-8 py-2 md:py-4 hover:opacity-90 transition-opacity"
+            >
+              <span className="text-black text-sm md:text-xl font-bold">Launch App</span>
+            </button>
+          </div>
         </div>
       </header>
 
