@@ -40,9 +40,33 @@ export function LivePriceChart({
   })
   const [kolMarkerStyle, setKolMarkerStyle] = useState({ left: 0, top: 0, display: 'none' })
   const [mcapBubbleStyle, setMcapBubbleStyle] = useState({ left: 0, top: 0, display: 'none' })
+  const [currentInterval, setCurrentInterval] = useState(5000) // Start with 5 second updates
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  const MAX_DATA_POINTS = 50
-  const UPDATE_INTERVAL = 1000
+  const MAX_DATA_POINTS = 60 // Always 60 data points
+
+  // Dynamic time window calculation
+  const getTimeWindowSettings = () => {
+    if (!callTimestamp) {
+      // Default to 60 min window if no call timestamp
+      return { updateInterval: 60000, intervalSeconds: 60 }
+    }
+
+    const callTime = new Date(callTimestamp).getTime()
+    const now = Date.now()
+    const elapsedMinutes = (now - callTime) / (1000 * 60)
+
+    if (elapsedMinutes <= 5) {
+      // 0-5 minutes: 5 second updates, 5 minute window
+      return { updateInterval: 5000, intervalSeconds: 5 }
+    } else if (elapsedMinutes <= 15) {
+      // 5-15 minutes: 15 second updates, 15 minute window
+      return { updateInterval: 15000, intervalSeconds: 15 }
+    } else {
+      // 15+ minutes: 60 second updates, 60 minute window
+      return { updateInterval: 60000, intervalSeconds: 60 }
+    }
+  }
 
   const formatMarketCap = (value: number): string => {
     if (value >= 1000000) {
@@ -251,6 +275,9 @@ export function LivePriceChart({
 
   const initializeWithHistoricalData = async () => {
     try {
+      const timeSettings = getTimeWindowSettings()
+      const intervalSeconds = timeSettings.intervalSeconds
+      
       const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`)
       const data = await response.json()
 
@@ -261,15 +288,15 @@ export function LivePriceChart({
 
         setCurrentMarketCap(currentMcap)
 
-        const historyCount = 20
         const now = Date.now()
         
         // Parse the actual call timestamp if provided
-        const actualCallTime = callTimestamp ? new Date(callTimestamp).getTime() : now - 75000 // Default to 15 intervals ago
+        const actualCallTime = callTimestamp ? new Date(callTimestamp).getTime() : now - (intervalSeconds * 1000 * 15)
         
         // Calculate how far back we need to go to include the call time
         const timeSinceCall = now - actualCallTime
-        const intervalsNeeded = Math.max(historyCount, Math.ceil(timeSinceCall / 5000) + 5)
+        const intervalMs = intervalSeconds * 1000
+        const intervalsNeeded = Math.max(20, Math.ceil(timeSinceCall / intervalMs) + 5)
         const effectiveHistoryCount = Math.min(intervalsNeeded, MAX_DATA_POINTS)
 
         const newTimeLabels: string[] = []
@@ -282,7 +309,7 @@ export function LivePriceChart({
         for (let i = 0; i < effectiveHistoryCount; i++) {
           const variation = (Math.random() - 0.5) * 0.0000001
           const historicalPrice = currentPrice + (variation * (effectiveHistoryCount - i))
-          const timestamp = now - (effectiveHistoryCount - i) * 5000
+          const timestamp = now - (effectiveHistoryCount - i) * intervalMs
           const time = formatTimeHHMM(timestamp)
 
           const priceRatio = historicalPrice / currentPrice
@@ -301,7 +328,7 @@ export function LivePriceChart({
           }
         }
 
-        // Set KOL call data at the identified index (fallback to earliest point if not found)
+        // Set KOL call data at the identified index (the actual call datapoint)
         const finalIndex = kolCallIndex !== null ? kolCallIndex : 0
         setKolCall({
           timestamp: newTimestamps[finalIndex],
@@ -320,21 +347,55 @@ export function LivePriceChart({
     }
   }
 
+  // Initialize chart and data on mount
   useEffect(() => {
     initChart()
     initializeWithHistoricalData()
 
-    const interval = setInterval(fetchTokenData, UPDATE_INTERVAL)
-    
+    // Initial interval setup
+    const timeSettings = getTimeWindowSettings()
+    setCurrentInterval(timeSettings.updateInterval)
+
     return () => {
-      clearInterval(interval)
       // Cleanup: destroy chart instance when component unmounts
       if (chartRef.current) {
         chartRef.current.destroy()
         chartRef.current = null
       }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
     }
   }, [])
+
+  // Dynamic interval management - watches call age and adapts polling cadence
+  useEffect(() => {
+    // Clear existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+
+    // Set up new interval with current settings
+    intervalRef.current = setInterval(fetchTokenData, currentInterval)
+
+    // Check if we need to transition to a different time window
+    const checkIntervalTransition = () => {
+      const timeSettings = getTimeWindowSettings()
+      if (timeSettings.updateInterval !== currentInterval) {
+        setCurrentInterval(timeSettings.updateInterval)
+      }
+    }
+
+    // Check for transitions every 30 seconds
+    const transitionChecker = setInterval(checkIntervalTransition, 30000)
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+      clearInterval(transitionChecker)
+    }
+  }, [currentInterval])
 
   useEffect(() => {
     if (chartRef.current) {
