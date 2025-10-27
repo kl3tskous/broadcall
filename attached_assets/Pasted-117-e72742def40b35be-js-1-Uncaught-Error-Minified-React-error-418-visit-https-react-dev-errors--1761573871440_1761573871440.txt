@@ -1,0 +1,37 @@
+117-e72742def40b35be.js:1 Uncaught Error: Minified React error #418; visit https://react.dev/errors/418 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at t5 (fd9d1056-f645e3cd7ccf8003.js:1:24670)
+    at iZ (fd9d1056-f645e3cd7ccf8003.js:1:120535)
+    at ia (fd9d1056-f645e3cd7ccf8003.js:1:95162)
+    at fd9d1056-f645e3cd7ccf8003.js:1:91088
+    at fd9d1056-f645e3cd7ccf8003.js:1:91095
+    at oZ (fd9d1056-f645e3cd7ccf8003.js:1:91200)
+    at MessagePort.M (117-e72742def40b35be.js:1:84770)
+
+fd9d1056-f645e3cd7ccf8003.js:1 Uncaught Error: Minified React error #418; visit https://react.dev/errors/418 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at t5 (fd9d1056-f645e3cd7ccf8003.js:1:24670)
+    at iZ (fd9d1056-f645e3cd7ccf8003.js:1:120535)
+    at ia (fd9d1056-f645e3cd7ccf8003.js:1:95162)
+    at fd9d1056-f645e3cd7ccf8003.js:1:91088
+    at fd9d1056-f645e3cd7ccf8003.js:1:91095
+    at oZ (fd9d1056-f645e3cd7ccf8003.js:1:91200)
+    at MessagePort.M (117-e72742def40b35be.js:1:84770)
+fd9d1056-f645e3cd7ccf8003.js:1 Uncaught Error: Minified React error #423; visit https://react.dev/errors/423 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at iZ (fd9d1056-f645e3cd7ccf8003.js:1:118349)
+    at ia (fd9d1056-f645e3cd7ccf8003.js:1:95162)
+    at fd9d1056-f645e3cd7ccf8003.js:1:94984
+    at il (fd9d1056-f645e3cd7ccf8003.js:1:94991)
+    at oJ (fd9d1056-f645e3cd7ccf8003.js:1:92347)
+    at oZ (fd9d1056-f645e3cd7ccf8003.js:1:91766)
+    at MessagePort.M (117-e72742def40b35be.js:1:84770)
+injected.js:1 Backpack couldn't override `window.ethereum`.
+pageProvider.js:1 eth getParams hZwSn8Fo5HEYvtY9cwf9F
+117-e72742def40b35be.js:1 TypeError: Cannot set property ethereum of #<Window> which has only a getter
+    at pageProvider.js:1:97893
+    at async pageProvider.js:1:96198
+inpage.js:143 Uncaught (in promise) TypeError: Cannot redefine property: ethereum
+    at Object.defineProperties (<anonymous>)
+    at setupContentScriptMessenger (inpage.js:143:72525)
+favicon.ico:1 
+ GET https://broadcall.xyz/favicon.ico 404 (Not Found)
+injected.js:1 
+ POST https://broadcall.xyz/api/calls/create 500 (Internal Server Error)
