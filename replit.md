@@ -44,6 +44,13 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 27, 2025)
+- ✅ **Redesigned Call Page Header Layout**: Updated profile section to match design reference
+  - **Avatar Positioning**: Avatar now overlaps the bottom of the banner using absolute positioning
+  - **Trades In Repositioning**: Moved to top-right corner of banner with glassmorphic styling
+  - **Thesis Section**: Added standalone thesis card between user info and main call card
+  - **Layout Structure**: Banner → Avatar (overlapping bottom) → Username/Bio → Thesis → Main Call Card
+  - **Files Modified**: `app/call/[id]/page.tsx` (lines 312-383)
+  - Architect-approved layout with responsive behavior across breakpoints
 - ✅ **Fixed Chart.js Canvas Error**: Resolved "Canvas is already in use" runtime error
   - **Root Cause**: Chart instances were not being destroyed before re-creation on component re-renders
   - **Fix**: Added chart destruction before creating new instances and cleanup on component unmount
