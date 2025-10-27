@@ -1,0 +1,298 @@
+// Default token: BONK
+const TOKEN_ADDRESS = 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263';
+const UPDATE_INTERVAL = 1000; // 1 second for smooth updates
+
+// User Profile Image - Replace with actual profile image URL from Broadcall settings
+const USER_PROFILE_IMAGE = 'https://api.dicebear.com/7.x/avataaars/svg?seed=Broadcall&backgroundColor=ff8c00';
+
+let chart = null;
+let priceData = [];
+let timeLabels = [];
+let timestamps = [];
+let marketCapData = []; // Store market cap values
+const MAX_DATA_POINTS = 50; // Keep last 50 data points
+let currentMarketCap = null; // Current market cap from API
+
+// Mock KOL call data (replace with real data from API or user input)
+const KOL_CALL = {
+    timestamp: null, // Will be set to a historical timestamp
+    marketCap: 948000, // $948K
+    price: null, // Will be set based on actual data
+    dataIndex: null // Track which data point corresponds to the call
+};
+
+// Initialize Chart.js
+function initChart() {
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    
+    // Create gradient for compact chart
+    const gradient = ctx.createLinearGradient(0, 0, 0, 120);
+    gradient.addColorStop(0, 'rgba(255, 140, 0, 0.6)');
+    gradient.addColorStop(1, 'rgba(255, 140, 0, 0.05)');
+    
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeLabels,
+            datasets: [{
+                label: 'Market Cap (USD)',
+                data: marketCapData,
+                yAxisID: 'y',
+                borderColor: '#ff8c00',
+                backgroundColor: gradient,
+                borderWidth: 2,
+                fill: true,
+                tension: 0.45,
+                pointRadius: function(context) {
+                    // Show green dot only on last point (smaller for compact view)
+                    return context.dataIndex === context.dataset.data.length - 1 ? 5 : 0;
+                },
+                pointBackgroundColor: function(context) {
+                    return context.dataIndex === context.dataset.data.length - 1 ? '#00ff88' : '#ff8c00';
+                },
+                pointBorderColor: function(context) {
+                    return context.dataIndex === context.dataset.data.length - 1 ? '#00ff88' : '#fff';
+                },
+                pointBorderWidth: 0,
+                pointHoverRadius: 8,
+                pointHoverBackgroundColor: '#ff8c00',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: {
+                            size: 9
+                        },
+                        maxTicksLimit: 6,
+                        callback: function(value, index) {
+                            const label = this.getLabelForValue(value);
+                            if (label && label.includes(':')) {
+                                const parts = label.split(':');
+                                return parts[0] + ':' + parts[1];
+                            }
+                            return label;
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    position: 'right',
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: {
+                            size: 9
+                        },
+                        callback: function(value) {
+                            if (value >= 1000000000) {
+                                return (value / 1000000000).toFixed(2) + 'B';
+                            } else if (value >= 1000000) {
+                                return (value / 1000000).toFixed(2) + 'M';
+                            } else if (value >= 1000) {
+                                return (value / 1000).toFixed(0) + 'K';
+                            }
+                            return value.toFixed(0);
+                        },
+                        padding: 5
+                    }
+                }
+            },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            animation: {
+                duration: 300
+            }
+        }
+    });
+}
+
+// Fetch token data from DexScreener API
+async function fetchTokenData() {
+    try {
+        const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`);
+        
+        if (!response.ok) {
+            throw new Error(`API request failed with status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('API Response:', data);
+        
+        if (data && data.pairs && data.pairs.length > 0) {
+            // Get the first pair (usually the most liquid)
+            const pair = data.pairs[0];
+            console.log('Using pair:', pair);
+            updateChart(pair);
+        } else {
+            console.error('No pairs found. Response:', data);
+        }
+    } catch (error) {
+        console.error('Error fetching token data:', error);
+        document.getElementById('token-name').textContent = 'Error: ' + error.message;
+    }
+}
+
+// Update chart with new data
+function updateChart(pair) {
+    const currentTime = new Date().toLocaleTimeString();
+    const price = parseFloat(pair.priceUsd);
+    const marketCap = pair.marketCap || pair.fdv || currentMarketCap;
+    const currentTimestamp = Date.now();
+    
+    // Update current market cap reference
+    if (marketCap) currentMarketCap = marketCap;
+    
+    // Add new data point
+    timeLabels.push(currentTime);
+    priceData.push(price);
+    marketCapData.push(marketCap);
+    timestamps.push(currentTimestamp);
+    
+    // Remove old data if exceeds max points, but keep KOL call visible
+    if (priceData.length > MAX_DATA_POINTS) {
+        // Only remove if KOL call isn't at the start
+        if (KOL_CALL.dataIndex !== null && KOL_CALL.dataIndex > 0) {
+            timeLabels.shift();
+            priceData.shift();
+            marketCapData.shift();
+            timestamps.shift();
+            KOL_CALL.dataIndex--; // Adjust index as data shifts
+        } else if (KOL_CALL.dataIndex === null || KOL_CALL.dataIndex === 0) {
+            // If KOL call is at position 0, don't remove more data
+            // This ensures the KOL call remains visible
+        }
+    }
+    
+    // Update KOL marker position
+    updateKolMarkerPosition();
+    
+    // Update chart
+    chart.update('none');
+}
+
+// Update KOL marker and market cap bubble position
+function updateKolMarkerPosition() {
+    if (!chart || KOL_CALL.marketCap === null || KOL_CALL.dataIndex === null) return;
+    
+    // Use the tracked data index for the KOL call
+    let kolIndex = KOL_CALL.dataIndex;
+    
+    const chartArea = chart.chartArea;
+    if (!chartArea) return;
+    
+    // Calculate position
+    const datasetMeta = chart.getDatasetMeta(0);
+    if (datasetMeta.data[kolIndex]) {
+        const point = datasetMeta.data[kolIndex];
+        const x = point.x;
+        const y = point.y;
+        
+        // Position KOL marker
+        const kolMarker = document.getElementById('kol-marker');
+        kolMarker.style.left = `${x}px`;
+        kolMarker.style.top = `${y}px`;
+        kolMarker.classList.remove('hidden');
+        
+        // Position market cap bubble (compact positioning)
+        const mcapBubble = document.getElementById('mcap-bubble');
+        const mcapValue = document.getElementById('mcap-value');
+        mcapValue.textContent = formatMarketCap(KOL_CALL.marketCap);
+        mcapBubble.style.left = `${x}px`;
+        mcapBubble.style.top = `${y - 30}px`;
+        mcapBubble.classList.remove('hidden');
+    }
+}
+
+// Format market cap value
+function formatMarketCap(value) {
+    if (value >= 1000000) {
+        return '$' + (value / 1000000).toFixed(2) + 'M';
+    } else if (value >= 1000) {
+        return '$' + (value / 1000).toFixed(0) + 'K';
+    }
+    return '$' + value.toFixed(0);
+}
+
+// Compact chart - no header/footer UI elements needed
+
+// Add some initial historical data for demo
+async function initializeWithHistoricalData() {
+    // Fetch initial data
+    const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`);
+    const data = await response.json();
+    
+    if (data && data.pairs && data.pairs.length > 0) {
+        const pair = data.pairs[0];
+        const currentPrice = parseFloat(pair.priceUsd);
+        
+        // Generate 20 historical data points with slight variations
+        const historyCount = 20;
+        const kolCallPointIndex = 5; // KOL called at the 6th point from the start
+        
+        // Get current market cap from API
+        currentMarketCap = pair.marketCap || pair.fdv || 1000000;
+        
+        for (let i = 0; i < historyCount; i++) {
+            const variation = (Math.random() - 0.5) * 0.0000001; // Small price variation
+            const historicalPrice = currentPrice + (variation * (historyCount - i));
+            const timestamp = Date.now() - (historyCount - i) * 5000;
+            const time = new Date(timestamp).toLocaleTimeString();
+            
+            // Calculate market cap based on price ratio
+            const priceRatio = historicalPrice / currentPrice;
+            const historicalMarketCap = currentMarketCap * priceRatio;
+            
+            timeLabels.push(time);
+            priceData.push(historicalPrice);
+            marketCapData.push(historicalMarketCap);
+            timestamps.push(timestamp);
+            
+            // Set KOL call data when we reach the call point
+            if (i === kolCallPointIndex) {
+                KOL_CALL.timestamp = timestamp;
+                KOL_CALL.price = historicalPrice;
+                KOL_CALL.dataIndex = i;
+                KOL_CALL.marketCap = historicalMarketCap; // Update with calculated mcap
+            }
+        }
+        
+        chart.update();
+        updateKolMarkerPosition();
+    }
+}
+
+// Initialize and start updating
+document.addEventListener('DOMContentLoaded', async () => {
+    // Set user profile image
+    document.getElementById('kol-profile-img').src = USER_PROFILE_IMAGE;
+    
+    initChart();
+    await initializeWithHistoricalData(); // Load historical data
+    setInterval(fetchTokenData, UPDATE_INTERVAL); // Update every 1 second
+});
