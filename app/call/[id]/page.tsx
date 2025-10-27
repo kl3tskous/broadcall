@@ -246,12 +246,13 @@ export default function CallPage() {
   if (loading) {
     return (
       <div 
-        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden"
         style={{
           backgroundImage: 'url(/background.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
         }}
       >
         <div className="text-xl text-gray-300 relative z-10">Loading...</div>
@@ -262,12 +263,13 @@ export default function CallPage() {
   if (allCalls.length === 0) {
     return (
       <div 
-        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden"
         style={{
           backgroundImage: 'url(/background.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
         }}
       >
         <div className="bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-[40px] p-8 shadow-lg text-center relative z-10">
@@ -291,12 +293,13 @@ export default function CallPage() {
 
   return (
     <main 
-      className="relative min-h-screen overflow-hidden bg-black"
+      className="relative min-h-screen overflow-hidden"
       style={{
         backgroundImage: 'url(/background.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
       }}
     >
       {/* Gradient Blobs */}

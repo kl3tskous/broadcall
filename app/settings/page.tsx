@@ -307,6 +307,7 @@ export default function SettingsPage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
         }}
       >
         <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center max-w-md w-full relative z-10">
@@ -329,6 +330,7 @@ export default function SettingsPage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
         }}
       >
         <div className="text-xl text-gray-300 relative z-10">Loading settings...</div>
