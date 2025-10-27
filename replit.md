@@ -1,7 +1,7 @@
 # BroadCall - Coin Call Referral Platform
 
 ## Overview
-BroadCall is a Next.js platform designed for Solana influencers to create and share professional "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats), offers social sharing, and allows influencers to monetize calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan). A key feature is the Telegram bot integration, enabling KOLs to link their Telegram accounts and automatically broadcast token calls with buy buttons to their channels.
+BroadCall is a Next.js platform for Solana influencers to create and share professional, "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats), offers social sharing features, and enables influencers to monetize calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan). A key feature is the Telegram bot integration, allowing KOLs to link their Telegram accounts and automatically broadcast token calls with buy buttons to their channels.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -14,10 +14,9 @@ Do not make changes to the file `Y`.
 The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS, featuring a dark, modern design with an orange-to-red gradient theme.
 
 **UI/UX Decisions:**
-- **Flex-worthy Token Call Pages:** Designed for social sharing with dynamic headers, prominent ROI display, professional drop shadows, gradient overlays, and backdrop blur effects. The token call pages showcase the KOL's full profile, including a Twitter-style banner, avatar with an orange gradient stroke, username with a verification badge, and a "Latest Call Hero Card" prominently featuring the most recent call with large ROI display, token logo, platform trading buttons, and an embedded DexScreener chart. Subsequent calls are displayed as smaller cards below.
-- **Glassmorphic Design:** Consistent glassmorphic elements are used across all pages for cards, inputs, buttons, and navigation, featuring semi-transparent backgrounds, backdrop blur, and enhanced shadow effects. This includes a unified glassmorphic navigation header across the entire platform.
+- **Flex-worthy Token Call Pages:** Designed for social sharing with dynamic headers, prominent ROI display, professional drop shadows, gradient overlays, and backdrop blur effects. Pages showcase the KOL's profile, including a Twitter-style banner, avatar, username with verification badge, and a "Latest Call Hero Card" with large ROI display, token logo, platform trading buttons, and an embedded DexScreener chart.
+- **Glassmorphic Design:** Consistent glassmorphic elements are used across all pages for cards, inputs, buttons, and navigation.
 - **Mobile-Optimized Layouts:** Compact, streamlined layouts for optimal viewing and sharing across devices.
-- **Platform Logo Integration:** Official trading platform logos are integrated into buttons and settings, including an infinite scroll display on the landing page.
 - **OpenGraph Metadata:** Generates rich social previews for shared links.
 - **Custom Background Image:** All pages utilize a consistent custom background image (`/background.png`).
 
@@ -26,114 +25,17 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Database:** Supabase (PostgreSQL) stores user profiles, settings, and call data, including detailed token metadata, views, and clicks.
 - **Real-time Data:** DexScreener API provides automatic token metadata and real-time price data with 30-second auto-refresh.
 - **Tracking System:** Implements optimistic UI updates for view tracking on page load and click tracking on platform buttons.
-- **Referral System:** Supports multi-platform referral codes with smart priority (call-specific > user settings > default).
+- **Referral System:** Supports multi-platform referral codes with smart priority.
 - **File Upload System:** Replit App Storage for secure profile picture and banner uploads.
 - **KOL Profile System:** Public profile pages (`/profile/[address]`) with Twitter-style layouts, user bio, social links, performance stats, and tabbed views for "Calls" and "Stats."
-- **Telegram Bot Integration:** A Python-based Telegram bot for secure KOL account linking (Ed25519 signature verification, token generation, webhook-free polling) and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows KOLs to selectively enable/disable broadcasting to specific channels from the platform's settings. **Security hardened**: All channel management and broadcast endpoints require Ed25519 wallet signature authentication with 5-minute timestamp expiry, action binding (channel ID, enabled state, call ID), and server-side data fetching from database to prevent content tampering and phishing attacks.
+- **Telegram Bot Integration:** A Python-based Telegram bot for secure KOL account linking (Ed25519 signature verification, token generation, webhook-free polling) and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows selective broadcasting from platform settings. Security is hardened with Ed25519 wallet signature authentication for all channel management and broadcast endpoints.
 
 **Feature Specifications:**
 - **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
-- **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment. The `/create-call` page provides a dedicated interface for KOLs to create and broadcast token calls.
+- **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment.
 - **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
 - **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
-- **Telegram Channel Broadcasting:** KOLs can broadcast their token calls to linked Telegram channels with professionally formatted messages and inline buy buttons, utilizing their referral codes. The broadcast system includes:
-  - Automatic DexScreener data fetching (token name, symbol, logo, price, market cap)
-  - Professional Markdown-formatted messages with ROI display, token details, and KOL thesis
-  - Inline keyboard buttons for all 5 trading platforms (GMGN, Axiom, Photon, BullX, Trojan) plus DexScreener chart
-  - Smart referral link injection using user's saved platform codes
-  - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
-
-## Recent Changes (October 27, 2025)
-- ✅ **Redesigned Call Page Header Layout**: Updated profile section to match design reference
-  - **Avatar Positioning**: Avatar now overlaps the bottom of the banner using absolute positioning
-  - **Trades In Repositioning**: Moved to top-right corner of banner with glassmorphic styling
-  - **Thesis Section**: Added standalone thesis card between user info and main call card
-  - **Layout Structure**: Banner → Avatar (overlapping bottom) → Username/Bio → Thesis → Main Call Card
-  - **Files Modified**: `app/call/[id]/page.tsx` (lines 312-383)
-  - Architect-approved layout with responsive behavior across breakpoints
-- ✅ **Fixed Chart.js Canvas Error**: Resolved "Canvas is already in use" runtime error
-  - **Root Cause**: Chart instances were not being destroyed before re-creation on component re-renders
-  - **Fix**: Added chart destruction before creating new instances and cleanup on component unmount
-  - **Files Modified**: `components/LivePriceChart.tsx` (lines 65-69, 332-339)
-  - Architect-verified fix, no more Canvas errors in production
-- ✅ **Live Price Chart with KOL Marker**: Integrated Chart.js live price chart component into token call pages
-  - **Component**: `components/LivePriceChart.tsx` - Displays real-time price action with KOL profile marker
-  - **Features**: 1-second live updates from DexScreener API, HH:mm time formatting, market cap Y-axis (B/M/K format)
-  - **KOL Marker**: Profile image with broadcast wave CSS animations positioned at actual call timestamp
-  - **Market Cap Bubble**: Displays market cap value at call time above KOL marker
-  - **Memory Management**: Dataset capped at 50 data points maximum to prevent memory leaks
-  - **Historical Support**: Dynamically extends history window to cover older call timestamps
-  - **Architecture**: Marker anchored at index 0 for historical calls, always enforces MAX_DATA_POINTS cap
-  - **Data Integration**: Uses Supabase data (token_address, initial_mcap, created_at, creatorAvatar)
-  - **Integration**: Embedded in call page cards between ROI percentage display and platform buttons
-  - Card layout matches design reference with proper structure
-  - Architect-approved implementation with no TypeScript or runtime errors
-
-## Previous Changes (October 26, 2025)
-- ✅ **Database Security Hardening**: Removed insecure SSL bypass from production database connections
-  - **Root Cause**: All 16 API routes had `ssl: { rejectUnauthorized: false }` which disabled certificate verification
-  - **Fix**: Removed SSL override from all PostgreSQL Pool connections, now relying on proper DATABASE_URL configuration
-  - **Security Decision**: Using standard Supabase practice - Session Pooler connection string with `?pgbouncer=true` parameter handles SSL correctly
-  - Production database now connects securely with proper SSL certificate verification
-  - Verified via `/api/health/db` endpoint on broadcall.xyz showing "healthy" status
-- ✅ **CRITICAL: Fixed Autoscale Deployment API Routes**: Resolved 404 errors on API routes in production
-  - **Root Cause**: Next.js was listening on `localhost` only, but Replit autoscale deployments require binding to `0.0.0.0`
-  - **Fix**: Updated package.json start script from `next start -p 5000` to `next start -p 5000 -H 0.0.0.0`
-  - This allows the Next.js server to accept connections from all network interfaces, which is mandatory for autoscale deployments
-  - API routes now work correctly in production on broadcall.xyz
-- ✅ **Fixed TypeScript Build Errors**: Resolved all TypeScript compilation issues for production deployment
-  - Installed @types/bs58 package for proper type definitions
-  - Fixed Buffer type handling in object storage route (converted to Uint8Array)
-  - Corrected property names: price_at_call → initial_price, market_cap_at_call → initial_mcap
-  - Fixed market cap property: current_market_cap → current_mcap
-  - Added trades_in_name and trades_in_image to UserSettings interface
-  - Build now completes successfully with zero TypeScript errors
-- ✅ **Fixed Deployment Configuration**: Corrected deployment run command for Next.js + Python bot
-  - Fixed incorrect Python run command that was causing deployment failures
-  - Build command: `npm run build` (compiles Next.js application)
-  - Run command: `bash -c "npm start & python bot.py"` (runs both Next.js and Telegram bot)
-  - Deployment now properly serves Next.js on port 5000 with Telegram bot running in background
-- ✅ **Production Domain Setup**: Created domain utility system for broadcall.xyz integration
-  - Added `lib/utils.ts` with `getBaseUrl()`, `getFullUrl()`, and `getDomain()` functions
-  - Environment-aware URL generation (broadcall.xyz in production, localhost in dev)
-  - Added `NEXT_PUBLIC_APP_URL` environment variable to .env.local.example
-  - Ready for production deployment with custom domain support
-- ✅ **Production Deployment Configuration**: Verified deployment setup
-  - Autoscale deployment mode configured in .replit
-  - Both Server and Telegram Bot workflows running successfully in development
-- ✅ **Code Cleanup**: Removed unused files for cleaner production codebase
-  - Removed unused main.py template file
-  - Cleaned up temporary pasted text files from attached_assets folder
-  - Verified no LSP diagnostics in bot.py
-- ✅ **One-Click Telegram Waitlist (Inline on Homepage)**: Implemented seamless waitlist signup flow entirely on homepage using Telegram deep links
-  - Users click "Join Waitlist" → "Open Telegram" UI appears inline in the same section (no page redirect)
-  - Single "Open Telegram" button launches Telegram with wallet address pre-encoded in URL parameter
-  - Bot's `/start` command auto-detects wallet addresses (32-44 chars) and completes verification instantly
-  - User just clicks "START" button in Telegram - no manual copy/paste needed
-  - Homepage auto-polls every 3 seconds and updates to success state when verification completes
-  - Entire flow happens on homepage with smooth state transitions
-  - `/waitlist` command kept as backup verification method
-- ✅ **Improved UX**: Removed page redirects, all waitlist steps now happen inline on homepage
-
-## Previous Changes (October 25, 2025)
-- ✅ **"Trades in" Feature**: Added trades_in_name and trades_in_image columns to user_settings table for group/community attribution
-- ✅ **Settings Page Enhancement**: Added "Trades in" section with group name input and image upload functionality using existing Replit Object Storage system
-- ✅ **Upload Consistency**: Unified all image uploads (avatar, banner, trades-in) to use the same `/api/upload` endpoint and FileUploader flow
-- ✅ **Call Page Redesign**: Completely redesigned `/call/[id]` to match Figma design with:
-  - Twitter-style banner + profile header (avatar with orange border, verification badge, bio)
-  - Thesis + "Trades in" display row showing community attribution
-  - Main call card: "Called: $TOKEN And it's UP by +X%" with price badge, chart preview, stats
-  - 6 trading platforms (GMGN, Axiom, Photon, BullX, Trojan, DexScreener) in horizontal glassmorphic layout
-- ✅ **DexScreener Integration**: Added as 6th trading platform with proper logo and URL handling
-- ✅ **Performance Tracking**: Maintained auto-updating ROI, multiplier, ATH stats with 30-second refresh
-
-## Previous Changes (October 23, 2025)
-- ✅ Created `calls` table for storing token call data with comprehensive schema
-- ✅ Built `/api/calls/create` endpoint with DexScreener integration and automatic broadcasting
-- ✅ Updated `/api/telegram/broadcast` with professional message formatting and inline buy buttons
-- ✅ Created `/create-call` page with clean UX for token call creation
-- ✅ Fixed authentication flow between create and broadcast endpoints
-- ✅ Implemented complete end-to-end call broadcasting system
+- **Telegram Channel Broadcasting:** KOLs can broadcast token calls to linked Telegram channels with professionally formatted messages and inline buy buttons, utilizing their referral codes. The system includes automatic DexScreener data fetching, Markdown-formatted messages, inline keyboard buttons for all 5 trading platforms plus DexScreener chart, and smart referral link injection.
 
 ## External Dependencies
 - **Supabase:** PostgreSQL database and authentication.

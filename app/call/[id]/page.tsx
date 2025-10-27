@@ -309,7 +309,7 @@ export default function CallPage() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-6 md:px-8">
         
         {/* Banner + Avatar Section */}
-        <div className="relative mb-20 md:mb-24">
+        <div className="relative mb-16 md:mb-20">
           {/* Banner Image */}
           <img 
             className="w-full h-48 md:h-64 rounded-[40px] border-2 border-orange-600 object-cover" 
@@ -328,17 +328,50 @@ export default function CallPage() {
             </div>
           </div>
 
-          {/* Trades In - positioned on the right side */}
+          {/* User Info - positioned to the right of bottom half of avatar */}
+          <div className="absolute left-24 md:left-36 -bottom-8 md:-bottom-10 ml-4 md:ml-6">
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-xl md:text-2xl font-extrabold text-white">
+                {creatorAlias || 'Anonymous'}
+              </h1>
+              <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
+            </div>
+            <p className="text-sm md:text-base text-white/80 font-light opacity-60">
+              @{creatorAlias || 'anonymous'}
+            </p>
+          </div>
+        </div>
+
+        {/* Bio Section */}
+        {creatorBio && (
+          <p className="text-white/80 text-sm mb-6">
+            {creatorBio}
+          </p>
+        )}
+
+        {/* Thesis + Trades In Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Thesis Section */}
+          {latestCall.thesis && (
+            <div className="bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-4 md:p-6">
+              <p className="text-white text-xl font-bold leading-4 mb-3">Thesis:</p>
+              <p className="text-white/80 text-sm md:text-base font-normal leading-snug">
+                &ldquo;{latestCall.thesis}&rdquo;
+              </p>
+            </div>
+          )}
+
+          {/* Trades In Section */}
           {creatorSettings && (
-            <div className="absolute right-4 md:right-8 top-4 md:top-8 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-2 md:gap-3">
-              <div>
+            <div className="bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-4 md:p-6 flex items-center gap-3">
+              <div className="flex-1">
                 <span className="text-white text-base md:text-xl font-extrabold">Trades in: </span>
                 <span className="text-orange-600 text-base md:text-xl font-extrabold">
                   @{creatorSettings.trades_in_name || creatorAlias || 'anonymous'}
                 </span>
               </div>
               {creatorSettings.trades_in_image && (
-                <div className="size-8 md:size-10 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden flex-shrink-0">
+                <div className="size-10 md:size-12 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden flex-shrink-0">
                   <img 
                     className="size-full rounded-full object-cover" 
                     src={creatorSettings.trades_in_image} 
@@ -349,35 +382,6 @@ export default function CallPage() {
             </div>
           )}
         </div>
-
-        {/* User Info Section */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <h1 className="text-xl md:text-2xl font-extrabold text-white">
-              {creatorAlias || 'Anonymous'}
-            </h1>
-            <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
-          </div>
-          <p className="text-sm md:text-base text-white/80 font-light opacity-60 mb-4">
-            @{creatorAlias || 'anonymous'}
-          </p>
-          
-          {creatorBio && (
-            <p className="text-white/80 text-sm mb-4">
-              {creatorBio}
-            </p>
-          )}
-        </div>
-
-        {/* Thesis Section */}
-        {latestCall.thesis && (
-          <div className="bg-white/10 rounded-2xl border border-white/10 p-4 md:p-6 mb-6 max-w-2xl">
-            <p className="text-white text-xl font-bold leading-4 mb-3">Thesis:</p>
-            <p className="text-white/80 text-sm md:text-base font-normal leading-snug">
-              &ldquo;{latestCall.thesis}&rdquo;
-            </p>
-          </div>
-        )}
 
         {/* Main Call Card */}
         <div className="relative bg-white/10 rounded-[40px] border-2 border-white/10 p-6 md:p-8 mb-8">
@@ -405,41 +409,30 @@ export default function CallPage() {
               )}
             </div>
 
-            {/* Right: Chart & Token Logo */}
-            <div className="relative flex-shrink-0">
+            {/* Right: Token Logo & Stats */}
+            <div className="relative flex-shrink-0 flex flex-col items-center gap-4">
+              {/* Token Logo */}
+              {latestCall.token_logo && (
+                <div className="size-20 md:size-24 rounded-2xl border-2 border-orange-600 shadow-xl overflow-hidden">
+                  <img 
+                    src={latestCall.token_logo} 
+                    alt={latestCall.token_symbol || 'Token'} 
+                    className="size-full object-cover"
+                  />
+                </div>
+              )}
+
               {/* Current Price Badge */}
               {latestCall.priceData && (
-                <div className="absolute top-0 right-0 z-10 bg-orange-600/80 rounded-md border border-white/10 px-3 py-1">
+                <div className="bg-orange-600/80 rounded-md border border-white/10 px-3 py-1">
                   <p className="text-white text-xs md:text-sm font-bold">
                     ${formatMarketCap(latestCall.priceData.marketCap || 0)}
                   </p>
                 </div>
               )}
 
-              {/* Chart Preview */}
-              {latestCall.priceData?.pairAddress && (
-                <div className="relative bg-white/10 rounded-[40px] backdrop-blur-[10px] overflow-hidden border-2 border-orange-600 w-full md:w-56 lg:w-64">
-                  <iframe
-                    src={`https://dexscreener.com/solana/${latestCall.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                    className="w-full h-36 md:h-40 border-0"
-                    style={{ background: 'transparent' }}
-                  />
-                </div>
-              )}
-
-              {/* Token Logo Card */}
-              {latestCall.token_logo && (
-                <div className="absolute -bottom-4 -right-4 z-10">
-                  <img 
-                    src={latestCall.token_logo} 
-                    alt={latestCall.token_symbol || 'Token'} 
-                    className="size-16 md:size-20 rounded-2xl border-2 border-orange-600 shadow-xl"
-                  />
-                </div>
-              )}
-
               {/* Marketcap Stats */}
-              <div className="mt-4 text-center">
+              <div className="text-center">
                 <p className="text-white text-sm md:text-base font-extrabold mb-1">
                   Marketcap when called:
                 </p>
@@ -482,17 +475,6 @@ export default function CallPage() {
             })}
           </div>
         </div>
-
-        {/* Full DexScreener Chart */}
-        {latestCall.priceData?.pairAddress && (
-          <div className="relative bg-gradient-to-b from-orange-600/25 to-stone-500/0 rounded-[40px] border-2 border-orange-600 overflow-hidden mb-8">
-            <iframe
-              src={`https://dexscreener.com/solana/${latestCall.priceData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-              className="w-full h-[280px] md:h-96 border-0"
-              style={{ background: 'transparent' }}
-            />
-          </div>
-        )}
 
         {/* Previous Calls */}
         {previousCalls.length > 0 && (
