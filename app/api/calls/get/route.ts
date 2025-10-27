@@ -37,33 +37,20 @@ export async function GET(request: NextRequest) {
           )
         }
 
-        // Transform data to match expected format (creator_wallet alias)
-        const call = result.rows[0]
-        const transformedCall = {
-          ...call,
-          creator_wallet: call.wallet_address
-        }
-
         return NextResponse.json({
           success: true,
-          data: transformedCall
+          data: result.rows[0]
         })
       } else {
         // Fetch all calls for a wallet address
         result = await client.query(
-          'SELECT * FROM calls WHERE wallet_address = $1 ORDER BY created_at DESC',
+          'SELECT * FROM calls WHERE creator_wallet = $1 ORDER BY created_at DESC',
           [walletAddress]
         )
         
-        // Transform data to match expected format (creator_wallet alias)
-        const transformedCalls = result.rows.map(call => ({
-          ...call,
-          creator_wallet: call.wallet_address
-        }))
-        
         return NextResponse.json({
           success: true,
-          data: transformedCalls
+          data: result.rows
         })
       }
     } finally {

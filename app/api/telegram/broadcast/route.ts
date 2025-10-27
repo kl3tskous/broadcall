@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     try {
       // Fetch call data from database
       const callResult = await client.query(
-        'SELECT * FROM calls WHERE id = $1 AND wallet_address = $2',
+        'SELECT * FROM calls WHERE id = $1 AND creator_wallet = $2',
         [call_id, wallet_address]
       )
 
@@ -109,12 +109,12 @@ export async function POST(request: NextRequest) {
       thesis = call.thesis
       
       // Calculate ROI from database data
-      const price_at_call = parseFloat(call.price_at_call || '0')
-      current_price = parseFloat(call.current_price || call.price_at_call || '0')
-      market_cap = call.current_market_cap || call.market_cap_at_call
+      const initial_price = parseFloat(call.initial_price || '0')
+      current_price = parseFloat(call.current_price || call.initial_price || '0')
+      market_cap = call.current_mcap || call.initial_mcap
 
       // Calculate ROI
-      roi = price_at_call > 0 ? ((current_price - price_at_call) / price_at_call) * 100 : 0
+      roi = initial_price > 0 ? ((current_price - initial_price) / initial_price) * 100 : 0
 
       // Fetch user's referral codes from database (trusted source)
       const userResult = await client.query(
