@@ -132,20 +132,20 @@ export async function POST(request: NextRequest) {
     // Store call in database
     const result = await pool.query(
       `INSERT INTO calls (
-        wallet_address, 
+        creator_wallet, 
         token_address, 
         token_name, 
         token_symbol, 
         token_logo, 
-        price_at_call, 
-        market_cap_at_call, 
+        initial_price, 
+        initial_mcap, 
         thesis, 
-        dexscreener_url,
+        platform,
         current_price,
-        current_market_cap,
+        current_mcap,
         ath_price,
-        ath_market_cap,
-        ath_timestamp
+        ath_mcap,
+        first_shared_at
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())
       RETURNING id, created_at`,
       [
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
         tokenData.price,
         tokenData.marketCap,
         thesis || '',
-        tokenData.dexscreenerUrl,
+        'BroadCall',
         tokenData.price,
         tokenData.marketCap,
         tokenData.price,
