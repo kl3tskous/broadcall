@@ -189,26 +189,38 @@ export function LivePriceChart({
     }
   }
 
+  const formatTimeHHMM = (timestamp: number): string => {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(new Date(timestamp))
+  }
+
   const updateChart = (pair: any) => {
-    const currentTime = new Date().toLocaleTimeString()
+    const currentTimestamp = Date.now()
+    const currentTime = formatTimeHHMM(currentTimestamp)
     const price = parseFloat(pair.priceUsd)
     const marketCap = pair.marketCap || pair.fdv || currentMarketCap
-    const currentTimestamp = Date.now()
 
     if (marketCap) setCurrentMarketCap(marketCap)
 
     setTimeLabels(prev => {
       const newLabels = [...prev, currentTime]
-      if (newLabels.length > MAX_DATA_POINTS && kolCall.dataIndex !== null && kolCall.dataIndex > 0) {
+      if (newLabels.length > MAX_DATA_POINTS) {
         newLabels.shift()
-        setKolCall(k => ({ ...k, dataIndex: k.dataIndex !== null ? k.dataIndex - 1 : null }))
+        // Update KOL marker index after shift (keep it at 0 if already at 0)
+        setKolCall(k => ({ 
+          ...k, 
+          dataIndex: k.dataIndex !== null && k.dataIndex > 0 ? k.dataIndex - 1 : 0 
+        }))
       }
       return newLabels
     })
 
     setPriceData(prev => {
       const newData = [...prev, price]
-      if (newData.length > MAX_DATA_POINTS && kolCall.dataIndex !== null && kolCall.dataIndex > 0) {
+      if (newData.length > MAX_DATA_POINTS) {
         newData.shift()
       }
       return newData
@@ -216,7 +228,7 @@ export function LivePriceChart({
 
     setMarketCapData(prev => {
       const newData = [...prev, marketCap]
-      if (newData.length > MAX_DATA_POINTS && kolCall.dataIndex !== null && kolCall.dataIndex > 0) {
+      if (newData.length > MAX_DATA_POINTS) {
         newData.shift()
       }
       return newData
@@ -224,7 +236,7 @@ export function LivePriceChart({
 
     setTimestamps(prev => {
       const newData = [...prev, currentTimestamp]
-      if (newData.length > MAX_DATA_POINTS && kolCall.dataIndex !== null && kolCall.dataIndex > 0) {
+      if (newData.length > MAX_DATA_POINTS) {
         newData.shift()
       }
       return newData
@@ -244,18 +256,28 @@ export function LivePriceChart({
         setCurrentMarketCap(currentMcap)
 
         const historyCount = 20
-        const kolCallPointIndex = 5
+        const now = Date.now()
+        
+        // Parse the actual call timestamp if provided
+        const actualCallTime = callTimestamp ? new Date(callTimestamp).getTime() : now - 75000 // Default to 15 intervals ago
+        
+        // Calculate how far back we need to go to include the call time
+        const timeSinceCall = now - actualCallTime
+        const intervalsNeeded = Math.max(historyCount, Math.ceil(timeSinceCall / 5000) + 5)
+        const effectiveHistoryCount = Math.min(intervalsNeeded, MAX_DATA_POINTS)
 
         const newTimeLabels: string[] = []
         const newPriceData: number[] = []
         const newMarketCapData: number[] = []
         const newTimestamps: number[] = []
+        let kolCallIndex: number | null = null
+        let closestDistance = Infinity
 
-        for (let i = 0; i < historyCount; i++) {
+        for (let i = 0; i < effectiveHistoryCount; i++) {
           const variation = (Math.random() - 0.5) * 0.0000001
-          const historicalPrice = currentPrice + (variation * (historyCount - i))
-          const timestamp = Date.now() - (historyCount - i) * 5000
-          const time = new Date(timestamp).toLocaleTimeString()
+          const historicalPrice = currentPrice + (variation * (effectiveHistoryCount - i))
+          const timestamp = now - (effectiveHistoryCount - i) * 5000
+          const time = formatTimeHHMM(timestamp)
 
           const priceRatio = historicalPrice / currentPrice
           const historicalMarketCap = currentMcap * priceRatio
@@ -265,15 +287,22 @@ export function LivePriceChart({
           newMarketCapData.push(historicalMarketCap)
           newTimestamps.push(timestamp)
 
-          if (i === kolCallPointIndex) {
-            setKolCall({
-              timestamp,
-              price: historicalPrice,
-              dataIndex: i,
-              marketCap: historicalMarketCap
-            })
+          // Find the data point closest to the actual call time
+          const distance = Math.abs(timestamp - actualCallTime)
+          if (distance < closestDistance) {
+            closestDistance = distance
+            kolCallIndex = i
           }
         }
+
+        // Set KOL call data at the identified index (fallback to earliest point if not found)
+        const finalIndex = kolCallIndex !== null ? kolCallIndex : 0
+        setKolCall({
+          timestamp: newTimestamps[finalIndex],
+          price: newPriceData[finalIndex],
+          dataIndex: finalIndex,
+          marketCap: newMarketCapData[finalIndex] || initialMarketCap
+        })
 
         setTimeLabels(newTimeLabels)
         setPriceData(newPriceData)
