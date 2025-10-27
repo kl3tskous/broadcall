@@ -312,7 +312,7 @@ export default function CallPage() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-6 md:px-8">
         
         {/* Banner + Avatar Section */}
-        <div className="relative mb-16 md:mb-20">
+        <div className="relative mb-24 md:mb-28">
           {/* Banner Image */}
           <img 
             className="w-full h-48 md:h-64 rounded-[40px] border-2 border-orange-600 object-cover" 
@@ -331,9 +331,9 @@ export default function CallPage() {
             </div>
           </div>
 
-          {/* Trades In Section - positioned at bottom right of banner */}
+          {/* Trades In Section - positioned below banner */}
           {creatorSettings && (
-            <div className="absolute right-4 md:right-8 -bottom-6 md:-bottom-8 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-3 max-w-[280px] md:max-w-xs">
+            <div className="absolute right-4 md:right-8 top-full mt-3 md:mt-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-3 max-w-[280px] md:max-w-xs">
               <div className="flex-1">
                 <span className="text-white text-sm md:text-base font-extrabold">Trades in: </span>
                 <span className="text-orange-600 text-sm md:text-base font-extrabold">
