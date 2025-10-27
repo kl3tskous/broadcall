@@ -328,19 +328,22 @@ export default function CallPage() {
             </div>
           </div>
 
+          {/* Username Handle - positioned at bottom right of banner */}
+          <div className="absolute right-4 md:right-8 bottom-4 md:bottom-6">
+            <p className="text-base md:text-lg text-orange-600 font-extrabold">
+              @{creatorAlias || 'anonymous'}
+            </p>
+          </div>
         </div>
 
-        {/* User Info - positioned below avatar */}
+        {/* User Name - positioned below avatar */}
         <div className="mb-4">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2">
             <h1 className="text-xl md:text-2xl font-extrabold text-white">
               {creatorAlias || 'Anonymous'}
             </h1>
             <div className="size-5 bg-gradient-to-l from-orange-600 via-orange-500 to-amber-500 rounded-full" />
           </div>
-          <p className="text-sm md:text-base text-white/80 font-light opacity-60">
-            @{creatorAlias || 'anonymous'}
-          </p>
         </div>
 
         {/* Bio Section */}
