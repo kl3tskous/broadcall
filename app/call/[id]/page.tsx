@@ -317,7 +317,7 @@ export default function CallPage() {
             alt="Banner"
           />
 
-          {/* Avatar - positioned at bottom of banner */}
+          {/* Avatar - positioned at bottom left of banner */}
           <div className="absolute left-4 md:left-8 -bottom-14 md:-bottom-16">
             <div className="size-28 md:size-36 bg-white/10 rounded-full border-4 border-orange-600 backdrop-blur-[10px] overflow-hidden">
               <img 
@@ -327,6 +327,27 @@ export default function CallPage() {
               />
             </div>
           </div>
+
+          {/* Trades In Section - positioned at bottom right of banner */}
+          {creatorSettings && (
+            <div className="absolute right-4 md:right-8 -bottom-10 md:-bottom-12 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-3 max-w-[280px] md:max-w-xs">
+              <div className="flex-1">
+                <span className="text-white text-sm md:text-base font-extrabold">Trades in: </span>
+                <span className="text-orange-600 text-sm md:text-base font-extrabold">
+                  @{creatorSettings.trades_in_name || creatorAlias || 'anonymous'}
+                </span>
+              </div>
+              {creatorSettings.trades_in_image && (
+                <div className="size-10 md:size-12 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden flex-shrink-0">
+                  <img 
+                    className="size-full rounded-full object-cover" 
+                    src={creatorSettings.trades_in_image} 
+                    alt="Group"
+                  />
+                </div>
+              )}
+            </div>
+          )}
 
         </div>
 
@@ -350,39 +371,15 @@ export default function CallPage() {
           </p>
         )}
 
-        {/* Thesis + Trades In Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* Thesis Section */}
-          {latestCall.thesis && (
-            <div className="bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-4 md:p-6">
-              <p className="text-white text-xl font-bold leading-4 mb-3">Thesis:</p>
-              <p className="text-white/80 text-sm md:text-base font-normal leading-snug">
-                &ldquo;{latestCall.thesis}&rdquo;
-              </p>
-            </div>
-          )}
-
-          {/* Trades In Section */}
-          {creatorSettings && (
-            <div className="bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-4 md:p-6 flex items-center gap-3">
-              <div className="flex-1">
-                <span className="text-white text-base md:text-xl font-extrabold">Trades in: </span>
-                <span className="text-orange-600 text-base md:text-xl font-extrabold">
-                  @{creatorSettings.trades_in_name || creatorAlias || 'anonymous'}
-                </span>
-              </div>
-              {creatorSettings.trades_in_image && (
-                <div className="size-10 md:size-12 bg-white/10 rounded-full border-2 border-orange-600 backdrop-blur-[10px] overflow-hidden flex-shrink-0">
-                  <img 
-                    className="size-full rounded-full object-cover" 
-                    src={creatorSettings.trades_in_image} 
-                    alt="Group"
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        {/* Thesis Section */}
+        {latestCall.thesis && (
+          <div className="bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-4 md:p-6 mb-6">
+            <p className="text-white text-xl font-bold leading-4 mb-3">Thesis:</p>
+            <p className="text-white/80 text-sm md:text-base font-normal leading-snug">
+              &ldquo;{latestCall.thesis}&rdquo;
+            </p>
+          </div>
+        )}
 
         {/* Main Call Card */}
         <div className="relative bg-white/10 rounded-[40px] border-2 border-white/10 p-6 md:p-8 mb-8">
