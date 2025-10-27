@@ -43,7 +43,19 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Smart referral link injection using user's saved platform codes
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
-## Recent Changes (October 26, 2025)
+## Recent Changes (October 27, 2025)
+- ✅ **Live Price Chart with KOL Marker**: Integrated Chart.js live price chart component into token call pages
+  - **Component**: `components/LivePriceChart.tsx` - Displays real-time price action with KOL profile marker
+  - **Features**: 1-second live updates from DexScreener API, HH:mm time formatting, market cap Y-axis (B/M/K format)
+  - **KOL Marker**: Profile image with broadcast wave CSS animations positioned at actual call timestamp
+  - **Market Cap Bubble**: Displays market cap value at call time above KOL marker
+  - **Memory Management**: Dataset capped at 50 data points maximum to prevent memory leaks
+  - **Historical Support**: Dynamically extends history window to cover older call timestamps
+  - **Architecture**: Marker anchored at index 0 for historical calls, always enforces MAX_DATA_POINTS cap
+  - **Integration**: Embedded in call page cards between ROI percentage display and DexScreener iframe
+  - Architect-approved implementation with no TypeScript or runtime errors
+
+## Previous Changes (October 26, 2025)
 - ✅ **Database Security Hardening**: Removed insecure SSL bypass from production database connections
   - **Root Cause**: All 16 API routes had `ssl: { rejectUnauthorized: false }` which disabled certificate verification
   - **Fix**: Removed SSL override from all PostgreSQL Pool connections, now relying on proper DATABASE_URL configuration
