@@ -59,6 +59,12 @@ export function LivePriceChart({
     const ctx = canvasRef.current.getContext('2d')
     if (!ctx) return
 
+    // Destroy existing chart instance if it exists
+    if (chartRef.current) {
+      chartRef.current.destroy()
+      chartRef.current = null
+    }
+
     const gradient = ctx.createLinearGradient(0, 0, 0, 120)
     gradient.addColorStop(0, 'rgba(255, 140, 0, 0.6)')
     gradient.addColorStop(1, 'rgba(255, 140, 0, 0.05)')
@@ -319,7 +325,15 @@ export function LivePriceChart({
     initializeWithHistoricalData()
 
     const interval = setInterval(fetchTokenData, UPDATE_INTERVAL)
-    return () => clearInterval(interval)
+    
+    return () => {
+      clearInterval(interval)
+      // Cleanup: destroy chart instance when component unmounts
+      if (chartRef.current) {
+        chartRef.current.destroy()
+        chartRef.current = null
+      }
+    }
   }, [])
 
   useEffect(() => {

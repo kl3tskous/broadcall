@@ -44,6 +44,11 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - Database storage of all calls with performance metrics (views, clicks, ROI, ATH tracking)
 
 ## Recent Changes (October 27, 2025)
+- ✅ **Fixed Chart.js Canvas Error**: Resolved "Canvas is already in use" runtime error
+  - **Root Cause**: Chart instances were not being destroyed before re-creation on component re-renders
+  - **Fix**: Added chart destruction before creating new instances and cleanup on component unmount
+  - **Files Modified**: `components/LivePriceChart.tsx` (lines 65-69, 332-339)
+  - Architect-verified fix, no more Canvas errors in production
 - ✅ **Live Price Chart with KOL Marker**: Integrated Chart.js live price chart component into token call pages
   - **Component**: `components/LivePriceChart.tsx` - Displays real-time price action with KOL profile marker
   - **Features**: 1-second live updates from DexScreener API, HH:mm time formatting, market cap Y-axis (B/M/K format)
@@ -52,7 +57,9 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   - **Memory Management**: Dataset capped at 50 data points maximum to prevent memory leaks
   - **Historical Support**: Dynamically extends history window to cover older call timestamps
   - **Architecture**: Marker anchored at index 0 for historical calls, always enforces MAX_DATA_POINTS cap
-  - **Integration**: Embedded in call page cards between ROI percentage display and DexScreener iframe
+  - **Data Integration**: Uses Supabase data (token_address, initial_mcap, created_at, creatorAvatar)
+  - **Integration**: Embedded in call page cards between ROI percentage display and platform buttons
+  - Card layout matches design reference with proper structure
   - Architect-approved implementation with no TypeScript or runtime errors
 
 ## Previous Changes (October 26, 2025)
