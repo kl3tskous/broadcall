@@ -330,7 +330,7 @@ export default function CallPage() {
 
           {/* Trades In Section - positioned at bottom right of banner */}
           {creatorSettings && (
-            <div className="absolute right-4 md:right-8 -bottom-10 md:-bottom-12 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-3 max-w-[280px] md:max-w-xs">
+            <div className="absolute right-4 md:right-8 -bottom-6 md:-bottom-8 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-[10px] p-3 md:p-4 flex items-center gap-3 max-w-[280px] md:max-w-xs">
               <div className="flex-1">
                 <span className="text-white text-sm md:text-base font-extrabold">Trades in: </span>
                 <span className="text-orange-600 text-sm md:text-base font-extrabold">
