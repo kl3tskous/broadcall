@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getUploadURL } from '@/lib/objectStorage';
 
+export const dynamic = 'force-dynamic'
+
 export async function POST() {
   try {
     const uploadURL = await getUploadURL();

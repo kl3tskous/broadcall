@@ -3,8 +3,11 @@ import { Pool } from 'pg'
 import nacl from 'tweetnacl'
 import bs58 from 'bs58'
 
+export const dynamic = 'force-dynamic'
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 })
 
 export async function POST(request: NextRequest) {

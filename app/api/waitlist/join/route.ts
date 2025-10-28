@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import { PublicKey } from '@solana/web3.js';
 
+export const dynamic = 'force-dynamic'
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
 function isValidSolanaAddress(address: string): boolean {

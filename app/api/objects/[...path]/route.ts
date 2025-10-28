@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Storage } from '@google-cloud/storage';
 
+export const dynamic = 'force-dynamic'
+
 const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
 
 const storage = new Storage({

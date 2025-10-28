@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
+export const dynamic = 'force-dynamic'
+
 // Use direct PostgreSQL connection to bypass Supabase PostgREST schema cache issues
 // PostgREST schema cache doesn't update automatically when columns are added
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
 export async function GET(request: NextRequest) {

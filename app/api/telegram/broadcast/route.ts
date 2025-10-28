@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Pool } from 'pg'
 
+export const dynamic = 'force-dynamic'
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 })
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN

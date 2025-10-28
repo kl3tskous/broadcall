@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     // Check if DATABASE_URL exists
@@ -15,7 +17,8 @@ export async function GET() {
     // Create a temporary pool for testing
     const connectionString = process.env.DATABASE_URL;
     const pool = new Pool({
-      connectionString
+      connectionString,
+      ssl: { rejectUnauthorized: false }
     });
 
     // Try to connect and run a simple query
