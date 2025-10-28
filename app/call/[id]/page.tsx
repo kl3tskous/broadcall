@@ -450,7 +450,7 @@ export default function CallPage() {
               <LivePriceChart 
                 tokenAddress={latestCall.token_address}
                 userProfileImage={creatorAvatar || undefined}
-                initialMarketCap={latestCall.initial_mcap}
+                initialMarketCap={latestCall.initial_mcap ?? undefined}
                 callTimestamp={latestCall.created_at}
               />
             </div>
