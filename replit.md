@@ -21,8 +21,9 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Custom Background Image:** All pages utilize a consistent custom background image (`/background.png`).
 
 **Technical Implementations:**
-- **Wallet Integration:** Phantom wallet integration using Solana Wallet Adapter for secure authentication.
-- **Database:** Supabase (PostgreSQL) stores user profiles, settings, and call data, including detailed token metadata, views, and clicks.
+- **Authentication System:** Twitter OAuth 2.0-based authentication with PKCE (Proof Key for Code Exchange) for enhanced security. Users log in with their X (Twitter) account, then connect their Telegram account to join the waitlist. Session management uses HTTP-only cookies with 30-day expiration. User data (Twitter profile, Telegram ID, waitlist status) stored in Supabase users table.
+- **Wallet Integration:** Phantom wallet integration using Solana Wallet Adapter (optional, for future token calls after gaining access).
+- **Database:** Supabase (PostgreSQL) stores user authentication data, profiles, settings, and call data. New `users` table stores Twitter/Telegram profiles with `joined_waitlist` and `access_granted` flags. `sessions` table manages active login sessions.
 - **Real-time Data:** DexScreener API provides automatic token metadata and real-time price data with 30-second auto-refresh.
 - **Tracking System:** Implements optimistic UI updates for view tracking on page load and click tracking on platform buttons.
 - **Referral System:** Supports multi-platform referral codes with smart priority.
@@ -31,16 +32,26 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Telegram Bot Integration:** A Python-based Telegram bot for secure KOL account linking (Ed25519 signature verification, token generation, webhook-free polling) and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows selective broadcasting from platform settings. Security is hardened with Ed25519 wallet signature authentication for all channel management and broadcast endpoints.
 
 **Feature Specifications:**
-- **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
+- **Authentication Flow:** 
+  1. User clicks "Login with X (Twitter)" on homepage
+  2. Redirected to Twitter OAuth 2.0 authorization (with PKCE)
+  3. After Twitter login, user profile data fetched from Twitter API v2
+  4. User redirected to "Connect Telegram" screen
+  5. User connects Telegram account via Telegram Login Widget
+  6. `joined_waitlist` flag set to TRUE in database
+  7. User sees waitlist confirmation page with both accounts connected
+  8. Dashboard/call creation unlocked after admin grants `access_granted = TRUE`
+- **User Onboarding & Profile Management:** Twitter profile data (username, display name, avatar, bio) automatically populated. Optional Solana wallet connection for token call creation. Profile management includes referral codes and "Trades In" badge settings.
 - **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment.
 - **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
 - **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
 - **Telegram Channel Broadcasting:** KOLs can broadcast token calls to linked Telegram channels with professionally formatted messages and inline buy buttons, utilizing their referral codes. The system includes automatic DexScreener data fetching, Markdown-formatted messages, inline keyboard buttons for all 5 trading platforms plus DexScreener chart, and smart referral link injection.
 
 ## External Dependencies
-- **Supabase:** PostgreSQL database and authentication.
+- **Twitter API v2:** OAuth 2.0 authentication and user profile data fetching (username, name, bio, profile image).
+- **Supabase:** PostgreSQL database for users, sessions, settings, and call data.
 - **DexScreener API:** Real-time token data, prices, market cap, and charts.
-- **Solana Wallet Adapter (Phantom):** Wallet connection and interaction.
+- **Solana Wallet Adapter (Phantom):** Optional wallet connection and interaction.
 - **Trading Platforms:** Integration with GMGN, Axiom, Photon, BullX, and Trojan for referral linking.
-- **Telegram Bot API:** Python-telegram-bot library for Telegram bot functionality.
-- **Cryptography Libraries:** tweetnacl (Ed25519 signatures), bs58 (Base58 encoding), for wallet signature verification.
+- **Telegram Bot API:** Python-telegram-bot library for bot functionality and Telegram Login Widget for user authentication.
+- **Cryptography Libraries:** tweetnacl (Ed25519 signatures), bs58 (Base58 encoding), Node.js crypto module (PKCE generation, HMAC verification).
