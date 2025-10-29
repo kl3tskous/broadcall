@@ -66,20 +66,31 @@ export default function ConnectTelegramPage() {
 
       const data = await response.json()
       const botUrl = data.bot_url
+      const token = data.token
 
       // Open Telegram bot with token
       window.open(botUrl, '_blank')
       
-      // Show waiting message
+      // Show waiting message with manual fallback option
       const container = document.getElementById('telegram-login-container')
       if (container) {
         container.innerHTML = `
-          <div class="text-center p-6 bg-blue-500/10 rounded-xl border border-blue-500/30">
-            <div class="flex items-center justify-center gap-2 mb-2">
+          <div class="text-center p-6 bg-blue-500/10 rounded-xl border border-blue-500/30 space-y-4">
+            <div class="flex items-center justify-center gap-2">
               <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-400"></div>
               <p class="text-blue-400 font-medium">Waiting for Telegram connection...</p>
             </div>
-            <p class="text-sm text-gray-400">Complete the verification in Telegram, then return here.</p>
+            <p class="text-sm text-gray-400">Open @Broadcall_Bot on Telegram and send:</p>
+            <div class="bg-black/40 p-3 rounded-lg border border-gray-600">
+              <code class="text-green-400 text-sm select-all">/start ${token}</code>
+            </div>
+            <button 
+              onclick="navigator.clipboard.writeText('/start ${token}')"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors"
+            >
+              Copy Command
+            </button>
+            <p class="text-xs text-gray-500">The page will automatically redirect once connected</p>
           </div>
         `
       }
