@@ -81,7 +81,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 "❌ Could not connect to BroadCall servers. Please try again later."
             )
     else:
-        # Account connection flow - existing behavior
+        # Account connection flow - Twitter OAuth edition
         token = param
         await update.message.reply_text("🔄 Verifying your connection token...")
         
@@ -99,19 +99,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 if response.status_code == 200:
                     data = response.json()
                     await update.message.reply_text(
-                        f"✅ Success! Your Telegram account is now connected to BroadCall.\n\n"
-                        f"👤 Connected as: @{telegram_username}\n"
-                        f"💼 BroadCall Profile: {data.get('alias', 'Anonymous')}\n\n"
-                        "You can now:\n"
-                        "• Use /status to check your connection\n"
-                        "• Use /disconnect to unlink your account\n"
-                        "• Push token calls to Telegram (coming soon!)"
+                        f"🎉 Success! You're now on the BroadCall waitlist!\n\n"
+                        f"✅ Telegram Connected: @{telegram_username}\n"
+                        f"✅ Twitter Account: @{data.get('twitter_username', 'Unknown')}\n\n"
+                        f"We'll notify you right here on Telegram when BroadCall launches.\n\n"
+                        f"Get ready to turn your token calls into income! 🚀"
                     )
                 elif response.status_code == 400:
                     error_data = response.json()
                     await update.message.reply_text(
                         f"❌ Connection failed: {error_data.get('error', 'Invalid or expired token')}\n\n"
-                        "Please generate a new connection link from BroadCall Settings."
+                        "Please try again from the BroadCall website."
                     )
                 else:
                     await update.message.reply_text(

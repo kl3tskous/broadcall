@@ -14,13 +14,6 @@ export default function ConnectTelegramPage() {
     checkAuth()
   }, [])
 
-  useEffect(() => {
-    // Load Telegram Login Widget after component mounts
-    if (user && !user.telegram_id) {
-      loadTelegramWidget()
-    }
-  }, [user])
-
   async function checkAuth() {
     try {
       const response = await fetch('/api/auth/me')
@@ -48,29 +41,64 @@ export default function ConnectTelegramPage() {
     }
   }
 
-  function loadTelegramWidget() {
-    // Remove existing script if any
-    const existingScript = document.getElementById('telegram-widget-script')
-    if (existingScript) {
-      existingScript.remove()
-    }
+  async function handleTelegramConnect() {
+    try {
+      // Generate connection token
+      const response = await fetch('/api/telegram/generate-token', {
+        method: 'POST'
+      })
 
-    // Create and load the Telegram widget script
-    const script = document.createElement('script')
-    script.id = 'telegram-widget-script'
-    script.src = 'https://telegram.org/js/telegram-widget.js?22'
-    script.async = true
-    script.setAttribute('data-telegram-login', 'Broadcall_Bot')
-    script.setAttribute('data-size', 'large')
-    script.setAttribute('data-radius', '10')
-    script.setAttribute('data-auth-url', `${window.location.origin}/api/auth/telegram/callback`)
-    script.setAttribute('data-request-access', 'write')
+      if (!response.ok) {
+        throw new Error('Failed to generate connection token')
+      }
 
-    const container = document.getElementById('telegram-login-container')
-    if (container) {
-      container.innerHTML = '' // Clear container
-      container.appendChild(script)
+      const data = await response.json()
+      const botUrl = data.bot_url
+
+      // Open Telegram bot with token
+      window.open(botUrl, '_blank')
+      
+      // Show waiting message
+      const container = document.getElementById('telegram-login-container')
+      if (container) {
+        container.innerHTML = `
+          <div class="text-center p-6 bg-blue-500/10 rounded-xl border border-blue-500/30">
+            <div class="flex items-center justify-center gap-2 mb-2">
+              <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-400"></div>
+              <p class="text-blue-400 font-medium">Waiting for Telegram connection...</p>
+            </div>
+            <p class="text-sm text-gray-400">Complete the verification in Telegram, then return here.</p>
+          </div>
+        `
+      }
+
+      // Start polling for connection status
+      pollConnectionStatus()
+
+    } catch (error) {
+      console.error('Error connecting Telegram:', error)
+      alert('Failed to connect Telegram. Please try again.')
     }
+  }
+
+  function pollConnectionStatus() {
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch('/api/auth/me')
+        const data = await response.json()
+
+        if (data.authenticated && data.user.telegram_id) {
+          // Connected! Redirect to waitlist confirmation or dashboard
+          clearInterval(interval)
+          router.push('/waitlist/confirmed')
+        }
+      } catch (error) {
+        console.error('Error polling connection status:', error)
+      }
+    }, 2000) // Poll every 2 seconds
+
+    // Stop polling after 5 minutes
+    setTimeout(() => clearInterval(interval), 5 * 60 * 1000)
   }
 
   if (loading) {
@@ -161,24 +189,20 @@ export default function ConnectTelegramPage() {
 
             {/* Telegram Connect Button */}
             <div id="telegram-login-container" className="flex justify-center mb-6">
-              {/* Telegram Login Widget will be inserted here */}
-            </div>
-
-            {/* Manual Telegram Link (Fallback for mobile) */}
-            <div className="text-center mb-6">
-              <p className="text-sm text-gray-400 mb-3">Or click here to connect via Telegram:</p>
-              <a
-                href={`https://t.me/Broadcall_Bot?start=connect`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all"
+              <button
+                onClick={handleTelegramConnect}
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-lg"
               >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.84 8.672c-.139.623-.506.775-1.023.483l-2.826-2.081-1.362 1.311c-.151.151-.277.277-.568.277l.203-2.883 5.256-4.747c.229-.203-.05-.316-.354-.113l-6.499 4.091-2.798-.874c-.609-.192-.621-.609.127-.903l10.933-4.213c.509-.184.953.122.787.903z"/>
                 </svg>
-                Connect Telegram
-              </a>
+                <span className="text-lg">Connect Telegram</span>
+              </button>
             </div>
+
+            <p className="text-center text-sm text-gray-400 mb-6">
+              Click the button above to open Telegram and complete your connection
+            </p>
 
             <div className="text-center text-sm text-gray-500">
               By connecting Telegram, you agree to join the BroadCall waitlist

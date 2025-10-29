@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     try {
       // Check if token exists and is valid
       const tokenResult = await client.query(
-        `SELECT wallet_address, expires_at, used 
+        `SELECT user_id, expires_at 
          FROM telegram_connection_tokens 
          WHERE token = $1`,
         [token]
@@ -38,13 +38,6 @@ export async function POST(request: NextRequest) {
 
       const tokenData = tokenResult.rows[0]
 
-      if (tokenData.used) {
-        return NextResponse.json(
-          { error: 'Token already used' },
-          { status: 400 }
-        )
-      }
-
       const expiresAt = new Date(tokenData.expires_at)
       if (expiresAt < new Date()) {
         return NextResponse.json(
@@ -53,34 +46,35 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Update profile with Telegram info
+      // Update user with Telegram info and mark as joined waitlist
       await client.query(
-        `UPDATE profiles 
-         SET telegram_id = $1, telegram_username = $2, updated_at = NOW()
-         WHERE wallet_address = $3`,
-        [telegram_id, telegram_username, tokenData.wallet_address]
+        `UPDATE users 
+         SET telegram_id = $1, 
+             telegram_username = $2, 
+             joined_waitlist = true,
+             updated_at = NOW()
+         WHERE id = $3`,
+        [telegram_id.toString(), telegram_username, tokenData.user_id]
       )
 
-      // Mark token as used
+      // Delete the used token
       await client.query(
-        `UPDATE telegram_connection_tokens 
-         SET used = true 
-         WHERE token = $1`,
+        `DELETE FROM telegram_connection_tokens WHERE token = $1`,
         [token]
       )
 
-      // Get profile alias
-      const profileResult = await client.query(
-        `SELECT alias FROM profiles WHERE wallet_address = $1`,
-        [tokenData.wallet_address]
+      // Get user info
+      const userResult = await client.query(
+        `SELECT twitter_name, twitter_username FROM users WHERE id = $1`,
+        [tokenData.user_id]
       )
 
-      const alias = profileResult.rows[0]?.alias || 'Anonymous'
+      const user = userResult.rows[0]
 
       return NextResponse.json({
         success: true,
-        alias,
-        wallet_address: tokenData.wallet_address,
+        twitter_name: user?.twitter_name || 'User',
+        twitter_username: user?.twitter_username || 'user',
       })
     } finally {
       client.release()

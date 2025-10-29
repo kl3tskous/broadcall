@@ -156,7 +156,26 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- =====================================================
--- STEP 6: VERIFY MIGRATION
+-- STEP 6: CREATE TELEGRAM CONNECTION TOKENS TABLE
+-- =====================================================
+
+DROP TABLE IF EXISTS telegram_connection_tokens CASCADE;
+
+CREATE TABLE telegram_connection_tokens (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  token TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+-- Create indexes for telegram_connection_tokens table
+CREATE INDEX idx_telegram_connection_tokens_token ON telegram_connection_tokens(token);
+CREATE INDEX idx_telegram_connection_tokens_user_id ON telegram_connection_tokens(user_id);
+CREATE INDEX idx_telegram_connection_tokens_expires_at ON telegram_connection_tokens(expires_at);
+
+-- =====================================================
+-- STEP 7: VERIFY MIGRATION
 -- =====================================================
 
 DO $$
@@ -168,10 +187,12 @@ BEGIN
   RAISE NOTICE 'Tables created:';
   RAISE NOTICE '  ✓ users (with Twitter OAuth fields)';
   RAISE NOTICE '  ✓ sessions (with hashed tokens)';
+  RAISE NOTICE '  ✓ telegram_connection_tokens';
   RAISE NOTICE '';
   RAISE NOTICE 'Indexes created:';
   RAISE NOTICE '  ✓ 6 indexes on users table';
   RAISE NOTICE '  ✓ 3 indexes on sessions table';
+  RAISE NOTICE '  ✓ 3 indexes on telegram_connection_tokens table';
   RAISE NOTICE '';
   RAISE NOTICE 'Triggers and functions created';
   RAISE NOTICE '';
