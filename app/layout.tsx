@@ -1,7 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { WalletProvider } from '@/components/WalletProvider'
-import { AuthProvider } from '@/contexts/AuthContext'
+import Providers from '@/components/Providers'
 
 export const metadata: Metadata = {
   title: 'BroadCall - Solana Influencer Platform',
@@ -16,11 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <WalletProvider>
-            {children}
-          </WalletProvider>
-        </AuthProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
