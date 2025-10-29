@@ -89,7 +89,11 @@ function generateCodeVerifier(): string {
 async function generateCodeChallenge(verifier: string): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode(verifier)
-  const hash = await crypto.subtle.digest('SHA-256', data.buffer)
+  // Create a clean ArrayBuffer copy to satisfy TypeScript's strict type checking
+  const buffer = new ArrayBuffer(data.length)
+  const view = new Uint8Array(buffer)
+  view.set(data)
+  const hash = await crypto.subtle.digest('SHA-256', view)
   
   // Convert hash to base64url
   return base64UrlEncode(hash)

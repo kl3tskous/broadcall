@@ -1,0 +1,33 @@
+  run `npm fund` for details
+Detected Next.js version: 14.2.33
+Running "npm run build"
+> coin-call-platform@0.1.0 build
+> next build
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+  ▲ Next.js 14.2.33
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+./app/api/auth/twitter/route.ts:92:54
+Type error: No overload matches this call.
+  Overload 1 of 2, '(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer>', gave the following error.
+    Argument of type 'ArrayBufferLike' is not assignable to parameter of type 'BufferSource'.
+      Type 'SharedArrayBuffer' is not assignable to type 'BufferSource'.
+        Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+  Overload 2 of 2, '(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer>', gave the following error.
+    Argument of type 'ArrayBufferLike' is not assignable to parameter of type 'BufferSource'.
+      Type 'SharedArrayBuffer' is not assignable to type 'BufferSource'.
+        Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+  90 |   const encoder = new TextEncoder()
+  91 |   const data = encoder.encode(verifier)
+> 92 |   const hash = await crypto.subtle.digest('SHA-256', data.buffer)
+     |                                                      ^
+  93 |   
+  94 |   // Convert hash to base64url
+  95 |   return base64UrlEncode(hash)
+Next.js build worker exited with code: 1 and signal: null
+Error: Command "npm run build" exited with 1
