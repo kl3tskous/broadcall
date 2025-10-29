@@ -3,8 +3,17 @@ import { NextRequest, NextResponse } from 'next/server';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXTAUTH_URL || 'http://localhost:5000';
 
+const TELEGRAM_WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET!;
+
 export async function POST(request: NextRequest) {
   try {
+    if (!TELEGRAM_WEBHOOK_SECRET) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'TELEGRAM_WEBHOOK_SECRET environment variable is not set' 
+      }, { status: 500 });
+    }
+    
     const webhookUrl = `${BACKEND_URL}/api/telegram/webhook`;
     
     console.log(`Setting Telegram webhook to: ${webhookUrl}`);
@@ -14,7 +23,8 @@ export async function POST(request: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         url: webhookUrl,
-        allowed_updates: ['message', 'my_chat_member']
+        allowed_updates: ['message', 'my_chat_member'],
+        secret_token: TELEGRAM_WEBHOOK_SECRET
       })
     });
     

@@ -81,6 +81,7 @@ DATABASE_URL=postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres
 
 # Telegram Bot
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_WEBHOOK_SECRET=generate_a_random_32_char_string_for_webhook_security
 
 # Session Security
 SESSION_SECRET=generate_a_random_32_char_string
@@ -95,15 +96,9 @@ PUBLIC_OBJECT_SEARCH_PATHS=/public
 
 ## 🤖 Step 5: Set Up Telegram Webhook
 
-After your app is deployed, set the webhook:
+After your app is deployed, set the webhook using curl or Postman:
 
-### Method 1: Using the API endpoint
-Visit in your browser:
-```
-https://your-domain.vercel.app/api/telegram/set-webhook
-```
-
-Click the POST button or use curl:
+### Using curl:
 ```bash
 curl -X POST https://your-domain.vercel.app/api/telegram/set-webhook
 ```
@@ -158,9 +153,10 @@ In your Twitter Developer Portal:
 ## 📊 Architecture Overview
 
 ### Webhook-Based Telegram Bot (Production-Ready)
-- ✅ **No long-running processes** - Stateless, serverless architecture
-- ✅ **Auto-scales** - Handles unlimited traffic via Vercel Edge
+- ✅ **No long-running processes** - Stateless serverless functions
+- ✅ **Auto-scales** - Handles unlimited traffic via Vercel serverless infrastructure
 - ✅ **Zero conflicts** - No polling collisions or 409 errors
+- ✅ **Secured** - Webhook requests verified with secret token
 - ✅ **Integrated** - All bot logic runs through Next.js API routes
 
 ### Endpoints

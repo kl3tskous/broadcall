@@ -29,7 +29,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Referral System:** Supports multi-platform referral codes with smart priority.
 - **File Upload System:** Replit App Storage for secure profile picture and banner uploads.
 - **KOL Profile System:** Public profile pages (`/profile/[address]`) with Twitter-style layouts, user bio, social links, performance stats, and tabbed views for "Calls" and "Stats."
-- **Telegram Bot Integration:** A Python-based Telegram bot for secure KOL account linking (Ed25519 signature verification, token generation, webhook-free polling) and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows selective broadcasting from platform settings. Security is hardened with Ed25519 wallet signature authentication for all channel management and broadcast endpoints.
+- **Telegram Bot Integration:** Webhook-based Telegram bot (production-ready) integrated directly into Next.js API routes. Handles secure KOL account linking via one-time tokens and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows selective broadcasting from platform settings. Security features include secret token validation for webhook requests, preventing unauthorized/forged updates.
 
 **Feature Specifications:**
 - **Authentication Flow:** 
@@ -37,7 +37,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
   2. Redirected to Twitter OAuth 2.0 authorization (with PKCE)
   3. After Twitter login, user profile data fetched from Twitter API v2
   4. User redirected to "Connect Telegram" screen
-  5. User connects Telegram account via Telegram Login Widget
+  5. User connects Telegram account via one-time token link
   6. `joined_waitlist` flag set to TRUE in database
   7. User sees waitlist confirmation page with both accounts connected
   8. Dashboard/call creation unlocked after admin grants `access_granted = TRUE`
@@ -53,5 +53,5 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **DexScreener API:** Real-time token data, prices, market cap, and charts.
 - **Solana Wallet Adapter (Phantom):** Optional wallet connection and interaction.
 - **Trading Platforms:** Integration with GMGN, Axiom, Photon, BullX, and Trojan for referral linking.
-- **Telegram Bot API:** Python-telegram-bot library for bot functionality and Telegram Login Widget for user authentication.
+- **Telegram Bot API:** Webhook-based bot integration via Next.js API routes for stateless, scalable architecture.
 - **Cryptography Libraries:** tweetnacl (Ed25519 signatures), bs58 (Base58 encoding), Node.js crypto module (PKCE generation, HMAC verification).

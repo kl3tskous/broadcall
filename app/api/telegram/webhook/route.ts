@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+const TELEGRAM_WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET!;
 const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXTAUTH_URL || 'http://localhost:5000';
 
 export async function POST(request: NextRequest) {
   try {
+    const secretToken = request.headers.get('x-telegram-bot-api-secret-token');
+    
+    if (!TELEGRAM_WEBHOOK_SECRET || secretToken !== TELEGRAM_WEBHOOK_SECRET) {
+      console.error('Invalid or missing Telegram webhook secret token');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const update = await request.json();
     
     console.log('Received Telegram webhook update:', JSON.stringify(update, null, 2));
