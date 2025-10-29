@@ -45,11 +45,23 @@ export default function ConnectTelegramPage() {
     try {
       // Generate connection token
       const response = await fetch('/api/telegram/generate-token', {
-        method: 'POST'
+        method: 'POST',
+        credentials: 'include', // IMPORTANT: Include cookies for session auth
+        headers: {
+          'Content-Type': 'application/json',
+        }
       })
 
+      if (response.status === 401) {
+        // Session expired - redirect to login
+        alert('Your session expired. Please log in again.')
+        router.push('/')
+        return
+      }
+
       if (!response.ok) {
-        throw new Error('Failed to generate connection token')
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to generate connection token')
       }
 
       const data = await response.json()
