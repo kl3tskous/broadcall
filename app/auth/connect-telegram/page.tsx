@@ -14,6 +14,13 @@ export default function ConnectTelegramPage() {
     checkAuth()
   }, [])
 
+  useEffect(() => {
+    // Load Telegram Login Widget after component mounts
+    if (user && !user.telegram_id) {
+      loadTelegramWidget()
+    }
+  }, [user])
+
   async function checkAuth() {
     try {
       const response = await fetch('/api/auth/me')
@@ -38,6 +45,31 @@ export default function ConnectTelegramPage() {
       console.error('Auth check error:', err)
       setError('Failed to verify authentication')
       setLoading(false)
+    }
+  }
+
+  function loadTelegramWidget() {
+    // Remove existing script if any
+    const existingScript = document.getElementById('telegram-widget-script')
+    if (existingScript) {
+      existingScript.remove()
+    }
+
+    // Create and load the Telegram widget script
+    const script = document.createElement('script')
+    script.id = 'telegram-widget-script'
+    script.src = 'https://telegram.org/js/telegram-widget.js?22'
+    script.async = true
+    script.setAttribute('data-telegram-login', 'Broadcall_Bot')
+    script.setAttribute('data-size', 'large')
+    script.setAttribute('data-radius', '10')
+    script.setAttribute('data-auth-url', `${window.location.origin}/api/auth/telegram/callback`)
+    script.setAttribute('data-request-access', 'write')
+
+    const container = document.getElementById('telegram-login-container')
+    if (container) {
+      container.innerHTML = '' // Clear container
+      container.appendChild(script)
     }
   }
 
@@ -132,6 +164,22 @@ export default function ConnectTelegramPage() {
               {/* Telegram Login Widget will be inserted here */}
             </div>
 
+            {/* Manual Telegram Link (Fallback for mobile) */}
+            <div className="text-center mb-6">
+              <p className="text-sm text-gray-400 mb-3">Or click here to connect via Telegram:</p>
+              <a
+                href={`https://t.me/Broadcall_Bot?start=connect`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all"
+              >
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.84 8.672c-.139.623-.506.775-1.023.483l-2.826-2.081-1.362 1.311c-.151.151-.277.277-.568.277l.203-2.883 5.256-4.747c.229-.203-.05-.316-.354-.113l-6.499 4.091-2.798-.874c-.609-.192-.621-.609.127-.903l10.933-4.213c.509-.184.953.122.787.903z"/>
+                </svg>
+                Connect Telegram
+              </a>
+            </div>
+
             <div className="text-center text-sm text-gray-500">
               By connecting Telegram, you agree to join the BroadCall waitlist
             </div>
@@ -157,17 +205,6 @@ export default function ConnectTelegramPage() {
           </div>
         </div>
       </div>
-
-      {/* Telegram Login Widget Script */}
-      <script
-        async
-        src="https://telegram.org/js/telegram-widget.js?22"
-        data-telegram-login={process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "your_bot"}
-        data-size="large"
-        data-radius="10"
-        data-auth-url={`${process.env.NEXTAUTH_URL}/api/auth/telegram/callback`}
-        data-request-access="write"
-      />
     </div>
   )
 }
