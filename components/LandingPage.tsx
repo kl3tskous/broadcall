@@ -6,14 +6,27 @@ import Image from 'next/image'
 import { UserPlus, Bell, Send, Check } from 'lucide-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import TelegramLoginButton from '@/components/TelegramLoginButton'
 
 export default function LandingPage() {
   const { setVisible } = useWalletModal()
   const { publicKey, connected } = useWallet()
+  const { user, login: telegramLogin } = useAuth()
+  const router = useRouter()
   const [isJoining, setIsJoining] = useState(false)
   const [showTelegramStep, setShowTelegramStep] = useState(false)
   const [isOnWaitlist, setIsOnWaitlist] = useState(false)
   const [checking, setChecking] = useState(false)
+  const [loginError, setLoginError] = useState('')
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard')
+    }
+  }, [user, router])
 
   // Check if wallet is already on waitlist (completed)
   useEffect(() => {
@@ -62,6 +75,16 @@ export default function LandingPage() {
     const interval = setInterval(checkStatus, 3000)
     return () => clearInterval(interval)
   }, [showTelegramStep, publicKey])
+
+  const handleTelegramAuth = async (telegramData: any) => {
+    try {
+      setLoginError('')
+      await telegramLogin(telegramData)
+    } catch (error: any) {
+      console.error('Telegram login error:', error)
+      setLoginError(error.message || 'Failed to log in with Telegram')
+    }
+  }
 
   const handleJoinWaitlist = async () => {
     if (!connected || !publicKey) {
