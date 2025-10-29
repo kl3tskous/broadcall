@@ -11,10 +11,11 @@ const pool = new Pool({
 
 export async function POST(request: NextRequest) {
   try {
-    // Get session from cookies
-    const sessionToken = request.cookies.get('session_token')?.value
+    // Get session from cookies (use correct cookie name: broadCall_session)
+    const sessionToken = request.cookies.get('broadCall_session')?.value
     
     if (!sessionToken) {
+      console.log('No session cookie found')
       return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }

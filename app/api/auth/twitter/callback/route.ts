@@ -76,9 +76,11 @@ export async function GET(request: NextRequest) {
     const sessionToken = generateSessionToken()
     
     // Store session in HTTP-only cookie (store unhashed version in cookie)
+    // IMPORTANT: Replit always uses HTTPS, so always set secure: true
+    // SameSite=Lax is needed for mobile Safari compatibility
     cookieStore.set('broadCall_session', sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Always true on Replit (HTTPS)
       sameSite: 'lax',
       maxAge: 30 * 24 * 60 * 60, // 30 days
       path: '/'
