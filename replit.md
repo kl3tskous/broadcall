@@ -1,14 +1,7 @@
 # BroadCall - Coin Call Referral Platform
 
 ## Overview
-BroadCall is a Next.js platform for Solana influencers to create and share professional, "flex-worthy" token call pages. The platform now features Twitter/X OAuth as the primary authentication method, with optional Telegram connection and Phantom wallet linking. It uses Supabase for data management and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats), offers social sharing features, and enables influencers to monetize calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan). A key feature is the Telegram bot integration, allowing KOLs to link their Telegram accounts and automatically broadcast token calls with buy buttons to their channels.
-
-## Recent Changes (Oct 29, 2025)
-**Authentication Migration: Telegram-First → Twitter/X OAuth-First**
-- Migrated from Telegram-first to Twitter/X OAuth-first authentication using NextAuth.js
-- Created new `broadcall_users` table with Twitter-centric fields
-- Twitter login is now the primary entry point; Telegram and wallet are optional
-- All existing features (Telegram bot, token calls, referral tracking) remain intact
+BroadCall is a Next.js platform for Solana influencers to create and share professional, "flex-worthy" token call pages. It integrates with Phantom wallet, uses Supabase for data management, and displays real-time price charts via DexScreener. The platform automates performance tracking (views, clicks, ROI, ATH stats), offers social sharing features, and enables influencers to monetize calls by attaching custom referral codes for multiple trading platforms (GMGN, Axiom, Photon, BullX, Trojan). A key feature is the Telegram bot integration, allowing KOLs to link their Telegram accounts and automatically broadcast token calls with buy buttons to their channels.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -28,9 +21,8 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Custom Background Image:** All pages utilize a consistent custom background image (`/background.png`).
 
 **Technical Implementations:**
-- **Authentication:** NextAuth.js with Twitter OAuth 2.0 for primary authentication. Automatic profile sync (avatar, banner, bio).
-- **Wallet Integration:** Optional Phantom wallet integration using Solana Wallet Adapter (can be linked in settings).
-- **Database:** Supabase (PostgreSQL) with `broadcall_users` table for Twitter-first user management. Stores profiles, settings, and call data.
+- **Wallet Integration:** Phantom wallet integration using Solana Wallet Adapter for secure authentication.
+- **Database:** Supabase (PostgreSQL) stores user profiles, settings, and call data, including detailed token metadata, views, and clicks.
 - **Real-time Data:** DexScreener API provides automatic token metadata and real-time price data with 30-second auto-refresh.
 - **Tracking System:** Implements optimistic UI updates for view tracking on page load and click tracking on platform buttons.
 - **Referral System:** Supports multi-platform referral codes with smart priority.
@@ -39,7 +31,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 - **Telegram Bot Integration:** A Python-based Telegram bot for secure KOL account linking (Ed25519 signature verification, token generation, webhook-free polling) and automatic token call broadcasting to configured Telegram channels. The bot manages channel subscriptions and allows selective broadcasting from platform settings. Security is hardened with Ed25519 wallet signature authentication for all channel management and broadcast endpoints.
 
 **Feature Specifications:**
-- **User Onboarding & Profile Management:** Twitter OAuth login → Optional Telegram connection → Waitlist join. Users can later link Phantom wallet in settings. Profile includes Twitter data (auto-synced), optional Telegram, and optional wallet address.
+- **User Onboarding & Profile Management:** Welcome flow for new users to set up referral codes and manage profile (alias, avatar, Twitter handle, bio, Telegram, website).
 - **Call Creation:** Users create calls by entering a Solana token address and optional thesis, with automatic metadata fetching and referral code attachment.
 - **Performance Tracking:** Call pages display auto-updating ROI, multiplier, and ATH (All-Time High) price/market cap.
 - **Social Sharing:** "Share on X" buttons with pre-filled tweets and a copy link button.
