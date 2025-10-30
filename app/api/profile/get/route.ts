@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
     // Priority: custom uploads > profile table > twitter defaults
     const result = await pool.query(
       `SELECT 
-        p.*,
+        COALESCE(p.wallet_address, u.wallet_address) as wallet_address,
+        COALESCE(p.alias, u.twitter_name, u.twitter_username) as alias,
+        COALESCE(p.bio, u.bio) as bio,
         COALESCE(
           NULLIF(u.custom_profile_image, ''),
           NULLIF(p.avatar_url, ''),
@@ -34,10 +36,15 @@ export async function GET(request: NextRequest) {
           NULLIF(u.custom_banner_image, ''),
           NULLIF(p.banner_url, ''),
           NULLIF(u.banner_image_url, '')
-        ) as banner_url
-      FROM profiles p
-      LEFT JOIN users u ON u.twitter_username = p.wallet_address
-      WHERE p.wallet_address = $1`,
+        ) as banner_url,
+        p.twitter_handle,
+        p.telegram,
+        p.website,
+        p.created_at,
+        p.updated_at
+      FROM users u
+      LEFT JOIN profiles p ON p.wallet_address = u.wallet_address
+      WHERE u.wallet_address = $1`,
       [wallet_address]
     );
 
