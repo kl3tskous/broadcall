@@ -22,6 +22,7 @@ The platform is built with Next.js 14 (App Router), TypeScript, and Tailwind CSS
 
 **Technical Implementations:**
 - **Authentication System:** Twitter OAuth 2.0-based authentication with PKCE (Proof Key for Code Exchange) for enhanced security. Users log in with their X (Twitter) account, then connect their Telegram account to join the waitlist. Session management uses HTTP-only cookies with 30-day expiration. User data (Twitter profile, Telegram ID, waitlist status) stored in Supabase users table.
+- **Profile & Banner Images:** Automatic Twitter profile picture and banner sync on login with custom upload override. Users can upload custom images (max 5MB) via `/settings` which are stored in Replit App Storage. Image hierarchy: custom images → profile table → Twitter defaults. DELETE endpoints allow reverting to Twitter images. All images served via Supabase Storage with proper validation and authentication.
 - **Wallet Integration:** Phantom wallet integration using Solana Wallet Adapter (optional, for future token calls after gaining access).
 - **Database:** Supabase (PostgreSQL) stores user authentication data, profiles, settings, and call data. New `users` table stores Twitter/Telegram profiles with `joined_waitlist` and `access_granted` flags. `sessions` table manages active login sessions.
 - **Real-time Data:** DexScreener API provides automatic token metadata and real-time price data with 30-second auto-refresh.
