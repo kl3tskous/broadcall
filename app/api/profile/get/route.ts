@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
         p.created_at,
         p.updated_at
       FROM users u
-      LEFT JOIN profiles p ON p.wallet_address = u.wallet_address
-      WHERE u.wallet_address = $1`,
+      LEFT JOIN profiles p ON p.wallet_address = u.wallet_address OR p.wallet_address = u.twitter_username
+      WHERE u.wallet_address = $1 OR u.twitter_username = $1`,
       [wallet_address]
     );
 
