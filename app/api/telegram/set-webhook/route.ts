@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
-const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXTAUTH_URL || 'http://localhost:5000';
+const BACKEND_URL = (process.env.BACKEND_URL || process.env.NEXTAUTH_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 const TELEGRAM_WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET!;
 
