@@ -19,9 +19,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
     }
 
-    // Query PostgreSQL directly - ensures all columns are returned
+    // Query PostgreSQL directly - joins with users table to get custom images
+    // Custom images override default images if they're set
     const result = await pool.query(
-      'SELECT * FROM profiles WHERE wallet_address = $1',
+      `SELECT 
+        p.*,
+        COALESCE(u.custom_profile_image, p.avatar_url, u.profile_image_url) as avatar_url,
+        COALESCE(u.custom_banner_image, p.banner_url, u.banner_image_url) as banner_url
+      FROM profiles p
+      LEFT JOIN users u ON u.twitter_username = p.wallet_address
+      WHERE p.wallet_address = $1`,
       [wallet_address]
     );
 

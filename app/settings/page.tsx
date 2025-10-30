@@ -462,12 +462,20 @@ export default function SettingsPage() {
                     <button
                       onClick={async () => {
                         if (confirm('Remove custom profile picture and use X profile picture?')) {
-                          const { data, error } = await fetch('/api/upload/profile-image', {
-                            method: 'DELETE'
-                          })
-                          if (!error) {
-                            setUser({ ...user, custom_profile_image: null })
-                            alert('Custom profile picture removed')
+                          try {
+                            const response = await fetch('/api/upload/profile-image', {
+                              method: 'DELETE'
+                            })
+                            if (response.ok) {
+                              setUser({ ...user, custom_profile_image: null })
+                              alert('Custom profile picture removed')
+                            } else {
+                              const data = await response.json()
+                              alert(data.error || 'Failed to remove custom image')
+                            }
+                          } catch (error) {
+                            console.error('Error removing custom image:', error)
+                            alert('Failed to remove custom image')
                           }
                         }
                       }}
@@ -521,12 +529,20 @@ export default function SettingsPage() {
                     <button
                       onClick={async () => {
                         if (confirm('Remove custom banner and use X banner?')) {
-                          const { data, error } = await fetch('/api/upload/banner-image', {
-                            method: 'DELETE'
-                          })
-                          if (!error) {
-                            setUser({ ...user, custom_banner_image: null })
-                            alert('Custom banner removed')
+                          try {
+                            const response = await fetch('/api/upload/banner-image', {
+                              method: 'DELETE'
+                            })
+                            if (response.ok) {
+                              setUser({ ...user, custom_banner_image: null })
+                              alert('Custom banner removed')
+                            } else {
+                              const data = await response.json()
+                              alert(data.error || 'Failed to remove custom banner')
+                            }
+                          } catch (error) {
+                            console.error('Error removing custom banner:', error)
+                            alert('Failed to remove custom banner')
                           }
                         }
                       }}
