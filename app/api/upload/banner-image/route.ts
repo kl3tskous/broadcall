@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // Upload to Supabase Storage
-    const { data, error } = supabase.storage
+    const { data, error } = await supabase.storage
       .from('broadcall-images')
       .upload(fileName, buffer, {
         contentType: file.type,
