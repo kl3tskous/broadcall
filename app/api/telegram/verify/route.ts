@@ -46,6 +46,15 @@ export async function POST(request: NextRequest) {
         )
       }
 
+      // First, clear any existing Telegram ID to prevent conflicts
+      await client.query(
+        `UPDATE users 
+         SET telegram_id = NULL, 
+             telegram_username = NULL
+         WHERE telegram_id = $1 AND id != $2`,
+        [telegram_id.toString(), tokenData.user_id]
+      )
+
       // Update user with Telegram info and mark as joined waitlist
       await client.query(
         `UPDATE users 
@@ -79,8 +88,13 @@ export async function POST(request: NextRequest) {
     } finally {
       client.release()
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in verify:', error)
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      detail: error.detail
+    })
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
