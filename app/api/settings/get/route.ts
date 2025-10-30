@@ -1,47 +1,89 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
+import { cookies } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-})
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const walletAddress = searchParams.get('wallet_address')
+    // Authenticate via session cookie
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('broadCall_session')?.value
 
-    if (!walletAddress) {
+    if (!sessionToken) {
       return NextResponse.json(
-        { error: 'wallet_address is required' },
-        { status: 400 }
+        { error: 'Not authenticated' },
+        { status: 401 }
       )
     }
 
-    const client = await pool.connect()
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-    try {
-      const result = await client.query(
-        'SELECT * FROM user_settings WHERE wallet_address = $1',
-        [walletAddress]
+    // Hash the session token
+    const { createHash } = require('crypto')
+    const hashedToken = createHash('sha256').update(sessionToken).digest('hex')
+
+    // Fetch session
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('session_token', hashedToken)
+      .single()
+
+    if (sessionError || !session) {
+      return NextResponse.json(
+        { error: 'Invalid session' },
+        { status: 401 }
       )
-
-      if (result.rows.length === 0) {
-        return NextResponse.json({
-          success: true,
-          data: null
-        })
-      }
-
-      return NextResponse.json({
-        success: true,
-        data: result.rows[0]
-      })
-    } finally {
-      client.release()
     }
+
+    // Check expiry
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase
+        .from('sessions')
+        .delete()
+        .eq('session_token', hashedToken)
+      
+      return NextResponse.json(
+        { error: 'Session expired' },
+        { status: 401 }
+      )
+    }
+
+    const userId = session.user_id
+
+    // Fetch user
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('twitter_username')
+      .eq('id', userId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    // Fetch settings
+    const { data: settings, error: settingsError } = await supabase
+      .from('user_settings')
+      .select('*')
+      .eq('wallet_address', user.twitter_username)
+      .single()
+
+    if (settingsError && settingsError.code !== 'PGRST116') {
+      throw settingsError
+    }
+
+    return NextResponse.json({
+      success: true,
+      settings: settings || null
+    })
   } catch (error) {
     console.error('Error fetching settings:', error)
     return NextResponse.json(

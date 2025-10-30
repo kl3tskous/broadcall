@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { Pool } from 'pg'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,84 +10,68 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 })
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const walletAddress = searchParams.get('wallet_address')
-    const signature = request.headers.get('x-wallet-signature')
-    const messageBase64 = request.headers.get('x-wallet-message')
-    
-    // Decode base64 message
-    const message = messageBase64 ? Buffer.from(messageBase64, 'base64').toString('utf-8') : null
+    // Authenticate via session cookie
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('broadCall_session')?.value
 
-    if (!walletAddress) {
+    if (!sessionToken) {
       return NextResponse.json(
-        { error: 'Wallet address is required' },
-        { status: 400 }
-      )
-    }
-
-    // Require authentication for channel access
-    if (!signature || !message) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
-    // Verify the signature matches the wallet address
-    try {
-      const { PublicKey } = await import('@solana/web3.js')
-      const nacl = await import('tweetnacl')
-      const bs58 = await import('bs58')
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Hash the session token
+    const { createHash } = require('crypto')
+    const hashedToken = createHash('sha256').update(sessionToken).digest('hex')
+
+    // Fetch session
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('session_token', hashedToken)
+      .single()
+
+    if (sessionError || !session) {
+      return NextResponse.json(
+        { error: 'Invalid session' },
+        { status: 401 }
+      )
+    }
+
+    // Check expiry
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase
+        .from('sessions')
+        .delete()
+        .eq('session_token', hashedToken)
       
-      const publicKey = new PublicKey(walletAddress)
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = bs58.default.decode(signature)
-
-      const verified = nacl.default.sign.detached.verify(
-        messageBytes,
-        signatureBytes,
-        publicKey.toBytes()
-      )
-
-      if (!verified) {
-        return NextResponse.json(
-          { error: 'Invalid signature' },
-          { status: 401 }
-        )
-      }
-
-      // Verify message contains the wallet address (prevents signature reuse)
-      if (!message.includes(walletAddress)) {
-        return NextResponse.json(
-          { error: 'Invalid message' },
-          { status: 401 }
-        )
-      }
-
-      // Verify timestamp freshness (reject signatures older than 5 minutes)
-      const timestampMatch = message.match(/Timestamp: (\d+)/)
-      if (timestampMatch) {
-        const timestamp = parseInt(timestampMatch[1])
-        const now = Date.now()
-        const fiveMinutes = 5 * 60 * 1000
-        if (now - timestamp > fiveMinutes) {
-          return NextResponse.json(
-            { error: 'Signature expired' },
-            { status: 401 }
-          )
-        }
-      } else {
-        return NextResponse.json(
-          { error: 'Invalid message format' },
-          { status: 401 }
-        )
-      }
-    } catch (verifyError) {
       return NextResponse.json(
-        { error: 'Authentication failed' },
+        { error: 'Session expired' },
         { status: 401 }
+      )
+    }
+
+    const userId = session.user_id
+
+    // Fetch user
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('twitter_username')
+      .eq('id', userId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
       )
     }
 
@@ -96,7 +82,7 @@ export async function GET(request: NextRequest) {
          FROM telegram_channels
          WHERE wallet_address = $1
          ORDER BY created_at DESC`,
-        [walletAddress]
+        [user.twitter_username]
       )
 
       return NextResponse.json({

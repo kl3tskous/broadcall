@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { Pool } from 'pg'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,88 +10,77 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 })
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+
 export async function PUT(request: NextRequest) {
   try {
-    const { channel_id, wallet_address, enabled, signature, message } = await request.json()
+    // Authenticate via session cookie
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('broadCall_session')?.value
 
-    if (!channel_id || !wallet_address || enabled === undefined) {
+    if (!sessionToken) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Hash the session token
+    const { createHash } = require('crypto')
+    const hashedToken = createHash('sha256').update(sessionToken).digest('hex')
+
+    // Fetch session
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('session_token', hashedToken)
+      .single()
+
+    if (sessionError || !session) {
+      return NextResponse.json(
+        { error: 'Invalid session' },
+        { status: 401 }
+      )
+    }
+
+    // Check expiry
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase
+        .from('sessions')
+        .delete()
+        .eq('session_token', hashedToken)
+      
+      return NextResponse.json(
+        { error: 'Session expired' },
+        { status: 401 }
+      )
+    }
+
+    const userId = session.user_id
+
+    // Fetch user
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('twitter_username')
+      .eq('id', userId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    const { channel_id, enabled } = await request.json()
+
+    if (!channel_id || enabled === undefined) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
-      )
-    }
-
-    // Require authentication
-    if (!signature || !message) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
-
-    // Verify the signature
-    try {
-      const { PublicKey } = await import('@solana/web3.js')
-      const nacl = await import('tweetnacl')
-      const bs58 = await import('bs58')
-      
-      const publicKey = new PublicKey(wallet_address)
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = bs58.default.decode(signature)
-
-      const verified = nacl.default.sign.detached.verify(
-        messageBytes,
-        signatureBytes,
-        publicKey.toBytes()
-      )
-
-      if (!verified || !message.includes(wallet_address)) {
-        return NextResponse.json(
-          { error: 'Invalid signature' },
-          { status: 401 }
-        )
-      }
-
-      // Verify the channel ID is bound to the signature (prevents cross-channel replay)
-      const expectedChannelText = `Channel: ${channel_id}`
-      if (!message.includes(expectedChannelText)) {
-        return NextResponse.json(
-          { error: 'Signature does not match channel' },
-          { status: 401 }
-        )
-      }
-
-      // Verify the enabled state is bound to the signature
-      const expectedEnabledText = enabled ? 'Enable: true' : 'Enable: false'
-      if (!message.includes(expectedEnabledText)) {
-        return NextResponse.json(
-          { error: 'Signature does not match action' },
-          { status: 401 }
-        )
-      }
-
-      // Verify timestamp freshness (reject signatures older than 5 minutes)
-      const timestampMatch = message.match(/Timestamp: (\d+)/)
-      if (timestampMatch) {
-        const timestamp = parseInt(timestampMatch[1])
-        const now = Date.now()
-        const fiveMinutes = 5 * 60 * 1000
-        if (now - timestamp > fiveMinutes) {
-          return NextResponse.json(
-            { error: 'Signature expired' },
-            { status: 401 }
-          )
-        }
-      } else {
-        return NextResponse.json(
-          { error: 'Invalid message format' },
-          { status: 401 }
-        )
-      }
-    } catch (verifyError) {
-      return NextResponse.json(
-        { error: 'Authentication failed' },
-        { status: 401 }
       )
     }
 
@@ -101,7 +92,7 @@ export async function PUT(request: NextRequest) {
          SET enabled = $1
          WHERE channel_id = $2 AND wallet_address = $3
          RETURNING id, channel_name, enabled`,
-        [enabled, channel_id, wallet_address]
+        [enabled, channel_id, user.twitter_username]
       )
 
       if (result.rows.length === 0) {

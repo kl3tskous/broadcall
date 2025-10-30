@@ -1,29 +1,88 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
+import { Pool } from 'pg'
 
 export const dynamic = 'force-dynamic'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+})
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-    const walletAddress = formData.get('wallet_address') as string;
+    // Authenticate via session cookie
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('broadCall_session')?.value
+
+    if (!sessionToken) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Hash the session token
+    const { createHash } = require('crypto')
+    const hashedToken = createHash('sha256').update(sessionToken).digest('hex')
+
+    // Fetch session
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('session_token', hashedToken)
+      .single()
+
+    if (sessionError || !session) {
+      return NextResponse.json(
+        { error: 'Invalid session' },
+        { status: 401 }
+      )
+    }
+
+    // Check expiry
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase
+        .from('sessions')
+        .delete()
+        .eq('session_token', hashedToken)
+      
+      return NextResponse.json(
+        { error: 'Session expired' },
+        { status: 401 }
+      )
+    }
+
+    const userId = session.user_id
+
+    // Fetch user
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('twitter_username')
+      .eq('id', userId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    const formData = await request.formData()
+    const file = formData.get('file') as File
 
     if (!file) {
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
-      );
-    }
-
-    if (!walletAddress) {
-      return NextResponse.json(
-        { error: 'Wallet address required' },
-        { status: 400 }
-      );
+      )
     }
 
     // Validate file type
@@ -31,7 +90,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Only image files are allowed' },
         { status: 400 }
-      );
+      )
     }
 
     // Validate file size (max 5MB)
@@ -39,20 +98,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'File size must be less than 5MB' },
         { status: 400 }
-      );
+      )
     }
 
-    // Create Supabase client
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     // Generate unique filename
-    const timestamp = Date.now();
-    const extension = file.name.split('.').pop() || 'jpg';
-    const fileName = `trades-images/${walletAddress}-${timestamp}.${extension}`;
+    const timestamp = Date.now()
+    const extension = file.name.split('.').pop() || 'jpg'
+    const fileName = `trades-images/${user.twitter_username}-${timestamp}.${extension}`
 
     // Convert file to buffer
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
 
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
@@ -60,27 +116,27 @@ export async function POST(request: NextRequest) {
       .upload(fileName, buffer, {
         contentType: file.type,
         upsert: false,
-      });
+      })
 
     if (error) {
-      console.error('Supabase upload error:', error);
+      console.error('Supabase upload error:', error)
       return NextResponse.json(
         { error: `Upload failed: ${error.message}` },
         { status: 500 }
-      );
+      )
     }
 
     // Get public URL
     const { data: urlData } = supabase.storage
       .from('broadcall-images')
-      .getPublicUrl(fileName);
+      .getPublicUrl(fileName)
 
-    return NextResponse.json({ url: urlData.publicUrl });
+    return NextResponse.json({ url: urlData.publicUrl })
   } catch (error) {
-    console.error('Error uploading trades image:', error);
+    console.error('Error uploading trades image:', error)
     return NextResponse.json(
       { error: 'Failed to upload image' },
       { status: 500 }
-    );
+    )
   }
 }

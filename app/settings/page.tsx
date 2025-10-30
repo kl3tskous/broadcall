@@ -1,22 +1,28 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { supabase, UserSettings, Profile } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { UserProfile } from '@/components/UserProfile'
 import { GmgnLogo, AxiomLogo, PhotonLogo, BullxLogo, TrojanLogo } from '@/components/PlatformLogos'
 import { CallPageHeader } from '@/components/CallPageHeader'
 
+interface User {
+  id: string
+  twitter_username: string
+  twitter_name: string
+  twitter_id: string
+  profile_image_url: string
+  bio: string | null
+  telegram_id: string | null
+  telegram_username: string | null
+  access_granted: boolean
+}
+
 export default function SettingsPage() {
-  const { publicKey, signMessage } = useWallet()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [settings, setSettings] = useState<UserSettings | null>(null)
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const [connectingTelegram, setConnectingTelegram] = useState(false)
   const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
   const [channels, setChannels] = useState<any[]>([])
@@ -33,83 +39,61 @@ export default function SettingsPage() {
   const [uploadingTradesImage, setUploadingTradesImage] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    const fetchSettings = async () => {
-      if (!publicKey) {
-        setLoading(false)
-        return
-      }
-
+    const fetchUserData = async () => {
       try {
-        const { data, error } = await supabase
-          .from('user_settings')
-          .select('*')
-          .eq('wallet_address', publicKey.toString())
-          .single()
+        // Check authentication
+        const authResponse = await fetch('/api/auth/me')
+        const authData = await authResponse.json()
 
-        if (error && error.code !== 'PGRST116') {
-          throw error
+        if (!authData.authenticated) {
+          router.push('/')
+          return
         }
 
-        if (data) {
-          setSettings(data)
-          setRefCodes({
-            gmgn_ref: data.gmgn_ref || '',
-            axiom_ref: data.axiom_ref || '',
-            photon_ref: data.photon_ref || '',
-            bullx_ref: data.bullx_ref || '',
-            trojan_ref: data.trojan_ref || ''
-          })
-          setTradesInName(data.trades_in_name || '')
-          setTradesInImage(data.trades_in_image || '')
+        // User is authenticated, check access
+        if (!authData.user.access_granted) {
+          router.push('/dashboard')
+          return
         }
 
-        // Fetch profile using API endpoint (bypasses Supabase PostgREST cache)
-        const profileResponse = await fetch(`/api/profile/get?wallet_address=${publicKey.toString()}`)
-        const profileResult = await profileResponse.json()
-        
-        if (profileResult.success && profileResult.data) {
-          setProfile(profileResult.data)
-          
-          // Fetch channels if Telegram is connected
-          if (profileResult.data.telegram_id) {
-            fetchChannels()
+        setUser(authData.user)
+
+        // Fetch user settings
+        const settingsResponse = await fetch('/api/settings/get')
+        if (settingsResponse.ok) {
+          const settingsData = await settingsResponse.json()
+          if (settingsData.success && settingsData.settings) {
+            setRefCodes({
+              gmgn_ref: settingsData.settings.gmgn_ref || '',
+              axiom_ref: settingsData.settings.axiom_ref || '',
+              photon_ref: settingsData.settings.photon_ref || '',
+              bullx_ref: settingsData.settings.bullx_ref || '',
+              trojan_ref: settingsData.settings.trojan_ref || ''
+            })
+            setTradesInName(settingsData.settings.trades_in_name || '')
+            setTradesInImage(settingsData.settings.trades_in_image || '')
           }
         }
+
+        // Fetch channels if Telegram is connected
+        if (authData.user.telegram_id) {
+          fetchChannels()
+        }
       } catch (error) {
-        console.error('Error fetching settings:', error)
+        console.error('Error fetching user data:', error)
+        router.push('/')
       } finally {
         setLoading(false)
       }
     }
 
-    fetchSettings()
-  }, [publicKey])
+    fetchUserData()
+  }, [router])
 
   const fetchChannels = async () => {
-    if (!publicKey || !signMessage) return
-    
     setLoadingChannels(true)
     try {
-      // Sign a message to authenticate
-      const message = `BroadCall Channel Access\nWallet: ${publicKey.toString()}\nTimestamp: ${Date.now()}`
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = await signMessage(messageBytes)
-      const bs58 = await import('bs58')
-      const signature = bs58.default.encode(signatureBytes)
-
-      // Encode message as base64 for HTTP header (headers can't contain newlines)
-      const messageBase64 = btoa(message)
-
-      const response = await fetch(`/api/telegram/channels?wallet_address=${publicKey.toString()}`, {
-        headers: {
-          'x-wallet-signature': signature,
-          'x-wallet-message': messageBase64
-        }
-      })
+      const response = await fetch('/api/telegram/channels')
       
       if (response.ok) {
         const data = await response.json()
@@ -123,26 +107,15 @@ export default function SettingsPage() {
   }
 
   const handleToggleChannel = async (channelId: number, currentlyEnabled: boolean) => {
-    if (!publicKey || !signMessage) return
-    
     try {
-      // Sign a message to authenticate (includes the action to prevent replay attacks)
       const newEnabledState = !currentlyEnabled
-      const message = `BroadCall Channel Toggle\nWallet: ${publicKey.toString()}\nChannel: ${channelId}\nEnable: ${newEnabledState}\nTimestamp: ${Date.now()}`
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = await signMessage(messageBytes)
-      const bs58 = await import('bs58')
-      const signature = bs58.default.encode(signatureBytes)
-
+      
       const response = await fetch('/api/telegram/channels/toggle', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           channel_id: channelId,
-          wallet_address: publicKey.toString(),
-          enabled: newEnabledState,
-          signature,
-          message
+          enabled: newEnabledState
         })
       })
 
@@ -161,15 +134,12 @@ export default function SettingsPage() {
   }
 
   const handleSave = async () => {
-    if (!publicKey) return
-
     setSaving(true)
     try {
       const response = await fetch('/api/settings/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          wallet_address: publicKey.toString(),
           ...refCodes,
           trades_in_name: tradesInName,
           trades_in_image: tradesInImage
@@ -209,7 +179,6 @@ export default function SettingsPage() {
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('wallet_address', publicKey!.toString())
 
       const response = await fetch('/api/upload/trades-image', {
         method: 'POST',
@@ -233,19 +202,11 @@ export default function SettingsPage() {
   }
 
   const handleConnectTelegram = async () => {
-    if (!publicKey) {
-      alert('Please connect your wallet first.')
-      return
-    }
-
     setConnectingTelegram(true)
     try {
       const response = await fetch('/api/telegram/generate-token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          wallet_address: publicKey.toString()
-        })
+        headers: { 'Content-Type': 'application/json' }
       })
 
       if (!response.ok) {
@@ -270,7 +231,7 @@ export default function SettingsPage() {
   }
 
   const handleDisconnectTelegram = async () => {
-    if (!profile?.telegram_id) return
+    if (!user?.telegram_id) return
 
     if (!confirm('Are you sure you want to disconnect your Telegram account?')) {
       return
@@ -281,14 +242,15 @@ export default function SettingsPage() {
       const response = await fetch('/api/telegram/disconnect', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegram_id: profile.telegram_id })
+        body: JSON.stringify({ telegram_id: user.telegram_id })
       })
 
       if (!response.ok) {
         throw new Error('Failed to disconnect Telegram')
       }
 
-      setProfile({ ...profile, telegram_id: null, telegram_username: null })
+      setUser({ ...user, telegram_id: null, telegram_username: null })
+      setChannels([])
       alert('Telegram disconnected successfully!')
     } catch (error) {
       console.error('Error disconnecting Telegram:', error)
@@ -296,29 +258,6 @@ export default function SettingsPage() {
     } finally {
       setDisconnectingTelegram(false)
     }
-  }
-
-  if (!publicKey) {
-    return (
-      <div 
-        className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
-        style={{
-          backgroundImage: 'url(/background.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-        }}
-      >
-        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] text-center max-w-md w-full relative z-10">
-          <h2 className="text-2xl font-bold mb-4 text-white">Connect Your Wallet</h2>
-          <p className="text-gray-300 mb-6">
-            Please connect your wallet to access settings
-          </p>
-          {mounted && <WalletMultiButton className="btn-primary mx-auto" />}
-        </div>
-      </div>
-    )
   }
 
   if (loading) {
@@ -336,6 +275,10 @@ export default function SettingsPage() {
         <div className="text-xl text-gray-300 relative z-10">Loading settings...</div>
       </div>
     )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (
@@ -362,7 +305,23 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <UserProfile walletAddress={publicKey.toString()} />
+        {/* User Profile Section */}
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mb-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Profile</h2>
+          <div className="flex items-center gap-4">
+            {user.profile_image_url && (
+              <img
+                src={user.profile_image_url}
+                alt={user.twitter_name}
+                className="w-16 h-16 rounded-full border-2 border-orange-600"
+              />
+            )}
+            <div>
+              <p className="text-white font-bold text-lg">{user.twitter_name}</p>
+              <p className="text-gray-400">@{user.twitter_username}</p>
+            </div>
+          </div>
+        </div>
 
         {/* Telegram Connection Section */}
         <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
@@ -373,18 +332,18 @@ export default function SettingsPage() {
             Telegram Connection
           </h2>
           <p className="text-gray-300 mb-6 text-sm">
-            Connect your Telegram account to push token calls directly to your channel (coming soon!)
+            Connect your Telegram account to push token calls directly to your channel
           </p>
 
-          {profile?.telegram_id ? (
+          {user.telegram_id ? (
             <div className="space-y-4">
               <div className="bg-white/[0.08] backdrop-blur-[10px] p-4 rounded-2xl border border-white/10">
                 <p className="text-sm text-gray-400 mb-2">Connected Account</p>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <p className="font-medium text-white">@{profile.telegram_username}</p>
+                  <p className="font-medium text-white">@{user.telegram_username}</p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">ID: {profile.telegram_id}</p>
+                <p className="text-xs text-gray-500 mt-1">ID: {user.telegram_id}</p>
               </div>
               <button
                 onClick={handleDisconnectTelegram}
@@ -401,7 +360,7 @@ export default function SettingsPage() {
               className="w-full bg-gradient-to-r from-[#FF5605] via-[#FF7704] to-[#FFA103] rounded-2xl px-6 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.038-1.359 5.353-.168.557-.5.743-.82.762-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.441-.751-.244-1.349-.374-1.297-.788.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.325.016.093.036.305.02.471z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.038-1.359 5.353-.168.557-.5.743-.82.762-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.230.007-.032.014-.15-.056-.212s-.174-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.441-.751-.244-1.349-.374-1.297-.788.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.325.016.093.036.305.02.471z"/>
               </svg>
               <span className="text-black text-base font-bold">
                 {connectingTelegram ? 'Generating Link...' : 'Connect Telegram'}
@@ -411,7 +370,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Telegram Channels Section - Only show if Telegram is connected */}
-        {profile?.telegram_id && (
+        {user.telegram_id && (
           <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
             <h2 className="text-xl md:text-2xl font-bold mb-4 text-white flex items-center gap-2">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -630,14 +589,6 @@ export default function SettingsPage() {
                 {saving ? 'Saving...' : 'Save Changes'}
               </span>
             </button>
-          </div>
-        </div>
-
-        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
-          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Connected Wallet</h2>
-          <div className="bg-white/[0.08] backdrop-blur-[10px] p-4 rounded-2xl border border-white/10">
-            <p className="text-sm text-gray-400 mb-1">Wallet Address</p>
-            <p className="font-mono text-sm text-white break-all">{publicKey.toString()}</p>
           </div>
         </div>
       </div>
