@@ -3,15 +3,35 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+
+interface User {
+  id: string
+  twitter_username: string
+  twitter_name: string
+  profile_image_url: string
+}
 
 export function Header() {
-  const { publicKey } = useWallet()
+  const [user, setUser] = useState<User | null>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/me')
+        const data = await response.json()
+        
+        if (data.authenticated) {
+          setUser(data.user)
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error)
+      }
+    }
+    
+    checkAuth()
   }, [])
 
   return (
@@ -32,19 +52,19 @@ export function Header() {
 
           {/* Center navigation items */}
           <nav className="hidden md:flex items-center gap-8">
-            {mounted && publicKey && (
+            {mounted && user && (
               <>
                 <Link
-                  href="/"
+                  href="/dashboard"
+                  className="text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/create-call"
                   className="text-sm text-gray-300 hover:text-white transition-colors"
                 >
                   Create Call
-                </Link>
-                <Link
-                  href={`/profile/${publicKey.toString()}`}
-                  className="text-sm text-gray-300 hover:text-white transition-colors"
-                >
-                  Profile
                 </Link>
                 <Link
                   href="/settings"
@@ -56,44 +76,30 @@ export function Header() {
             )}
           </nav>
 
-          {/* Wallet button on the right */}
+          {/* User info on the right */}
           <div className="flex items-center gap-4">
-            {mounted && (
-              <div className="wallet-adapter-outlined">
-                <WalletMultiButton />
-              </div>
+            {mounted && user && (
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                {user.profile_image_url && (
+                  <Image
+                    src={user.profile_image_url}
+                    alt={user.twitter_name}
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                )}
+                <span className="text-white text-sm hidden md:block">
+                  @{user.twitter_username}
+                </span>
+              </Link>
             )}
           </div>
         </div>
       </div>
-      <style jsx global>{`
-        .wallet-adapter-outlined .wallet-adapter-button {
-          background: transparent !important;
-          border: 1px solid rgba(255, 255, 255, 0.2) !important;
-          border-radius: 8px !important;
-          height: 40px !important;
-          padding: 0 20px !important;
-          font-size: 14px !important;
-          font-weight: 500 !important;
-          color: white !important;
-          transition: all 0.2s ease !important;
-          min-height: unset !important;
-        }
-        .wallet-adapter-outlined .wallet-adapter-button:hover {
-          background: rgba(255, 255, 255, 0.05) !important;
-          border-color: rgba(255, 255, 255, 0.3) !important;
-        }
-        .wallet-adapter-outlined .wallet-adapter-button-trigger {
-          background: transparent !important;
-          border: 1px solid rgba(255, 255, 255, 0.2) !important;
-          border-radius: 8px !important;
-          height: 40px !important;
-          padding: 0 20px !important;
-          font-size: 14px !important;
-          font-weight: 500 !important;
-          color: white !important;
-        }
-      `}</style>
     </header>
   )
 }

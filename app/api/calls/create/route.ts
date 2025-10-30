@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { Pool } from 'pg'
-import nacl from 'tweetnacl'
-import bs58 from 'bs58'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,91 +10,86 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 })
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { wallet_address, token_address, thesis, signature, message } = body
+    // Authenticate via session cookie
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('broadCall_session')?.value
 
-    if (!wallet_address || !token_address || !signature || !message) {
+    if (!sessionToken) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      )
-    }
-
-    // Verify wallet signature
-    try {
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = bs58.decode(signature)
-      const publicKeyBytes = bs58.decode(wallet_address)
-      
-      const isValid = nacl.sign.detached.verify(
-        messageBytes,
-        signatureBytes,
-        publicKeyBytes
-      )
-
-      if (!isValid) {
-        return NextResponse.json(
-          { error: 'Invalid signature' },
-          { status: 401 }
-        )
-      }
-
-      // Check timestamp (5 minute expiry)
-      const timestampMatch = message.match(/Timestamp: (\d+)/)
-      if (timestampMatch) {
-        const timestamp = parseInt(timestampMatch[1])
-        const now = Date.now()
-        if (Math.abs(now - timestamp) > 5 * 60 * 1000) {
-          return NextResponse.json(
-            { error: 'Message expired' },
-            { status: 401 }
-          )
-        }
-      }
-    } catch (error) {
-      console.error('Signature verification error:', error)
-      return NextResponse.json(
-        { error: 'Signature verification failed' },
+        { error: 'Not authenticated. Please log in.' },
         { status: 401 }
       )
     }
 
-    // Check if user has access_granted = true
-    try {
-      console.log('Checking access for wallet:', wallet_address)
-      const accessCheck = await pool.query(
-        'SELECT access_granted FROM waitlist WHERE wallet_address = $1',
-        [wallet_address]
-      )
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-      console.log('Access check result:', accessCheck.rows)
+    // Hash the session token to match database
+    const { createHash } = require('crypto')
+    const hashedToken = createHash('sha256').update(sessionToken).digest('hex')
 
-      if (accessCheck.rows.length === 0) {
-        console.log('Wallet not found in waitlist')
-        return NextResponse.json(
-          { error: 'Wallet not on waitlist. Please join the waitlist first.' },
-          { status: 403 }
-        )
-      }
+    // Fetch session from database
+    const { data: session, error: sessionError } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('session_token', hashedToken)
+      .single()
 
-      const hasAccess = accessCheck.rows[0].access_granted === true
-      console.log('Has access:', hasAccess, 'access_granted value:', accessCheck.rows[0].access_granted)
-      
-      if (!hasAccess) {
-        return NextResponse.json(
-          { error: 'Access not granted yet. You are on the waitlist - we will notify you when access is granted.' },
-          { status: 403 }
-        )
-      }
-      
-      console.log('Access check passed!')
-    } catch (error) {
-      console.error('Access check error:', error)
+    if (sessionError || !session) {
       return NextResponse.json(
-        { error: 'Failed to verify access' },
-        { status: 500 }
+        { error: 'Invalid session. Please log in again.' },
+        { status: 401 }
+      )
+    }
+
+    // Check if session has expired
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase
+        .from('sessions')
+        .delete()
+        .eq('session_token', hashedToken)
+      
+      return NextResponse.json(
+        { error: 'Session expired. Please log in again.' },
+        { status: 401 }
+      )
+    }
+
+    const userId = session.user_id
+
+    // Fetch user and check access
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    if (!user.access_granted) {
+      return NextResponse.json(
+        { error: 'Access not granted yet. You are on the waitlist - we will notify you when access is granted.' },
+        { status: 403 }
+      )
+    }
+
+    // Get request body
+    const body = await request.json()
+    const { token_address, thesis } = body
+
+    if (!token_address) {
+      return NextResponse.json(
+        { error: 'Token address is required' },
+        { status: 400 }
       )
     }
 
@@ -152,7 +147,7 @@ export async function POST(request: NextRequest) {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())
       RETURNING id, created_at`,
       [
-        wallet_address,
+        user.twitter_username, // Use Twitter username as creator identifier
         token_address,
         tokenData.name,
         tokenData.symbol,
@@ -174,16 +169,15 @@ export async function POST(request: NextRequest) {
     // Trigger broadcast to Telegram channels
     try {
       console.log('Triggering broadcast for call:', callId)
-      const broadcastResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5000'}/api/telegram/broadcast`, {
+      const backendUrl = (process.env.BACKEND_URL || process.env.NEXTAUTH_URL || 'http://localhost:5000').replace(/\/$/, '')
+      const broadcastResponse = await fetch(`${backendUrl}/api/telegram/broadcast`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          wallet_address,
+          user_id: userId,
           call_id: callId,
-          signature,
-          message,
         }),
       })
 

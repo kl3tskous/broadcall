@@ -1,58 +1,60 @@
 'use client'
 
-import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+
+interface User {
+  id: string
+  twitter_username: string
+  twitter_name: string
+  profile_image_url: string
+  access_granted: boolean
+}
 
 export default function CreateCallPage() {
-  const { publicKey, signMessage } = useWallet()
   const router = useRouter()
   
+  const [user, setUser] = useState<User | null>(null)
   const [tokenAddress, setTokenAddress] = useState('')
   const [thesis, setThesis] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-  const [hasAccess, setHasAccess] = useState<boolean | null>(null)
-  const [checkingAccess, setCheckingAccess] = useState(true)
+  const [checkingAuth, setCheckingAuth] = useState(true)
 
   useEffect(() => {
-    const checkAccess = async () => {
-      if (!publicKey) {
-        setCheckingAccess(false)
-        return
-      }
-
+    const checkAuth = async () => {
       try {
-        const response = await fetch(`/api/access/check?wallet=${publicKey.toString()}`)
+        const response = await fetch('/api/auth/me')
         const data = await response.json()
-        setHasAccess(data.hasAccess)
-        
-        if (!data.hasAccess) {
-          setTimeout(() => {
-            router.push('/')
-          }, 3000)
+
+        if (!data.authenticated) {
+          router.push('/')
+          return
         }
+
+        if (!data.user.access_granted) {
+          router.push('/auth/waitlist-confirmed')
+          return
+        }
+
+        setUser(data.user)
       } catch (error) {
-        console.error('Error checking access:', error)
-        setHasAccess(false)
+        console.error('Error checking auth:', error)
+        router.push('/')
       } finally {
-        setCheckingAccess(false)
+        setCheckingAuth(false)
       }
     }
 
-    checkAccess()
-  }, [publicKey, router])
+    checkAuth()
+  }, [router])
 
   const handleCreateCall = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!publicKey || !signMessage) {
-      setError('Please connect your wallet')
-      return
-    }
-
     if (!tokenAddress.trim()) {
       setError('Please enter a token address')
       return
@@ -63,25 +65,14 @@ export default function CreateCallPage() {
     setSuccess(false)
 
     try {
-      // Create authentication signature
-      const message = `BroadCall Create Call\nWallet: ${publicKey.toString()}\nToken: ${tokenAddress}\nTimestamp: ${Date.now()}`
-      const messageBytes = new TextEncoder().encode(message)
-      const signatureBytes = await signMessage(messageBytes)
-      const bs58 = await import('bs58')
-      const signature = bs58.default.encode(signatureBytes)
-
-      // Create the call
       const response = await fetch('/api/calls/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          wallet_address: publicKey.toString(),
           token_address: tokenAddress.trim(),
           thesis: thesis.trim(),
-          signature,
-          message,
         }),
       })
 
@@ -92,7 +83,6 @@ export default function CreateCallPage() {
         setTokenAddress('')
         setThesis('')
         
-        // Redirect to the token call page after 2 seconds
         setTimeout(() => {
           router.push(`/call/${data.call.id}`)
         }, 2000)
@@ -107,32 +97,27 @@ export default function CreateCallPage() {
     }
   }
 
-  if (!publicKey) {
+  if (checkingAuth) {
     return (
       <div className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
         <div className="min-h-screen backdrop-blur-sm bg-black/50">
-          {/* Header */}
           <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-                BroadCall
-              </h1>
-              <WalletMultiButton />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+                <Image
+                  src="/broadCall-logo.png"
+                  alt="BroadCall"
+                  width={180}
+                  height={180}
+                  className="h-9 w-auto"
+                  priority
+                />
+              </Link>
             </div>
           </header>
-
-          {/* Connect Wallet Prompt */}
           <div className="flex items-center justify-center pt-32">
             <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white text-center mb-4">
-                Connect Your Wallet
-              </h2>
-              <p className="text-gray-400 text-center mb-6">
-                Please connect your wallet to create a token call
-              </p>
-              <div className="flex justify-center">
-                <WalletMultiButton />
-              </div>
+              <p className="text-white text-center">Checking authentication...</p>
             </div>
           </div>
         </div>
@@ -140,56 +125,8 @@ export default function CreateCallPage() {
     )
   }
 
-  if (checkingAccess) {
-    return (
-      <div className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
-        <div className="min-h-screen backdrop-blur-sm bg-black/50">
-          <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-                BroadCall
-              </h1>
-              <WalletMultiButton />
-            </div>
-          </header>
-          <div className="flex items-center justify-center pt-32">
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-              <p className="text-white text-center">Checking access...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasAccess === false) {
-    return (
-      <div className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
-        <div className="min-h-screen backdrop-blur-sm bg-black/50">
-          <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-                BroadCall
-              </h1>
-              <WalletMultiButton />
-            </div>
-          </header>
-          <div className="flex items-center justify-center pt-32">
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white text-center mb-4">
-                🔒 Access Not Granted
-              </h2>
-              <p className="text-gray-400 text-center mb-6">
-                You're on the waitlist! Access will be granted soon.
-              </p>
-              <p className="text-gray-500 text-center text-sm">
-                Redirecting to homepage...
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  if (!user) {
+    return null
   }
 
   return (
@@ -198,10 +135,48 @@ export default function CreateCallPage() {
         {/* Header */}
         <header className="border-b border-white/10 backdrop-blur-md bg-black/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              BroadCall
-            </h1>
-            <WalletMultiButton />
+            <Link href="/dashboard" className="flex items-center hover:opacity-80 transition-opacity">
+              <Image
+                src="/broadCall-logo.png"
+                alt="BroadCall"
+                width={180}
+                height={180}
+                className="h-9 w-auto"
+                priority
+              />
+            </Link>
+            
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="text-sm text-gray-300 hover:text-white transition-colors"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/settings"
+                className="text-sm text-gray-300 hover:text-white transition-colors"
+              >
+                Settings
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                {user.profile_image_url && (
+                  <Image
+                    src={user.profile_image_url}
+                    alt={user.twitter_name}
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                )}
+                <span className="text-white text-sm hidden md:block">
+                  @{user.twitter_username}
+                </span>
+              </Link>
+            </div>
           </div>
         </header>
 
