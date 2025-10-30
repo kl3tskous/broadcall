@@ -12,6 +12,9 @@ interface User {
   twitter_name: string
   twitter_id: string
   profile_image_url: string
+  banner_image_url: string | null
+  custom_profile_image: string | null
+  custom_banner_image: string | null
   bio: string | null
   telegram_id: string | null
   telegram_username: string | null
@@ -37,6 +40,8 @@ export default function SettingsPage() {
   const [tradesInName, setTradesInName] = useState('')
   const [tradesInImage, setTradesInImage] = useState('')
   const [uploadingTradesImage, setUploadingTradesImage] = useState(false)
+  const [uploadingProfileImage, setUploadingProfileImage] = useState(false)
+  const [uploadingBannerImage, setUploadingBannerImage] = useState(false)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -158,6 +163,90 @@ export default function SettingsPage() {
       alert(error?.message || 'Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleProfileImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be less than 5MB')
+      return
+    }
+
+    setUploadingProfileImage(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload/profile-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Upload failed')
+      }
+
+      const data = await response.json()
+      if (user) {
+        setUser({ ...user, custom_profile_image: data.url })
+      }
+      alert('Profile picture uploaded successfully!')
+    } catch (error: any) {
+      console.error('Error uploading profile image:', error)
+      alert(error?.message || 'Failed to upload image. Please try again.')
+    } finally {
+      setUploadingProfileImage(false)
+    }
+  }
+
+  const handleBannerImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be less than 5MB')
+      return
+    }
+
+    setUploadingBannerImage(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload/banner-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Upload failed')
+      }
+
+      const data = await response.json()
+      if (user) {
+        setUser({ ...user, custom_banner_image: data.url })
+      }
+      alert('Banner uploaded successfully!')
+    } catch (error: any) {
+      console.error('Error uploading banner:', error)
+      alert(error?.message || 'Failed to upload image. Please try again.')
+    } finally {
+      setUploadingBannerImage(false)
     }
   }
 
@@ -319,6 +408,135 @@ export default function SettingsPage() {
             <div>
               <p className="text-white font-bold text-lg">{user.twitter_name}</p>
               <p className="text-gray-400">@{user.twitter_username}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile & Banner Images Section */}
+        <div className="bg-white/[0.12] backdrop-blur-[20px] border border-white/20 rounded-[34px] p-6 md:p-8 shadow-[0px_4px_6px_rgba(0,0,0,0.38)] mt-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-white flex items-center gap-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Profile & Banner Images
+          </h2>
+          <p className="text-gray-300 mb-6 text-sm">
+            Your X (Twitter) images are automatically synced. Upload custom images to override them on your token call pages.
+          </p>
+
+          {/* Profile Picture */}
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-3 text-white">
+                Profile Picture
+              </label>
+              <div className="flex items-center gap-4">
+                <img
+                  src={user.custom_profile_image || user.profile_image_url}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full border-2 border-orange-600 object-cover"
+                />
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfileImageUpload}
+                    disabled={uploadingProfileImage}
+                    className="hidden"
+                    id="profile-image-upload"
+                  />
+                  <label
+                    htmlFor="profile-image-upload"
+                    className="cursor-pointer inline-block px-6 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white hover:bg-white/[0.12] transition-colors"
+                  >
+                    {uploadingProfileImage ? 'Uploading...' : user.custom_profile_image ? 'Change Custom Image' : 'Upload Custom Image'}
+                  </label>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {user.custom_profile_image ? 
+                      `Using custom image • ` : 
+                      `Using X profile picture • `
+                    }
+                    Recommended: Square, max 5MB
+                  </p>
+                  {user.custom_profile_image && (
+                    <button
+                      onClick={async () => {
+                        if (confirm('Remove custom profile picture and use X profile picture?')) {
+                          const { data, error } = await fetch('/api/upload/profile-image', {
+                            method: 'DELETE'
+                          })
+                          if (!error) {
+                            setUser({ ...user, custom_profile_image: null })
+                            alert('Custom profile picture removed')
+                          }
+                        }
+                      }}
+                      className="text-xs text-red-400 hover:text-red-300 mt-2"
+                    >
+                      Remove custom image
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Banner Image */}
+            <div>
+              <label className="block text-sm font-medium mb-3 text-white">
+                Banner Image
+              </label>
+              <div className="space-y-4">
+                {(user.custom_banner_image || user.banner_image_url) && (
+                  <img
+                    src={user.custom_banner_image || user.banner_image_url || ''}
+                    alt="Banner"
+                    className="w-full h-32 md:h-40 rounded-2xl border-2 border-orange-600 object-cover"
+                  />
+                )}
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBannerImageUpload}
+                    disabled={uploadingBannerImage}
+                    className="hidden"
+                    id="banner-image-upload"
+                  />
+                  <label
+                    htmlFor="banner-image-upload"
+                    className="cursor-pointer inline-block px-6 py-3 bg-white/[0.08] backdrop-blur-[10px] border border-white/10 rounded-2xl text-white hover:bg-white/[0.12] transition-colors"
+                  >
+                    {uploadingBannerImage ? 'Uploading...' : user.custom_banner_image ? 'Change Custom Banner' : 'Upload Custom Banner'}
+                  </label>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {user.custom_banner_image ? 
+                      `Using custom banner • ` : 
+                      user.banner_image_url ? 
+                        `Using X banner • ` : 
+                        `No banner set • `
+                    }
+                    Recommended: 1500x500px, max 5MB
+                  </p>
+                  {user.custom_banner_image && (
+                    <button
+                      onClick={async () => {
+                        if (confirm('Remove custom banner and use X banner?')) {
+                          const { data, error } = await fetch('/api/upload/banner-image', {
+                            method: 'DELETE'
+                          })
+                          if (!error) {
+                            setUser({ ...user, custom_banner_image: null })
+                            alert('Custom banner removed')
+                          }
+                        }
+                      }}
+                      className="text-xs text-red-400 hover:text-red-300 mt-2 block"
+                    >
+                      Remove custom banner
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

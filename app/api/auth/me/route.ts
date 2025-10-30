@@ -90,6 +90,8 @@ export async function GET(request: NextRequest) {
       twitter_name: user.twitter_name,
       profile_image_url: user.profile_image_url,
       banner_image_url: user.banner_image_url,
+      custom_profile_image: user.custom_profile_image,
+      custom_banner_image: user.custom_banner_image,
       bio: user.bio,
       telegram_id: user.telegram_id,
       telegram_username: user.telegram_username,
