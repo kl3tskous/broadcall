@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { Pool } from 'pg'
 import { createClient } from '@supabase/supabase-js'
+import { getPool } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-})
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
@@ -128,6 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store call in database
+    const pool = getPool()
     const result = await pool.query(
       `INSERT INTO calls (
         creator_wallet, 

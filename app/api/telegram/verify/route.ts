@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
+import { getPool } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +14,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const pool = getPool()
     const client = await pool.connect()
     try {
       // Check if token exists and is valid
