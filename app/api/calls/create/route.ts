@@ -203,10 +203,18 @@ export async function POST(request: NextRequest) {
         created_at: createdAt,
       },
     })
-  } catch (error) {
-    console.error('Create call error:', error)
+  } catch (error: any) {
+    console.error('Create call error:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      detail: error.detail
+    })
     return NextResponse.json(
-      { error: 'Failed to create call' },
+      { 
+        error: 'Failed to create call',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     )
   }
