@@ -142,7 +142,7 @@ async function exchangeCodeForToken(code: string, codeVerifier: string) {
 async function fetchTwitterUserProfile(accessToken: string) {
   const userUrl = 'https://api.twitter.com/2/users/me'
   const params = new URLSearchParams({
-    'user.fields': 'id,username,name,profile_image_url,description,created_at'
+    'user.fields': 'id,username,name,profile_image_url,description,created_at,profile_banner_url'
   })
 
   const response = await fetch(`${userUrl}?${params}`, {
@@ -173,6 +173,7 @@ async function upsertUserInSupabase(twitterProfile: any, tokenData: any) {
     twitter_username: twitterProfile.username,
     twitter_name: twitterProfile.name,
     profile_image_url: twitterProfile.profile_image_url?.replace('_normal', '_400x400') || null,
+    banner_image_url: twitterProfile.profile_banner_url || null,
     bio: twitterProfile.description || null,
     twitter_access_token: tokenData.access_token,
     twitter_refresh_token: tokenData.refresh_token || null,
