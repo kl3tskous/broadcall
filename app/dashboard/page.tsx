@@ -40,7 +40,7 @@ export default function DashboardPage() {
         const settingsResponse = await fetch('/api/settings/get')
         const settingsData = await settingsResponse.json()
         
-        if (settingsResponse.ok && settingsData.settings && !settingsData.settings.onboarded) {
+        if (!settingsData?.settings?.onboarded) {
           router.push('/onboarding')
           return
         }
