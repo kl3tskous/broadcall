@@ -36,6 +36,14 @@ export default function DashboardPage() {
           router.push('/auth/waitlist-confirmed')
           return
         }
+
+        const settingsResponse = await fetch('/api/settings/get')
+        const settingsData = await settingsResponse.json()
+        
+        if (settingsResponse.ok && settingsData.settings && !settingsData.settings.onboarded) {
+          router.push('/onboarding')
+          return
+        }
       } catch (error) {
         console.error('Error checking auth:', error)
         router.push('/')
