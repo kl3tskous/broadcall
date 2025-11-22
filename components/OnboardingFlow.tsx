@@ -22,18 +22,18 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('user_settings')
-        .upsert(
-          {
-            wallet_address: walletAddress,
-            ...refCodes,
-            onboarded: true
-          },
-          { onConflict: 'wallet_address' }
-        )
+      const response = await fetch('/api/settings/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...refCodes,
+          onboarded: true
+        })
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to save settings')
+      }
 
       onComplete()
     } catch (error) {
@@ -47,17 +47,22 @@ export default function OnboardingFlow({ walletAddress, onComplete }: Onboarding
   const handleSkip = async () => {
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('user_settings')
-        .upsert(
-          {
-            wallet_address: walletAddress,
-            onboarded: true
-          },
-          { onConflict: 'wallet_address' }
-        )
+      const response = await fetch('/api/settings/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gmgn_ref: null,
+          axiom_ref: null,
+          photon_ref: null,
+          bullx_ref: null,
+          trojan_ref: null,
+          onboarded: true
+        })
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to complete setup')
+      }
 
       onComplete()
     } catch (error) {
